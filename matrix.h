@@ -1,0 +1,549 @@
+#ifndef MATRIX_H
+#define MATRIX_H
+
+#include <vector>
+#include <array>
+#include <cmath>
+#include <algorithm>
+#include <iostream>
+#include <initializer_list>
+#include <iomanip>
+#include <QDebug>
+#include <QElapsedTimer>
+#include "vec3.h"
+#include "vec4.h"
+#include "math_constants.h"
+
+namespace am
+{
+    template <size_t row, size_t col>
+    struct Matrix
+    {
+        // Type alias
+        using Mat = Matrix<row, col>;
+        // Constructors
+        Matrix();
+        Matrix(const int type);
+        Matrix(std::initializer_list<float> list);
+
+        // Operator overloading
+        float &operator()(int m, int n);
+        float operator()(int m, int n) const;
+        Mat operator+(const Mat &rhs) const;        // m + m
+        Mat operator-(const Mat &rhs) const;        // m - m
+        Mat operator*(const float rhs) const;       // m * f
+        template <size_t row1, size_t col1>         // f * m
+        friend Matrix<row,col> operator*(const float lhs, const Matrix<row, col> &rhs);
+        Vec4 operator*(const Vec4 &rhs);            // m * v4
+        Vec3 operator*(const Vec3 &rhs);            // m * v3
+        Mat operator*(const Mat &rhs) const;        // m * m
+        Mat &operator*=(const Mat &rhs);            // m *= m
+
+        // Transformations
+        void identity();
+        void scale(float x, float y, float z);
+        void scale(const Vec3 &scale);
+        void rotate(float degrees, const Vec3 &axis);
+        void translate(float x, float y, float z);
+        void translate(const Vec3 &pos);
+
+        // Special matrices
+        static Mat orthographic(float n, float f, float t, float r); // TODO fix
+        static Mat perspective(float fov, float aspect, float n, float f);
+        static Mat lookAt(const Vec3 &camPos, const Vec3 &target, const Vec3 &worldUp);
+
+        // Calculations
+        float determinant();
+        void inverse();
+        void transpose();
+        std::vector<float> solveLinearEquation();
+
+        // Other
+        void setMatrix(std::initializer_list<float> list);
+        const float *data() const;
+
+        // Print matrix
+        void print() const;
+        template <size_t row1, size_t col1>
+        friend std::ostream& operator<<(std::ostream &out, const Matrix<row, col> &rhs);
+        template <size_t row1, size_t col1>
+        friend QDebug operator<<(QDebug out, const Matrix<row, col> &rhs);
+
+
+    private:
+        void swap(int row1, int row2, std::array<float, row*col> &array);
+        void rowPlusRow(float K, int row1, int row2, std::array<float, row*col> &array);
+        void rowTimesConstant(float K, int row1, std::array<float, row*col> &array);
+        const std::array<float, row*col> &getMatrix();
+        bool notZero(float k);
+        void makeZero(std::array<float, row*col> &array);
+        void matrixMultiplication(const Mat &mat);
+
+    private:
+        std::array<float, row*col> mMatrix;
+    };
+
+    //-------------------------------------------------------------------------------
+
+    // Constructors
+    template<size_t row, size_t col>
+    Matrix<row,col>::Matrix()
+    {
+        identity();
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col>::Matrix(const int type)
+    {
+        if (type == 0)
+            makeZero(mMatrix);
+        else if (type == 1)
+            identity();
+        else
+            std::cout << "ERROR::MATRIX - Not valid matrix type\n";
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row,col>::Matrix(std::initializer_list<float> list)
+    {
+        std::copy(list.begin(), list.end(), mMatrix.begin());
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::setMatrix(std::initializer_list<float> list)
+    {
+        std::copy(list.begin(), list.end(), mMatrix.begin());
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::identity()
+    {
+        makeZero(mMatrix);
+        int size;
+        if (row<col)
+            size = row;
+        else
+            size = col;
+        for (int mn = 0; mn < size; ++mn)
+            mMatrix[mn * col + mn] = 1.0f;
+    }
+
+    template<size_t row, size_t col>
+    float& Matrix<row,col>::operator()(int m, int n)
+    {
+        return mMatrix[m * col + n];
+    }
+
+    template<size_t row, size_t col>
+    float Matrix<row, col>::operator()(int m, int n) const
+    {
+        return mMatrix[m * col + n];
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> Matrix<row, col>::operator+(const Mat &rhs) const
+    {
+        Mat result(0);
+        for (unsigned int m = 0; m < row; ++m) {
+            for (unsigned int n = 0; n < col; ++n)
+                result(m, n) = mMatrix[m * col + n] + rhs(m, n);
+        }
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> Matrix<row, col>::operator-(const Mat &rhs) const
+    {
+        Mat result(0);
+        for (unsigned int m = 0; m < row; ++m) {
+            for (unsigned int n = 0; n < col; ++n)
+                result(m, n) = mMatrix[m * col + n] - rhs(m, n);
+        }
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> Matrix<row,col>::operator*(const float rhs) const
+    {
+        Mat result(0);
+        for (unsigned int m = 0; m < row; ++m) {
+            for (unsigned int n = 0; n < col; ++n)
+                result(m, n) = mMatrix[m * col + n] * rhs;
+        }
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> operator*(const float lhs, const Matrix<row, col> &rhs)
+    {
+        Matrix<row, col> result(0);
+        for (unsigned int m = 0; m < row; ++m) {
+            for (unsigned int n = 0; n < col; ++n)
+                result(m, n) = lhs * rhs(m, n);
+        }
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Vec4 Matrix<row,col>::operator*(const Vec4 &rhs)
+    {
+        Vec4 result;
+        result.x = (mMatrix[0 * col + 0] * rhs.x
+                    + mMatrix[0 * col + 1] * rhs.y
+                    + mMatrix[0 * col + 2] * rhs.z
+                    + mMatrix[0 * col + 3] * rhs.w);
+        result.y = (mMatrix[1 * col + 0] * rhs.x
+                    + mMatrix[1 * col + 1] * rhs.y
+                    + mMatrix[1 * col + 2] * rhs.z
+                    + mMatrix[1 * col + 3] * rhs.w);
+        result.z = (mMatrix[2 * col + 0] * rhs.x
+                    + mMatrix[2 * col + 1] * rhs.y
+                    + mMatrix[2 * col + 2] * rhs.z
+                    + mMatrix[2 * col + 3] * rhs.w);
+        result.w = (mMatrix[3 * col + 0] * rhs.x
+                    + mMatrix[3 * col + 1] * rhs.y
+                    + mMatrix[3 * col + 2] * rhs.z
+                    + mMatrix[3 * col + 3] * rhs.w);
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Vec3 Matrix<row,col>::operator*(const Vec3 &rhs)
+    {
+        Vec3 result;
+        result.x = (mMatrix[0 * col + 0] * rhs.x
+                    + mMatrix[0 * col + 1] * rhs.y
+                    + mMatrix[0 * col + 2] * rhs.z);
+        result.y = (mMatrix[1 * col + 0] * rhs.x
+                    + mMatrix[1 * col + 1] * rhs.y
+                    + mMatrix[1 * col + 2] * rhs.z);
+        result.z = (mMatrix[2 * col + 0] * rhs.x
+                    + mMatrix[2 * col + 1] * rhs.y
+                    + mMatrix[2 * col + 2] * rhs.z);
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> Matrix<row,col>::operator*(const Mat &rhs) const
+    {
+        Mat result(0);
+        for (unsigned int m = 0; m < row; ++m) {
+            for (unsigned int n = 0; n < col; ++n) {
+                for (unsigned int i = 0; i < col; ++i)
+                    result(m, n) += mMatrix[m * col + i] * rhs(i,n);
+            }
+        }
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col>& Matrix<row, col>::operator*=(const Mat &rhs)
+    {
+        matrixMultiplication(rhs);
+        return *this;
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::scale(float x, float y, float z)
+    {
+        Mat temp;
+        temp(0, 0) = x;
+        temp(1, 1) = y;
+        temp(2, 2) = z;
+        matrixMultiplication(temp);
+    }
+
+    template<size_t row, size_t col>
+    inline void Matrix<row, col>::scale(const Vec3 & scale)
+    {
+        Mat temp;
+        temp(0, 0) = scale.x;
+        temp(1, 1) = scale.y;
+        temp(2, 2) = scale.z;
+        matrixMultiplication(temp);
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::rotate(float degrees, const Vec3& u)
+    {
+        if (u.length() >= 0.1f) {
+            float rad = degrees * (PI / 180.0f);
+            Mat rotationMat = {
+                cos(rad) + pow(u.x, 2.0f) * (1.0f - cos(rad)),		u.x * u.y * (1.0f - cos(rad)) - u.z * sin(rad),		u.x * u.z * (1.0f - cos(rad)) + u.y * sin(rad),	 0.0f,
+                u.y * u.x * (1.0f - cos(rad)) + u.z * sin(rad),		cos(rad) + pow(u.y, 2.0f) * (1.0f - cos(rad)),		u.y * u.z * (1.0f - cos(rad)) - u.x * sin(rad),	 0.0f,
+                u.z * u.x * (1.0f - cos(rad)) - u.y * sin(rad),		u.z * u.y * (1.0f - cos(rad)) + u.x * sin(rad),		cos(rad) + pow(u.z, 2.0f) * (1.0f - cos(rad)),	 0.0f,
+                0.0f,												0.0f,												0.0f,											 1.0f
+            };
+            matrixMultiplication(rotationMat);
+        }
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::translate(float x, float y, float z)
+    {
+        Matrix<row,col> temp;
+        temp.identity();
+        temp(0, 3) = x;
+        temp(1, 3) = y;
+        temp(2, 3) = z;
+        matrixMultiplication(temp);
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row, col>::translate(const Vec3& pos)
+    {
+        Matrix<row, col> temp;
+        temp.identity();
+        temp(0, 3) = pos.x;
+        temp(1, 3) = pos.y;
+        temp(2, 3) = pos.z;
+        matrixMultiplication(temp);
+    }
+
+    template<size_t row, size_t col>
+    float Matrix<row,col>::determinant()
+    {
+        auto copy = mMatrix;
+        int timesSwapped = 0;
+        for (int diag = 0; diag < row; diag++) {
+            // Bytter om rader hvis en av radene under diagonalen har en større ledende koeffisient
+            int rowToSwap = 0;
+            for (int j = diag + 1; j < row; j++) {
+                if (copy[j * col + diag]>copy[diag * col + diag])
+                    rowToSwap = j;
+            }
+
+            if (rowToSwap>diag) {
+                swap(diag, rowToSwap, copy);
+                ++timesSwapped;
+            }
+            // Gjør ledende koeffisienter under diagonalen til null
+            for (int j = diag + 1; j < row; j++) {
+                if (notZero(copy[j * col + diag])) {
+                    float k = copy[j * col + diag] / copy[diag * col + diag];
+                    rowPlusRow(-k, diag, j, copy);
+                }
+            }
+        }
+        // Multipliserer diagonalen
+        float result = 1.0;
+        for (int i = 0; i < row; i++)
+            result *= copy[i * col + i];
+        // For hver gang vi bytter rad edres fortegn
+        result *= pow(-1, timesSwapped);
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> Matrix<row,col>::orthographic(float n, float f, float t, float r)
+    {
+        Mat result(0);
+        result(0, 0) = 1/r;
+        result(1, 1) = 1/t;
+        result(2, 2) = -2/(f-n);
+        result(2, 3) = -((f+n)/(f-n));
+        result(3, 3) = 1;
+        return  result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> Matrix<row,col>::perspective(float fov, float aspect, float n, float f)
+    {
+        float tanHalfFov = tan(fov / 2.0f);
+
+        Mat result(0);
+        result(0,0) = 1.0f / (aspect * tanHalfFov);
+        result(1,1) = 1.0f / tanHalfFov;
+        result(2,2) = -(f + n) / (f - n);
+        result(3,2) = -1.0f;
+        result(2,3) = -(2.0f * f * n) / (f - n);
+        return result;
+    }
+
+    template<size_t row, size_t col>
+    Matrix<row, col> Matrix<row, col>::lookAt(const Vec3 &camPos, const Vec3 &target, const Vec3 &worldUp)
+    {
+        Vec3 front = normalize(camPos - target);
+        Vec3 right = normalize(cross(front, -worldUp));
+        Vec3 up = cross(front, right);
+
+        return {
+            right.x,    right.y,    right.z,    -am::dot(right, camPos),
+            up.x,       up.y,       up.z,       -am::dot(up, camPos),
+            front.x,    front.y,    front.z,    -am::dot(front, camPos),
+            0.0f,       0.0f,       0.0f,       1.0f
+        };
+    }
+
+    template<size_t row, size_t col>
+    std::vector<float> Matrix<row,col>::solveLinearEquation()
+    {
+        auto copy = mMatrix;
+        int cycle = 0;
+
+        for (int i = 0; i < row; ++i) {
+            for (int j = cycle; j < row; ++j) {
+                if (notZero(copy[j * col + cycle])) {
+                    if (j>cycle) {
+                        swap(cycle, j, copy);
+                    }
+                    float k = 1/copy[cycle * col + cycle];
+                    rowTimesConstant(k, cycle, copy);
+                    break;
+                }
+            }
+            for (int j = 0; j < row; ++j) {
+                if (notZero(copy[j * col + cycle]) && j!=cycle) {
+                    float k = -(copy[j * col + cycle]);
+                    rowPlusRow(k, cycle, j, copy);
+                }
+            }
+            ++cycle;
+        }
+        std::vector<float> Result;
+        for (int i = 0; i < row; ++i)
+            Result.push_back(copy[i * col + col-1]);
+        return Result;
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::inverse()
+    {
+        auto copy = mMatrix;
+        identity();
+        int cycle = 0;
+        for (int i = 0; i < col; ++i) {
+            for (int j = cycle; j < row; ++j) {
+                if (notZero(copy[j * col + cycle])) {
+                    if (j>cycle) {
+                        swap(cycle, j, copy);
+                        swap(cycle, j, mMatrix);
+                    }
+                    float k = 1/copy[cycle * col + cycle];
+                    rowTimesConstant(k, cycle, copy);
+                    rowTimesConstant(k, cycle, mMatrix);
+                    break;
+                }
+            }
+            for (int j = 0; j < row; ++j) {
+                if (notZero(copy[j * col + cycle]) && j!=cycle) {
+                    float k = -(copy[j * col + cycle]);
+                    rowPlusRow(k, cycle, j, copy);
+                    rowPlusRow(k, cycle, j, mMatrix);
+                }
+            }
+            ++cycle;
+        }
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::transpose()
+    {
+        Mat copy{*this};
+        for (unsigned int m = 0; m < row; m++) {
+            for (unsigned int n = 0; n < col; n++)
+                mMatrix[m * col + n] = copy(n, m);
+        }
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::print() const
+    {
+        for (int i = 0; i < row; ++i) {
+            std::cout << "(";
+            for (int j = 0; j < col; ++j)
+                std::cout << mMatrix[i * col + j] << " ";
+            std::cout << ")\n";
+        }
+    }
+
+    template<size_t row, size_t col>
+    const float *Matrix<row, col>::data() const
+    {
+        return mMatrix.data();
+    }
+
+    template<size_t row, size_t col>
+    std::ostream &operator<<(std::ostream &out, const Matrix<row, col> &rhs)
+    {
+        for (int i = 0; i < row; ++i) {
+            out << "(";
+            for (int j = 0; j < col; ++j)
+                out << rhs(i, j) << ((j<col-1)?" ":"");
+            out << ")\n";
+        }
+        return out;
+    }
+
+    template <size_t row, size_t col>
+    QDebug operator<<(QDebug out, const Matrix<row, col> &rhs)
+    {
+        out << "\n";
+        for (int i = 0; i < row; ++i) {
+            out << "(";
+            for (int j = 0; j < col; ++j)
+                out << rhs(i, j) << ((j<col-1)?" ":"");
+            out << ")\n";
+        }
+        return out;
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::swap(int row1, int row2, std::array<float, row*col> &array)
+    {
+        auto temp = array;
+        for (unsigned int i = 0; i < col; ++i) {
+            array[row1 * col + i] = temp[row2 * col + i];
+            array[row2 * col + i] = temp[row1 * col + i];
+        }
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::rowPlusRow(float k, int row1, int row2, std::array<float, row*col> &array)
+    {
+        for (unsigned int i = 0; i < col; ++i)
+            array[row2 * col + i] += array[row1 * col + i] * k;
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::rowTimesConstant(float k, int row1, std::array<float, row*col> &array)
+    {
+        for (unsigned int i = 0; i < col; ++i)
+            array[row1 * col + i] *= k;
+    }
+
+    template<size_t row, size_t col>
+    const std::array<float, row*col> &Matrix<row, col>::getMatrix()
+    {
+        return mMatrix;
+    }
+
+    template<size_t row, size_t col>
+    bool Matrix<row,col>::notZero(float k)
+    {
+        if (abs(k) < 0.000001f)
+            return false;
+        return true;
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::makeZero(std::array<float, row*col> &array)
+    {
+        std::fill(array.begin(), array.end(), 0.0f);
+    }
+
+    template<size_t row, size_t col>
+    void Matrix<row,col>::matrixMultiplication(const Mat& mat)
+    {
+        Mat result(0);
+        for (unsigned int m = 0; m < row; ++m) {
+            for (unsigned int n = 0; n < col; ++n) {
+                for (unsigned int i = 0; i < col; ++i)
+                    result(m, n) += mat(i, n) * mMatrix[m * col + i];
+            }
+        }
+        mMatrix = result.getMatrix();
+    }
+}
+
+#endif // MATRIX_H
