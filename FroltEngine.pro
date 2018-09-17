@@ -14,47 +14,62 @@ CONFIG += c++17
 QMAKE_CXXFLAGS += /std:c++17
 # --------------------------------------------------------------
 
+INCLUDEPATH += $$PWD/Libraries
+INCLUDEPATH += $$PWD/Math
+
+
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
     viewport.cpp \
-    entity.cpp \
     inputcomponent.cpp \
     playerinputcomponent.cpp \
-    a_math.cpp \
     material.cpp \
     mesh.cpp \
     model.cpp \
     shader.cpp \
-    stb_image.cpp \
     texture.cpp \
-    vec2.cpp \
-    vec3.cpp \
-    vec4.cpp \
     vertex.cpp \
-    engine.cpp
+    engine.cpp \
+    gameobject.cpp \
+    component.cpp \
+    transformcomponent.cpp \
+    Math/a_math.cpp \
+    Math/vec2.cpp \
+    Math/vec3.cpp \
+    Math/vec4.cpp \
+    LAS/lasreader.cpp \
+    Libraries/Include/stb_image.cpp \
+    factory.cpp
 
 HEADERS += \
     mainwindow.h \
     viewport.h \
-    entity.h \
     inputcomponent.h \
     playerinputcomponent.h \
-    a_math.h \
-    gl_constants.h \
     material.h \
-    math_constants.h \
-    matrix.h \
     mesh.h \
     model.h \
     shader.h \
-    stb_image.h \
     texture.h \
-    vec2.h \
-    vec3.h \
-    vec4.h \
     vertex.h \
-    engine.h
+    engine.h \
+    gameobject.h \
+    component.h \
+    transformcomponent.h \
+    Math/a_math.h \
+    Math/math_constants.h \
+    Math/matrix.h \
+    Math/vec2.h \
+    Math/vec3.h \
+    Math/vec4.h \
+    LAS/headerstock.h \
+    LAS/lasreader.h \
+    Libraries/Include/stb_image.h \
+    enums.h \
+    paths.h \
+    inputstate.h \
+    factory.h
 
 FORMS += \
     mainwindow.ui

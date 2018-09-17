@@ -32,7 +32,7 @@ private:
     Ui::MainWindow *ui{nullptr};
     QWidget *mViewportWidget{nullptr};
     Viewport *mViewport{nullptr};
-    Engine *mWorld{nullptr};
+    Engine *mEngine{nullptr};
 };
 
 #endif // MAINWINDOW_H

@@ -2,10 +2,11 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QTimer>
-#include "entity.h"
+#include "gameobject.h"
 #include "viewport.h"
 #include "inputcomponent.h"
 #include "playerinputcomponent.h"
+#include "transformcomponent.h"
 
 Engine::Engine(Viewport *viewport, QObject *parent)
     : QObject(parent),
@@ -20,7 +21,10 @@ void Engine::initialize()
 {
     connect(mGameLoopTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
 
-    mEntities.push_back(std::make_shared<Entity>(std::make_shared<PlayerInputComponent>(mViewport)));
+    mGameObjects.push_back(Factory::makeInputAndTransform(mViewport));
+    mGameObjects.push_back(Factory::makeInputAndTransform(mViewport));
+    mGameObjects.push_back(Factory::makeInputAndTransform(mViewport));
+    mGameObjects.push_back(Factory::makeInputAndTransform(mViewport));
 }
 
 void Engine::startGameLoop()
@@ -50,7 +54,8 @@ float Engine::getTime()
 
 void Engine::gameLoop()
 {
-    for (auto &entity : mEntities)
-        entity->update();
+    mDeltaTime = static_cast<float>(mTickTimer.restart()) / 1000.0f;
+    for (auto &entity : mGameObjects)
+        entity->update(mDeltaTime);
     render();
 }

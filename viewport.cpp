@@ -48,7 +48,7 @@ void Viewport::postRender()
     mContext->swapBuffers(this);
 }
 
-void Viewport::exposeEvent(QExposeEvent *event)
+void Viewport::exposeEvent(QExposeEvent *)
 {
     qDebug() << "exposeEvent() called";
 
@@ -62,33 +62,39 @@ void Viewport::exposeEvent(QExposeEvent *event)
 
 void Viewport::keyPressEvent(QKeyEvent *event)
 {
-    mPressedKeys += event->key();
+    mInputState.mPressedKeys += event->key();
 }
 
 void Viewport::keyReleaseEvent(QKeyEvent *event)
 {
-    mPressedKeys -= event->key();
+    mInputState.mPressedKeys -= event->key();
 }
 
 void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    mInputState.mDoubleClick = event->flags();
 }
 
 void Viewport::mouseMoveEvent(QMouseEvent *event)
 {
-    mMousePosX = event->pos().x();
-    mMousePosY = event->pos().y();
+    mInputState.mMousePos.x = event->pos().x();
+    mInputState.mMousePos.y = event->pos().y();
 }
 
 void Viewport::mousePressEvent(QMouseEvent *event)
 {
-    mPressedMouseButton -= event->button();
+    mInputState.mPressedMouseButtons += event->button();
+    mInputState.mDoubleClick = event->flags();
 }
 
 void Viewport::mouseReleaseEvent(QMouseEvent *event)
 {
+    mInputState.mPressedMouseButtons -= event->button();
+    mInputState.mDoubleClick = event->flags();
 }
 
 void Viewport::wheelEvent(QWheelEvent *event)
 {
+    mInputState.mWheelAngleDelta += event->angleDelta();
+    mInputState.mWheelPixelDelta += event->pixelDelta();
 }

@@ -1,18 +1,19 @@
 #ifndef INPUTCOMPONENT_H
 #define INPUTCOMPONENT_H
 
+#include "component.h"
+
 // Forward declarations
 class Viewport;
+struct InputState;
 
-class InputComponent
+class InputComponent : public Component
 {
 public:
-    InputComponent(Viewport *viewport);
-    virtual ~InputComponent();
-    virtual void update() = 0;
+    InputComponent(const InputState *inputState);
 
 protected:
-    Viewport *mViewport;
+    const InputState *mInputState;
 };
 
 #endif // INPUTCOMPONENT_H

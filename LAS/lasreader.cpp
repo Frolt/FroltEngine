@@ -1,5 +1,5 @@
 #include "lasreader.h"
-#include "gl_constants.h"
+#include "paths.h"
 #include "a_math.h"
 #include "vertex.h"
 #include <iostream>

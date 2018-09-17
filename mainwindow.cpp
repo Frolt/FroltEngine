@@ -53,7 +53,7 @@ void MainWindow::connectSignalsSlots()
 
 void MainWindow::viewportReady()
 {
-    mWorld = new Engine(mViewport);
+    mEngine = new Engine(mViewport);
 }
 
 void MainWindow::on_messageButton_clicked()

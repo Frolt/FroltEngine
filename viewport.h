@@ -4,13 +4,13 @@
 #include <QWindow>
 #include <QOpenGLFunctions_4_1_Core>
 #include <QSet>
+#include "inputstate.h"
 
 // Forward declarations
 class MainWindow;
 class QOpenGLContext;
 class QOpenGLDebugLogger;
 class InputComponent;
-
 
 class Viewport : public QWindow, protected QOpenGLFunctions_4_1_Core
 {
@@ -23,7 +23,7 @@ public:
     void postRender();
 
     // Event handlers
-    virtual void exposeEvent(QExposeEvent *event) override;
+    virtual void exposeEvent(QExposeEvent *) override;
     virtual void keyPressEvent(QKeyEvent *event) override;
     virtual void keyReleaseEvent(QKeyEvent *event) override;
     virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
@@ -41,11 +41,7 @@ private:
     bool mInitialized{false};
     float mAspect{0.0f};
 public:
-    QSet<int> mPressedKeys;
-    QSet<int> mPressedMouseButton;
-    // TODO make vector
-    int mMousePosX{0};
-    int mMousePosY{0};
+    InputState mInputState;
 };
 
 #endif // VIEWPORT_H
