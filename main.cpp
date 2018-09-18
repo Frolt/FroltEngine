@@ -3,7 +3,6 @@
 #include <QDebug>
 #include <iostream>
 #include "engine.h"
-#include "inputcomponent.h"
 
 int main(int argc, char *argv[])
 {

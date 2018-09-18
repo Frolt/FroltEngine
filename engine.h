@@ -5,13 +5,10 @@
 #include <QObject>
 #include <memory>
 #include <vector>
-#include "factory.h"
 
 // Forward declarations
-class GameObject;
 class QTimer;
 class Viewport;
-class Component;
 
 class Engine : public QObject
 {
@@ -28,11 +25,13 @@ private slots:
     void gameLoop();
 
 private:
-    std::vector<std::unique_ptr<GameObject>> mGameObjects;
+    // Timers
     QElapsedTimer mTimer;
     QElapsedTimer mTickTimer;
     QTimer *mGameLoopTimer;
+    // Pointers
     Viewport *mViewport;
+    // Variables
     float mDeltaTime{0.0f};
     bool mIsRunning{true};
 };

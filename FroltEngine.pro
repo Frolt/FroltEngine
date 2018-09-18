@@ -22,41 +22,22 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     viewport.cpp \
-    inputcomponent.cpp \
-    playerinputcomponent.cpp \
-    material.cpp \
-    mesh.cpp \
-    model.cpp \
     shader.cpp \
-    texture.cpp \
     vertex.cpp \
     engine.cpp \
-    gameobject.cpp \
-    component.cpp \
-    transformcomponent.cpp \
     Math/a_math.cpp \
     Math/vec2.cpp \
     Math/vec3.cpp \
     Math/vec4.cpp \
     LAS/lasreader.cpp \
     Libraries/Include/stb_image.cpp \
-    factory.cpp
 
 HEADERS += \
     mainwindow.h \
     viewport.h \
-    inputcomponent.h \
-    playerinputcomponent.h \
-    material.h \
-    mesh.h \
-    model.h \
     shader.h \
-    texture.h \
     vertex.h \
     engine.h \
-    gameobject.h \
-    component.h \
-    transformcomponent.h \
     Math/a_math.h \
     Math/math_constants.h \
     Math/matrix.h \
@@ -69,7 +50,6 @@ HEADERS += \
     enums.h \
     paths.h \
     inputstate.h \
-    factory.h
 
 FORMS += \
     mainwindow.ui
