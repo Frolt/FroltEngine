@@ -4,7 +4,6 @@
 #include <QCoreApplication>
 #include <QKeyEvent>
 #include <QMouseEvent>
-#include "inputcomponent.h"
 
 Viewport::Viewport(const QSurfaceFormat &format)
 {

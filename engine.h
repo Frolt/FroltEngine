@@ -9,6 +9,7 @@
 // Forward declarations
 class QTimer;
 class Viewport;
+class World;
 
 class Engine : public QObject
 {
@@ -34,6 +35,8 @@ private:
     // Variables
     float mDeltaTime{0.0f};
     bool mIsRunning{true};
+    // Worlds
+    std::unique_ptr<World> mWorld;
 };
 
 #endif // ENGINE_H

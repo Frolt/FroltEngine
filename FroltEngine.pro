@@ -31,6 +31,10 @@ SOURCES += \
     Math/vec4.cpp \
     LAS/lasreader.cpp \
     Libraries/Include/stb_image.cpp \
+    world.cpp \
+    ECS/system.cpp \
+    ECS/Systems/movementsystem.cpp \
+    ECS/entitymanager.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -50,6 +54,19 @@ HEADERS += \
     enums.h \
     paths.h \
     inputstate.h \
+    ECS/entity.h \
+    ECS/componentmanager.h \
+    ECS/entityhandle.h \
+    world.h \
+    ECS/componenthandle.h \
+    ECS/wrappers.h \
+    ECS/system.h \
+    ECS/Components/transformcomponent.h \
+    ECS/Components/movementcomponent.h \
+    ECS/Systems/movementsystem.h \
+    ECS/entitymanager.h \
+    ECS/component.h \
+    ECS/basecomponentmanager.h
 
 FORMS += \
     mainwindow.ui
