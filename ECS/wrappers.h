@@ -18,10 +18,4 @@ struct ComponentData
     std::array<T, 1024> data;
 };
 
-// COMPONENT COUNTER
-struct ComponentCounter {
-  static int counter;
-};
-int ComponentCounter::counter = 0;
-
 #endif // WRAPPERS_H

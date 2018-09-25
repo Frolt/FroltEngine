@@ -1,7 +1,7 @@
 #include "world.h"
 #include "ECS/system.h"
 #include "ECS/entitymanager.h"
-#include "ECS/entityhandle.h"
+//#include "ECS/entityhandle.h"
 
 World::World()
 {

@@ -4,6 +4,12 @@
 #include <utility>
 #include "wrappers.h"
 
+// COMPONENT COUNTER
+struct ComponentCounter {
+  static int counter;
+};
+int ComponentCounter::counter = 0;
+
 // COMPONENT INTERFACE
 template<typename T>
 struct Component

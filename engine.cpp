@@ -4,6 +4,8 @@
 #include <QTimer>
 #include "viewport.h"
 #include "world.h"
+#include "a.h"
+#include "b.h"
 
 Engine::Engine(Viewport *viewport, QObject *parent)
     : QObject(parent),

@@ -4,10 +4,8 @@
 #include <vector>
 #include <memory>
 #include "ECS/entity.h"
-#include "ECS/basecomponentmanager.h"
 #include "ECS/componentmanager.h"
 #include "ECS/componenthandle.h"
-#include "ECS/component.h"
 
 // Forward declarations
 class EntityManager;
@@ -50,6 +48,7 @@ private:
 //--------------------------------------------------------------------------------------
 // FUNCTION DEFINITIONS
 //--------------------------------------------------------------------------------------
+
 
 template<typename T>
 void World::unpack(Entity entity, ComponentHandle<T> &handle)

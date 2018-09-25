@@ -1,7 +1,5 @@
 #include "movementsystem.h"
-#include "ECS/componenthandle.h"
-#include "ECS/Components/transformcomponent.h"
-#include "ECS/Components/movementcomponent.h"
+#include <QDebug>
 
 MovementSystem::MovementSystem()
 {
