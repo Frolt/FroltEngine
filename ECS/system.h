@@ -1,9 +1,9 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#include "entity.h"
 #include <vector>
 #include <bitset>
+#include "entity.h"
 
 // Forward declarations
 class World;
@@ -12,7 +12,7 @@ class System
 {
 public:
     System();
-    virtual void init();
+    virtual void beginPlay();
     virtual void update(float deltaTime);
     virtual void render();
     // Add a reference to the parent world

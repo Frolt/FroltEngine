@@ -5,11 +5,13 @@
 
 struct Entity
 {
-    Entity(){};
-    Entity(unsigned int ID, std::string name) : mID{ID}, mName{name} {};
-    bool operator==(const Entity &rhs) { return mID == rhs.mID; }
+    Entity();
+    Entity(unsigned int ID, std::string name);
+    bool operator==(const Entity &rhs);
+    friend bool operator<(const Entity &lhs, const Entity &rhs);
 
-    unsigned int mID;
+    // Variables
+    unsigned int mID = 0;
     std::string mName;
 };
 

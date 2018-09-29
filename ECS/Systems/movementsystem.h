@@ -7,7 +7,7 @@ class MovementSystem : public System
 {
 public:
     MovementSystem();
-    void init() override;
+    void beginPlay() override;
     void update(float deltaTime) override;
 };
 

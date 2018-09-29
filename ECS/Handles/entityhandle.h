@@ -1,18 +1,18 @@
 #ifndef ENTITYHANDLE_H
 #define ENTITYHANDLE_H
 
-#include "entity.h"
+#include "ECS/entity.h"
 
 // Forward declarations
 class World;
 
 struct EntityHandle
 {
-    EntityHandle() {}
-    EntityHandle(World *world, Entity entity) : mWorld{world}, mEntity{entity} {}
+    EntityHandle();
+    EntityHandle(World *world, Entity entity);
     void destroy();
     template<typename T>
-    void addComponent(T component);
+    void addComponent(const T &component);
 
     World *mWorld;
     Entity mEntity;
@@ -24,13 +24,8 @@ struct EntityHandle
 
 #include "world.h"
 
-void EntityHandle::destroy()
-{
-    mWorld->destroyEntity(mEntity);
-}
-
 template<typename T>
-void EntityHandle::addComponent(T component)
+void EntityHandle::addComponent(const T &component)
 {
     mWorld->addComponent(mEntity, component);
 }

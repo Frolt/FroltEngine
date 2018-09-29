@@ -10,7 +10,8 @@ EntityManager::EntityManager()
 Entity EntityManager::createEntity(const std::string &name)
 {
     Entity e(mNextID++, name);
-    mEntities[name] = e;
+//    mEntities.insert(std::make_pair(e.mName, e));
+    mEntities[e.mName] = e;
     return e;
 }
 

@@ -1,8 +1,7 @@
 #ifndef COMPONENTHANDLE_H
 #define COMPONENTHANDLE_H
 
-#include "entity.h"
-#include "wrappers.h"
+#include "ECS/entity.h"
 
 // Forward declarations
 template<typename T>
@@ -13,18 +12,23 @@ class ComponentHandle
 {
 public:
     ComponentHandle();
-    ComponentHandle(ComponentManager<T> *manager, ComponentInstance instance, Entity entity);
+    ComponentHandle(Entity entity, ComponentManager<T> *manager);
     void destroy();
 
 public:
-    Entity mOwner;
+    // TODO overload . operator to return mComponent pointer
     T *mComponent{nullptr};
+
+private:
+    Entity mOwner;
     ComponentManager<T> *mManager{nullptr};
 };
 
 //--------------------------------------------------------------------------------------
 // FUNCTION DEFINITIONS
 //--------------------------------------------------------------------------------------
+
+#include "ECS/Managers/componentmanager.h"
 
 template<typename T>
 ComponentHandle<T>::ComponentHandle()
@@ -33,11 +37,10 @@ ComponentHandle<T>::ComponentHandle()
 }
 
 template<typename T>
-ComponentHandle<T>::ComponentHandle(ComponentManager<T> *manager, ComponentInstance instance, Entity entity)
+ComponentHandle<T>::ComponentHandle(Entity entity, ComponentManager<T> *manager)
+    : mOwner{entity}, mManager{manager}
 {
-    mOwner = entity;
     mComponent = manager->getComponent(entity);
-    mManager = manager;
 }
 
 template<typename T>

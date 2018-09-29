@@ -34,7 +34,11 @@ SOURCES += \
     world.cpp \
     ECS/system.cpp \
     ECS/Systems/movementsystem.cpp \
-    ECS/entitymanager.cpp
+    ECS/Managers/entitymanager.cpp \
+    ECS/component.cpp \
+    ECS/entity.cpp \
+    ECS/Managers/basecomponentmanager.cpp \
+    ECS/Handles/entityhandle.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -55,18 +59,17 @@ HEADERS += \
     paths.h \
     inputstate.h \
     ECS/entity.h \
-    ECS/componentmanager.h \
-    ECS/entityhandle.h \
+    ECS/Managers/componentmanager.h \
+    ECS/Handles/entityhandle.h \
     world.h \
-    ECS/componenthandle.h \
-    ECS/wrappers.h \
+    ECS/Handles/componenthandle.h \
     ECS/system.h \
     ECS/Components/transformcomponent.h \
     ECS/Components/movementcomponent.h \
     ECS/Systems/movementsystem.h \
-    ECS/entitymanager.h \
+    ECS/Managers/entitymanager.h \
     ECS/component.h \
-    ECS/basecomponentmanager.h
+    ECS/Managers/basecomponentmanager.h
 
 FORMS += \
     mainwindow.ui

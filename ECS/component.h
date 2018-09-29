@@ -2,30 +2,35 @@
 #define COMPONENT_H
 
 #include <utility>
-#include "wrappers.h"
 
-// COMPONENT COUNTER
+// Counter wrapper
 struct ComponentCounter {
   static int counter;
 };
-int ComponentCounter::counter = 0;
 
-// COMPONENT INTERFACE
+// Interface for components
 template<typename T>
 struct Component
 {
-    // Get the family for the component
-    static inline int family()
-    {
-      static int family = ComponentCounter::counter++;
-      return family;
-    }
+    static int typeID();
 };
 
-// STATIC METHOD FOR GETTING COMPONENT FAMILIY
-template <typename C>
-static int GetComponentFamily() {
-  return Component<typename std::remove_const<C>::type>::family();
+//--------------------------------------------------------------------------------------
+// FUNCTION DEFINITIONS
+//--------------------------------------------------------------------------------------
+
+template<typename T>
+int Component<T>::typeID()
+{
+    // id will only initialize once
+    static int id = ComponentCounter::counter++;
+    return id;
+}
+
+// Static method for getting component type id
+template <typename T>
+static int getComponentTypeID() {
+  return Component<T>::typeID();
 }
 
 #endif // COMPONENT_H

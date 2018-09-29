@@ -5,12 +5,12 @@ System::System()
 
 }
 
-void System::init()
+void System::beginPlay()
 {
 
 }
 
-void System::update(float deltaTime)
+void System::update(float)
 {
 
 }
