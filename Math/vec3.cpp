@@ -80,6 +80,11 @@ namespace am
         z = z / l;
     }
 
+    void Vec3::print()
+    {
+        std::cout << "(" << x << "," << y << "," << z << ")\n";
+    }
+
     std::array<float, 3> Vec3::getArray() const
     {
         return {{ x, y, z }};
@@ -89,11 +94,6 @@ namespace am
     {
         out << "(" << rhs.x << "," << rhs.y << "," << rhs.z << ")";
         return  out;
-    }
-
-    void Vec3::print()
-    {
-        std::cout << "(" << x << "," << y << "," << z << ")\n";
     }
 
     std::ostream &operator<<(std::ostream &out, const Vec3 &rhs)

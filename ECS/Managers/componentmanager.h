@@ -2,6 +2,7 @@
 #define COMPONENTMANAGER_H
 
 #include <map>
+#include <unordered_map>
 #include <array>
 #include <functional>
 #include "ECS/entity.h"
@@ -39,12 +40,18 @@ void ComponentManager<T>::addComponent(Entity entity, const T &component)
 template<typename T>
 T *ComponentManager<T>::getComponent(Entity entity)
 {
-    return &mComponents[mEntityMap[entity]];
+    auto index = mEntityMap[entity];
+    if (index == 0)
+        qDebug() << "ERROR::ACCESSING INDEX ZERO IN --> \"ComponentManager<" << typeid (T).name() << ">::getComponent\"";
+    return &mComponents[index];
 }
 
 template<typename T>
 void ComponentManager<T>::destroy(Entity entity)
 {
+    auto index = mEntityMap[entity];
+    if (index == 0)
+        qDebug() << "ERROR::ACCESSING INDEX ZERO IN --> \"ComponentManager<" << typeid (T).name() << ">::destroy\"";
     mComponents[mEntityMap[entity]] = mComponents[mSize - 1];
     mEntityMap.erase(entity);
     mSize--;

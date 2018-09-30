@@ -6,7 +6,6 @@
 
 struct TransformComponent : public Component<TransformComponent>
 {
-    TransformComponent() {}
     am::Vec3 mPosition{0};
     am::Vec3 mScale{1};
     am::Vec3 mEulerAngles{0};

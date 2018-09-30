@@ -27,18 +27,28 @@ void Engine::initialize()
 
     // Create worlds
     mWorld = std::make_unique<World>();
-    // Create systems;
-    mWorld->addSystem(std::make_unique<MovementSystem>());
     // Begin play
     mWorld->init();
 
     // Create entities
     auto player = mWorld->createEntity("alexander");
-    player->addComponent(TransformComponent());
+    player.addComponent(TransformComponent());
+    player.addComponent(MovementComponent());
 
-    ComponentHandle<TransformComponent> transHandle;
-    mWorld->unpack(player->mEntity, transHandle);
-    qDebug() << transHandle.mComponent->mScale;
+    ComponentHandle<TransformComponent> trans;
+    ComponentHandle<MovementComponent> move;
+    mWorld->unpack(player.mEntity, trans, move);
+    trans().mScale = am::Vec{2};
+    move().mAcceleration = 10.0f;
+
+    ComponentHandle<TransformComponent> trans2;
+    ComponentHandle<MovementComponent> move2;
+    mWorld->unpack(player.mEntity, trans2, move2);
+
+    mWorld->removeComponent<TransformComponent>(player());
+
+    qDebug() << trans2().mScale;
+    qDebug() << move2().mAcceleration;
 }
 
 void Engine::startGameLoop()

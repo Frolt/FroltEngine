@@ -6,9 +6,8 @@
 
 struct MovementComponent : public Component<MovementComponent>
 {
-    MovementComponent() {}
-    am::Vec3 mVelocity;
-    float mAcceleration;
+    am::Vec3 mVelocity{0};
+    float mAcceleration{0.0f};
 };
 
 #endif // MOVEMENTCOMPONENT_H

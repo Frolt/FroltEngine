@@ -7,8 +7,8 @@
 
 MovementSystem::MovementSystem()
 {
-    mSystemSignature.set(3);
-    mSystemSignature.set(18);
+    mSystemMask.addComponent<TransformComponent>();
+    mSystemMask.addComponent<MovementComponent>();
 }
 
 void MovementSystem::beginPlay()
@@ -19,11 +19,12 @@ void MovementSystem::beginPlay()
 void MovementSystem::update(float deltaTime)
 {
     for (auto &entity : mRegisteredEntities) {
+        qDebug() << "MovementSystem update()";
       ComponentHandle<TransformComponent> transform;
       ComponentHandle<MovementComponent> movement;
       mWorld->unpack(entity, transform, movement);
 
-      transform.mComponent->mPosition += movement.mComponent->mVelocity * deltaTime;
-      movement.mComponent->mVelocity += movement.mComponent->mAcceleration * deltaTime;
+      transform().mPosition += movement().mVelocity * deltaTime;
+      movement().mVelocity += movement().mAcceleration * deltaTime;
     }
 }

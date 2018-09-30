@@ -1,11 +1,9 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum class COMPONENT {
-    NO_VALUE,
-    PLAYER_INPUT,
-    AI_INPUT,
+enum COMPONENT {
     TRANSFORM,
+    MOVEMENT,
 };
 
 enum class SHADERS {

@@ -14,9 +14,9 @@ public:
     ComponentHandle();
     ComponentHandle(Entity entity, ComponentManager<T> *manager);
     void destroy();
+    T &operator()();
 
 public:
-    // TODO overload . operator to return mComponent pointer
     T *mComponent{nullptr};
 
 private:
@@ -46,7 +46,14 @@ ComponentHandle<T>::ComponentHandle(Entity entity, ComponentManager<T> *manager)
 template<typename T>
 void ComponentHandle<T>::destroy()
 {
+    // TODO need to update systems
     mManager->destroy(mOwner);
+}
+
+template<typename T>
+T &ComponentHandle<T>::operator()()
+{
+    return *mComponent;
 }
 
 #endif // COMPONENTHANDLE_H

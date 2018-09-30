@@ -4,13 +4,15 @@
 #include <vector>
 #include <memory>
 #include <string>
-#include "ECS/entity.h"
+#include <map>
 
 // Forward declarations
 class EntityManager;
 struct EntityHandle;
 class System;
 class BaseComponentManager;
+struct Entity;
+struct ComponentMask;
 template<typename T>
 class ComponentHandle;
 
@@ -21,20 +23,22 @@ public:
     ~World();
     void init();
     void update(float deltaTime);
-    void addSystem(std::unique_ptr<System> system);
-    std::unique_ptr<EntityHandle> createEntity(const std::string &name);
-    void destroyEntity(Entity entity);
+    void updateSystems(Entity &e, ComponentMask oldMask);
 
+    // Create, destroy and get entity
+    EntityHandle createEntity(const std::string &name);
+    void destroyEntity(Entity entity);
+    EntityHandle getEntity(const std::string &name);
+
+    // Add and remove component
     template<typename T>
     void addComponent(Entity entity, const T &component);
     template<typename T>
     void removeComponent(Entity entity);
 
-    // UNPACKS A GIVEN ENTITTY'S COMPONENTS
-    // Unpack() base template function
+    // Unpack function
     template<typename T>
     void unpack(Entity entity, ComponentHandle<T> &handle);
-    // Unpack() variadic template function
     template<typename T, typename ...Args>
     void unpack(Entity entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
 
@@ -42,6 +46,7 @@ private:
     std::vector<std::unique_ptr<System>> mSystems;
     std::vector<std::unique_ptr<BaseComponentManager>> mComponentManagers;
     std::unique_ptr<EntityManager> mEntityManager;
+    std::map<Entity, ComponentMask> mEntityMasks;
 };
 
 //--------------------------------------------------------------------------------------
@@ -51,11 +56,13 @@ private:
 #include "ECS/Handles/componenthandle.h"
 #include "ECS/Managers/componentmanager.h"
 #include "ECS/component.h"
+#include "ECS/entity.h"
+#include "ECS/componentmask.h"
 
 template<typename T>
 void World::unpack(Entity entity, ComponentHandle<T> &handle)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[getComponentTypeID<T>()].get());
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
     ComponentHandle<T> tmp(entity, manager);
     handle = tmp;
 }
@@ -63,7 +70,8 @@ void World::unpack(Entity entity, ComponentHandle<T> &handle)
 template<typename T, typename ...Args>
 void World::unpack(Entity entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[getComponentTypeID<T>()].get());
+    auto index = Component<T>::typeID();
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[index].get());
     ComponentHandle<T> tmp(entity, manager);
     handle = tmp;
     unpack<Args...>(entity, args ...);
@@ -72,15 +80,26 @@ void World::unpack(Entity entity, ComponentHandle<T> &handle, ComponentHandle<Ar
 template<typename T>
 void World::addComponent(Entity entity, const T &component)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[getComponentTypeID<T>()].get());
+    // add component
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
     manager->addComponent(entity, component);
+
+    // update mask
+    ComponentMask oldMask = mEntityMasks[entity];
+    mEntityMasks[entity].addComponent<T>();
+    updateSystems(entity, oldMask);
 }
 
 template<typename T>
 void World::removeComponent(Entity entity)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[getComponentTypeID<T>()].get());
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
     manager->destroy(entity);
+
+    // update mask
+    ComponentMask oldMask = mEntityMasks[entity];
+    mEntityMasks[entity].removeCompoent<T>();
+    updateSystems(entity, oldMask);
 }
 
 #endif // WORLD_H

@@ -5,6 +5,11 @@ System::System()
 
 }
 
+System::~System()
+{
+
+}
+
 void System::beginPlay()
 {
 
@@ -20,7 +25,7 @@ void System::render()
 
 }
 
-void System::registerWorld(World *world)
+void System::setWorld(World *world)
 {
     mWorld = world;
 }

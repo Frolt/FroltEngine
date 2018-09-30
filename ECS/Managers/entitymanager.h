@@ -11,11 +11,12 @@ public:
     EntityManager();
     Entity createEntity(const std::string &name);
     void destroyEntity(Entity entity);
-    Entity getEntity(std::string name);
+    Entity getEntity(const std::string &name);
+    size_t numOfEntities();
 
 private:
     std::map<std::string, Entity> mEntities;
-    static unsigned int mNextID;
+    static unsigned long long int mNextID;
 };
 
 #endif // ENTITYMANAGER_H

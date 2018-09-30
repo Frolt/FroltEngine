@@ -15,3 +15,8 @@ void EntityHandle::destroy()
 {
     mWorld->destroyEntity(mEntity);
 }
+
+Entity &EntityHandle::operator()()
+{
+    return mEntity;
+}

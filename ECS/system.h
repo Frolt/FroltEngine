@@ -4,6 +4,7 @@
 #include <vector>
 #include <bitset>
 #include "entity.h"
+#include "ECS/componentmask.h"
 
 // Forward declarations
 class World;
@@ -12,20 +13,18 @@ class System
 {
 public:
     System();
+    virtual ~System();
     virtual void beginPlay();
     virtual void update(float deltaTime);
     virtual void render();
-    // Add a reference to the parent world
-    void registerWorld(World *world);
-    // This entity fits our current requirements
+
+    void setWorld(World *world);
     void registerEntity(Entity entity);
-    // This entity has stopped fitting our current requirements
     void deRegisterEntity(Entity entity);
 
+public:
+    ComponentMask mSystemMask;
 protected:
-    // Specifies which components our system cares about — its size should = the number of different components
-    std::bitset<32> mSystemSignature;
-    // These entities fit the systemSignature and should be iterated upon for any functionality
     std::vector<Entity> mRegisteredEntities;
     World *mWorld;
 };

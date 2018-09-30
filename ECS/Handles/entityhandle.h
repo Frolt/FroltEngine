@@ -13,6 +13,7 @@ struct EntityHandle
     void destroy();
     template<typename T>
     void addComponent(const T &component);
+    Entity &operator()();
 
     World *mWorld;
     Entity mEntity;

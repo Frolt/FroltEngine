@@ -38,7 +38,8 @@ SOURCES += \
     ECS/component.cpp \
     ECS/entity.cpp \
     ECS/Managers/basecomponentmanager.cpp \
-    ECS/Handles/entityhandle.cpp
+    ECS/Handles/entityhandle.cpp \
+    ECS/componentmask.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -69,7 +70,8 @@ HEADERS += \
     ECS/Systems/movementsystem.h \
     ECS/Managers/entitymanager.h \
     ECS/component.h \
-    ECS/Managers/basecomponentmanager.h
+    ECS/Managers/basecomponentmanager.h \
+    ECS/componentmask.h
 
 FORMS += \
     mainwindow.ui
