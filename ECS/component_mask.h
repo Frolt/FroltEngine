@@ -1,5 +1,5 @@
-#ifndef COMPONENTMASK_H
-#define COMPONENTMASK_H
+#ifndef COMPONENT_MASK_H
+#define COMPONENT_MASK_H
 
 #include <bitset>
 
@@ -39,4 +39,4 @@ void ComponentMask::removeCompoent()
 }
 
 
-#endif // COMPONENTMASK_H
+#endif // COMPONENT_MASK_H

@@ -1,4 +1,4 @@
-#include "componentmask.h"
+#include "component_mask.h"
 
 ComponentMask::ComponentMask()
 {

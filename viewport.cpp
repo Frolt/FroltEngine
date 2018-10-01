@@ -22,14 +22,12 @@ Viewport::~Viewport()
 
 void Viewport::initialize()
 {
-    qDebug() << "initialize() called";
-
     mContext->makeCurrent(this);
     initializeOpenGLFunctions();
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+    glClearColor(0.180f, 0.419f, 1.0f, 1.0f);
 
     mInitialized = true;
     emit ready();
@@ -49,8 +47,6 @@ void Viewport::postRender()
 
 void Viewport::exposeEvent(QExposeEvent *)
 {
-    qDebug() << "exposeEvent() called";
-
     if (!mInitialized)
         initialize();
 

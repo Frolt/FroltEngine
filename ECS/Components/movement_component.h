@@ -1,5 +1,5 @@
-#ifndef MOVEMENTCOMPONENT_H
-#define MOVEMENTCOMPONENT_H
+#ifndef MOVEMENT_COMPONENT_H
+#define MOVEMENT_COMPONENT_H
 
 #include "a_math.h"
 #include "ECS/component.h"
@@ -10,4 +10,4 @@ struct MovementComponent : public Component<MovementComponent>
     float mAcceleration{0.0f};
 };
 
-#endif // MOVEMENTCOMPONENT_H
+#endif // MOVEMENT_COMPONENT_H

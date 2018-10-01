@@ -1,6 +1,11 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
+enum MESHES {
+    CUBE,
+    RECTANGLE,
+};
+
 enum COMPONENT {
     TRANSFORM,
     MOVEMENT,

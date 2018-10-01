@@ -5,6 +5,8 @@
 #include <QOpenGLFunctions_4_1_Core>
 #include <QSet>
 #include "inputstate.h"
+#include "meshfarm.h"
+#include <memory>
 
 // Forward declarations
 class MainWindow;
@@ -42,6 +44,7 @@ private:
     float mAspect{0.0f};
 public:
     InputState mInputState;
+    std::unique_ptr<MeshFarm> mMeshFarm;
 };
 
 #endif // VIEWPORT_H

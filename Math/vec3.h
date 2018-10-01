@@ -29,6 +29,9 @@ namespace am
         float length() const;
         void normalize();
         void print();
+        float yaw();
+        float pitch();
+        float roll();
         std::array<float, 3> getArray() const;
         friend QDebug operator<<(QDebug out, const Vec3 &rhs);
         friend std::ostream &operator<<(std::ostream &out, const Vec3 &rhs);

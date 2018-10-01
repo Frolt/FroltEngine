@@ -2,13 +2,17 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QTimer>
-#include "viewport.h"
-#include "world.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Handles/entityhandle.h"
-#include "ECS/Components/transformcomponent.h"
-#include "ECS/Components/movementcomponent.h"
+#include "ECS/Components/transform_component.h"
+#include "ECS/Components/movement_component.h"
+#include "ECS/Components/mesh_component.h"
+#include "ECS/Components/material_component.h"
 #include "ECS/Handles/componenthandle.h"
+#include "viewport.h"
+#include "world.h"
+#include "meshfarm.h"
+#include "paths.h"
 
 Engine::Engine(Viewport *viewport, QObject *parent)
     : QObject(parent),
@@ -24,31 +28,20 @@ void Engine::initialize()
     // Connect timer with gameLoop() function
     connect(mGameLoopTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
 
-
+    // Create shaders
+    mLightShader = std::make_unique<Shader>(shaderDir + "VertexShader.vert", shaderDir + "LightObject.frag");
     // Create worlds
     mWorld = std::make_unique<World>();
+    // Create mesh farm
+    mMeshFarm = std::make_unique<MeshFarm>();
     // Begin play
     mWorld->init();
 
     // Create entities
     auto player = mWorld->createEntity("alexander");
     player.addComponent(TransformComponent());
-    player.addComponent(MovementComponent());
-
-    ComponentHandle<TransformComponent> trans;
-    ComponentHandle<MovementComponent> move;
-    mWorld->unpack(player.mEntity, trans, move);
-    trans().mScale = am::Vec{2};
-    move().mAcceleration = 10.0f;
-
-    ComponentHandle<TransformComponent> trans2;
-    ComponentHandle<MovementComponent> move2;
-    mWorld->unpack(player.mEntity, trans2, move2);
-
-    mWorld->removeComponent<TransformComponent>(player());
-
-    qDebug() << trans2().mScale;
-    qDebug() << move2().mAcceleration;
+    player.addComponent(mMeshFarm->getRectangle(mLightShader.get()));
+    player.addComponent(MaterialComponent());
 }
 
 void Engine::startGameLoop()
@@ -80,6 +73,8 @@ float Engine::getTime()
 // GAME LOOP
 void Engine::gameLoop()
 {
+    mViewport->preRender();
     mWorld->update(mDeltaTime);
+    mViewport->postRender();
 }
 //-------------------------------------------------------------------

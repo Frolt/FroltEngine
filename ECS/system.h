@@ -4,7 +4,7 @@
 #include <vector>
 #include <bitset>
 #include "entity.h"
-#include "ECS/componentmask.h"
+#include "ECS/component_mask.h"
 
 // Forward declarations
 class World;

@@ -6,7 +6,7 @@
 static std::string dir = "../";
 static std::string texDir = "../Assets/Textures/";
 static std::string shaderDir = "../Shaders/";
-static std::string verticesDir = "../VerticesData/";
+static std::string primitivesDir = "../Assets/Primitives/";
 static std::string mapDir = "../LAS/MapData/";
 static std::string ModelDir = "../Assets/Models/";
 

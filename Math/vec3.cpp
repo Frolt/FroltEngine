@@ -85,6 +85,21 @@ namespace am
         std::cout << "(" << x << "," << y << "," << z << ")\n";
     }
 
+    float Vec3::yaw()
+    {
+        return x;
+    }
+
+    float Vec3::pitch()
+    {
+        return y;
+    }
+
+    float Vec3::roll()
+    {
+        return z;
+    }
+
     std::array<float, 3> Vec3::getArray() const
     {
         return {{ x, y, z }};

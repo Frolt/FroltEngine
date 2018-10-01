@@ -5,11 +5,13 @@
 #include <QObject>
 #include <memory>
 #include <vector>
+#include "shader.h"
 
 // Forward declarations
 class QTimer;
 class Viewport;
 class World;
+class MeshFarm;
 
 class Engine : public QObject
 {
@@ -37,6 +39,10 @@ private:
     bool mIsRunning{true};
     // Worlds
     std::unique_ptr<World> mWorld;
+    // Farms
+    std::unique_ptr<MeshFarm> mMeshFarm;
+    // Shaders
+    std::unique_ptr<Shader> mLightShader;
 };
 
 #endif // ENGINE_H

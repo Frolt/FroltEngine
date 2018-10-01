@@ -6,7 +6,7 @@
 #include <sstream>
 
 
-Shader::Shader(const std::string vertexPath, const std::string fragmentPath)
+Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
 {
     initializeOpenGLFunctions();
 
@@ -94,32 +94,32 @@ void Shader::use()
     glUseProgram(ID);
 }
 
-void Shader::setBool(const std::string & name, bool value)
+void Shader::setBool(const std::string &name, bool value)
 {
-    use();
     glUniform1i(glGetUniformLocation(ID, name.c_str()), static_cast<int>(value));
 }
 
-void Shader::setInt(const std::string & name, int value)
+void Shader::setInt(const std::string &name, int value)
 {
-    use();
     glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setFloat(const std::string & name, float value)
+void Shader::setFloat(const std::string &name, float value)
 {
-    use();
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setMat4(const std::string & name, const am::Mat4& mat)
+void Shader::setMat3(const std::string &name, const am::Mat3 &mat)
 {
-    use();
+    glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_TRUE, mat.data());
+}
+
+void Shader::setMat4(const std::string &name, const am::Mat4 &mat)
+{
     glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_TRUE, mat.data());
 }
 
 void Shader::setVec3(const std::string &name, const am::Vec3 &vec)
 {
-    use();
     glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, vec.getArray().data());
 }

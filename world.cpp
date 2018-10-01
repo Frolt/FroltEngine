@@ -3,10 +3,13 @@
 #include "ECS/Managers/entitymanager.h"
 #include "ECS/Managers/componentmanager.h"
 #include "ECS/Handles/entityhandle.h"
-#include "ECS/Components/transformcomponent.h"
-#include "ECS/Components/movementcomponent.h"
-#include "ECS/componentmask.h"
+#include "ECS/Components/transform_component.h"
+#include "ECS/Components/movement_component.h"
+#include "ECS/Components/mesh_component.h"
+#include "ECS/Components/material_component.h"
+#include "ECS/component_mask.h"
 #include "ECS/Systems/movementsystem.h"
+#include "ECS/Systems/rendersystem.h"
 
 World::World()
 {
@@ -15,8 +18,11 @@ World::World()
     // Create component managers
     mComponentManagers.push_back(std::make_unique<ComponentManager<TransformComponent>>());
     mComponentManagers.push_back(std::make_unique<ComponentManager<MovementComponent>>());
+    mComponentManagers.push_back(std::make_unique<ComponentManager<MeshComponent>>());
+    mComponentManagers.push_back(std::make_unique<ComponentManager<MaterialComponent>>());
     // Create systems
     mSystems.push_back(std::make_unique<MovementSystem>());
+    mSystems.push_back(std::make_unique<RenderSystem>());
     // Set world pointer for all systems
     for (auto &sys : mSystems)
         sys->setWorld(this);

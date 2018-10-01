@@ -39,7 +39,9 @@ SOURCES += \
     ECS/entity.cpp \
     ECS/Managers/basecomponentmanager.cpp \
     ECS/Handles/entityhandle.cpp \
-    ECS/componentmask.cpp
+    ECS/component_mask.cpp \
+    meshfarm.cpp \
+    ECS/Systems/rendersystem.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -65,13 +67,17 @@ HEADERS += \
     world.h \
     ECS/Handles/componenthandle.h \
     ECS/system.h \
-    ECS/Components/transformcomponent.h \
-    ECS/Components/movementcomponent.h \
     ECS/Systems/movementsystem.h \
     ECS/Managers/entitymanager.h \
     ECS/component.h \
     ECS/Managers/basecomponentmanager.h \
-    ECS/componentmask.h
+    ECS/Components/movement_component.h \
+    ECS/Components/transform_component.h \
+    ECS/Components/mesh_component.h \
+    ECS/Components/material_component.h \
+    ECS/component_mask.h \
+    meshfarm.h \
+    ECS/Systems/rendersystem.h
 
 FORMS += \
     mainwindow.ui
