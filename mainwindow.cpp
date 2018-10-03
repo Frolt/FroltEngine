@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete mViewport;
 }
 
 void MainWindow::init()
@@ -54,6 +55,8 @@ void MainWindow::connectSignalsSlots()
 void MainWindow::viewportReady()
 {
     mEngine = new Engine(mViewport);
+    QOpenGLContext *context = QOpenGLContext::currentContext();
+    Q_ASSERT(context);
 }
 
 void MainWindow::on_messageButton_clicked()

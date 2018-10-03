@@ -20,8 +20,8 @@ public:
     void update(float) override;
 
     void draw(ComponentHandle<MeshComponent> &mesh);
-    void updateShader(Shader *shader, MaterialComponent &material);
-    void updateModelMatrix(Shader *shader, TransformComponent &transform);
+    void updateMaterial(Shader *shader, MaterialComponent &material);
+    void updateTransform(Shader *shader, TransformComponent &transform);
 };
 
 #endif // RENDERSYSTEM_H

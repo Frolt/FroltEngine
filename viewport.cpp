@@ -22,6 +22,7 @@ Viewport::~Viewport()
 
 void Viewport::initialize()
 {
+    mInitialized = true;
     mContext->makeCurrent(this);
     initializeOpenGLFunctions();
 
@@ -29,14 +30,12 @@ void Viewport::initialize()
     glEnable(GL_CULL_FACE);
     glClearColor(0.180f, 0.419f, 1.0f, 1.0f);
 
-    mInitialized = true;
     emit ready();
 }
 
 void Viewport::preRender()
 {
     mContext->makeCurrent(this);
-    initializeOpenGLFunctions();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -52,7 +51,7 @@ void Viewport::exposeEvent(QExposeEvent *)
 
     const int retinaScale = static_cast<int>(devicePixelRatio());
     glViewport(0, 0, width() * retinaScale, height() * retinaScale);
-    mAspect = static_cast<float>(width()) / static_cast<float>(height());
+    mAspect = static_cast<float>(width()) / static_cast<float>(height());    
 }
 
 void Viewport::keyPressEvent(QKeyEvent *event)

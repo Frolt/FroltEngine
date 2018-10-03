@@ -22,15 +22,14 @@ void RenderSystem::beginPlay()
 void RenderSystem::update(float)
 {
     for (auto entity : mRegisteredEntities) {
-        qDebug() << "RenderSystem update()";
         ComponentHandle<MeshComponent> mesh;
         ComponentHandle<TransformComponent> transform;
         ComponentHandle<MaterialComponent> material;
         mWorld->unpack(entity, mesh, transform, material);
 
         mesh().mShader->use();
-        updateShader(mesh().mShader, material());
-        updateModelMatrix(mesh().mShader, transform());
+        updateMaterial(mesh().mShader, material());
+        updateTransform(mesh().mShader, transform());
         draw(mesh);
     }
 }
@@ -45,7 +44,7 @@ void RenderSystem::draw(ComponentHandle<MeshComponent> &mesh)
         glDrawArrays(GL_TRIANGLES, 0, mesh().mDrawCount);
 }
 
-void RenderSystem::updateShader(Shader *shader, MaterialComponent &material)
+void RenderSystem::updateMaterial(Shader *shader, MaterialComponent &material)
 {
     shader->setBool("material.hasDiffMap", material.mHasDiffMap);
     shader->setBool("material.hasSpecMap", material.mHasSpecMap);
@@ -69,7 +68,7 @@ void RenderSystem::updateShader(Shader *shader, MaterialComponent &material)
 //    }
 }
 
-void RenderSystem::updateModelMatrix(Shader *shader, TransformComponent &transform)
+void RenderSystem::updateTransform(Shader *shader, TransformComponent &transform)
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
@@ -91,10 +90,7 @@ void RenderSystem::updateModelMatrix(Shader *shader, TransformComponent &transfo
             m(2,0), m(2,1), m(2,2),
     };
 
-//    // TODO works?
-//    shader->setMat4("model", modelMatrix);
-//    shader->setMat3("normalMat", normalMatrix);
     // Update shader uniforms
-    glUniformMatrix4fv(glGetUniformLocation(shader->ID, "model"), 1, GL_TRUE, modelMatrix.data());
-    glUniformMatrix3fv(glGetUniformLocation(shader->ID, "normalMat"), 1, GL_TRUE, normalMatrix.data());
+    shader->setMat4("model", modelMatrix);
+    shader->setMat3("normalMat", normalMatrix);
 }

@@ -6,13 +6,14 @@
 // Forward declarations
 template<typename T>
 class ComponentManager;
+class World;
 
 template<typename T>
 class ComponentHandle
 {
 public:
     ComponentHandle();
-    ComponentHandle(Entity entity, ComponentManager<T> *manager);
+    ComponentHandle(World *world, Entity entity);
     void destroy();
     T &operator()();
 
@@ -20,8 +21,8 @@ public:
     T *mComponent{nullptr};
 
 private:
+    World *mWorld;
     Entity mOwner;
-    ComponentManager<T> *mManager{nullptr};
 };
 
 //--------------------------------------------------------------------------------------
@@ -29,6 +30,7 @@ private:
 //--------------------------------------------------------------------------------------
 
 #include "ECS/Managers/componentmanager.h"
+#include "world.h"
 
 template<typename T>
 ComponentHandle<T>::ComponentHandle()
@@ -37,17 +39,16 @@ ComponentHandle<T>::ComponentHandle()
 }
 
 template<typename T>
-ComponentHandle<T>::ComponentHandle(Entity entity, ComponentManager<T> *manager)
-    : mOwner{entity}, mManager{manager}
+ComponentHandle<T>::ComponentHandle(World *world, Entity entity)
+    : mWorld{world}, mOwner{entity}
 {
-    mComponent = manager->getComponent(entity);
+    mComponent = mWorld->getComponent<T>(entity);
 }
 
 template<typename T>
 void ComponentHandle<T>::destroy()
 {
-    // TODO need to update systems
-    mManager->destroy(mOwner);
+    mWorld->removeComponent<T>(mOwner);
 }
 
 template<typename T>

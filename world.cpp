@@ -61,12 +61,18 @@ void World::updateSystems(Entity &e, ComponentMask oldMask)
 EntityHandle World::createEntity(const std::string &name)
 {
     auto e = mEntityManager->createEntity(name);
+//    mEntityMasks.insert(std::pair(e, ComponentMask()));
     return EntityHandle(this, e);
 }
 
 void World::destroyEntity(Entity entity)
 {
+    // TODO cleanup components
+    mEntityMasks.erase(entity);
     mEntityManager->destroyEntity(entity);
+    // Check all components from entitymask
+    // then static cast all managers
+    // then remove all the components
 }
 
 EntityHandle World::getEntity(const std::string &name)

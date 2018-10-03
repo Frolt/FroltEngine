@@ -6,6 +6,8 @@
 #include <memory>
 #include <vector>
 #include "shader.h"
+#include "vertex.h"
+#include <QOpenGLFunctions_4_1_Core>
 
 // Forward declarations
 class QTimer;
@@ -13,7 +15,7 @@ class Viewport;
 class World;
 class MeshFarm;
 
-class Engine : public QObject
+class Engine : public QObject, protected QOpenGLFunctions_4_1_Core
 {
     Q_OBJECT
 public:
@@ -27,22 +29,20 @@ public:
 private slots:
     void gameLoop();
 
-private:
-    // Timers
-    QElapsedTimer mTimer;
-    QElapsedTimer mTickTimer;
-    QTimer *mGameLoopTimer;
-    // Pointers
+public:
     Viewport *mViewport;
-    // Variables
     float mDeltaTime{0.0f};
-    bool mIsRunning{true};
     // Worlds
     std::unique_ptr<World> mWorld;
     // Farms
     std::unique_ptr<MeshFarm> mMeshFarm;
     // Shaders
-    std::unique_ptr<Shader> mLightShader;
+    std::unique_ptr<Shader> mPhongShader;
+private:
+    // Timers
+    QElapsedTimer mTimer;
+    QElapsedTimer mTickTimer;
+    QTimer *mGameLoopTimer;
 };
 
 #endif // ENGINE_H

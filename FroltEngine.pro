@@ -101,3 +101,10 @@ unix|win32: LIBS += -L$$PWD/Libraries/libs/ -lglm_static
 INCLUDEPATH += $$PWD/Libraries/Include
 DEPENDPATH += $$PWD/Libraries/Include
 # --------------------------------------------------------------
+
+DISTFILES += \
+    Shaders/ColorObject.frag \
+    Shaders/LightObject.frag \
+    Shaders/LightSource.frag \
+    Shaders/TextureObject.frag \
+    Shaders/VertexShader.vert

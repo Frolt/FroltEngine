@@ -19,7 +19,6 @@ void MovementSystem::beginPlay()
 void MovementSystem::update(float deltaTime)
 {
     for (auto &entity : mRegisteredEntities) {
-        qDebug() << "MovementSystem update()";
         ComponentHandle<TransformComponent> transform;
         ComponentHandle<MovementComponent> movement;
         mWorld->unpack(entity, transform, movement);

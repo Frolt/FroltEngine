@@ -7,6 +7,10 @@
 #include "inputstate.h"
 #include "meshfarm.h"
 #include <memory>
+#include "a_math.h"
+#include "vertex.h"
+#include "shader.h"
+#include "paths.h"
 
 // Forward declarations
 class MainWindow;
@@ -41,10 +45,9 @@ private:
     QOpenGLContext *mContext{nullptr};
     QOpenGLDebugLogger *mOpenGLDebugLogger{nullptr};
     bool mInitialized{false};
-    float mAspect{0.0f};
 public:
     InputState mInputState;
-    std::unique_ptr<MeshFarm> mMeshFarm;
+    float mAspect{0.0f};
 };
 
 #endif // VIEWPORT_H

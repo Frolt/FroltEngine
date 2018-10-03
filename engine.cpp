@@ -29,19 +29,25 @@ void Engine::initialize()
     connect(mGameLoopTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
 
     // Create shaders
-    mLightShader = std::make_unique<Shader>(shaderDir + "VertexShader.vert", shaderDir + "LightObject.frag");
+    mPhongShader = std::make_unique<Shader>(shaderDir + "VertexShader.vert", shaderDir + "LightObject.frag");
     // Create worlds
     mWorld = std::make_unique<World>();
     // Create mesh farm
-    mMeshFarm = std::make_unique<MeshFarm>();
+    mMeshFarm = std::make_unique<MeshFarm>(mPhongShader.get());
     // Begin play
     mWorld->init();
 
     // Create entities
     auto player = mWorld->createEntity("alexander");
-    player.addComponent(TransformComponent());
-    player.addComponent(mMeshFarm->getRectangle(mLightShader.get()));
+    player.addComponent(TransformComponent(am::Vec{1.0f, 0.0f, 0.0f}));
+    player.addComponent(mMeshFarm->createCube(mPhongShader.get()));
     player.addComponent(MaterialComponent());
+
+    auto ole = mWorld->createEntity("ole");
+    ole.addComponent(TransformComponent(am::Vec{-1.0f, 0.0f, 0.0f}));
+    ole.addComponent(MovementComponent());
+    ole.addComponent(MaterialComponent());
+    ole.addComponent(mMeshFarm->createRectangle());
 }
 
 void Engine::startGameLoop()
@@ -74,6 +80,14 @@ float Engine::getTime()
 void Engine::gameLoop()
 {
     mViewport->preRender();
+
+    // SET VIEW AND PROJECTION MATRIX
+    am::Mat4 perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
+    auto view = am::Mat4::lookAt(am::Vec{0.0f, 5.0f, 10.0f}, am::Vec{0.0f, 0.0f, 0.0f}, am::up());
+    mPhongShader->use();
+    mPhongShader->setMat4("projection", perspective);
+    mPhongShader->setMat4("view", view);
+
     mWorld->update(mDeltaTime);
     mViewport->postRender();
 }

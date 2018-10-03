@@ -35,6 +35,8 @@ public:
     void addComponent(Entity entity, const T &component);
     template<typename T>
     void removeComponent(Entity entity);
+    template<typename T>
+    T *getComponent(Entity entity);
 
     // Unpack function
     template<typename T>
@@ -63,7 +65,7 @@ template<typename T>
 void World::unpack(Entity entity, ComponentHandle<T> &handle)
 {
     ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
-    ComponentHandle<T> tmp(entity, manager);
+    ComponentHandle<T> tmp(this, entity);
     handle = tmp;
 }
 
@@ -72,7 +74,7 @@ void World::unpack(Entity entity, ComponentHandle<T> &handle, ComponentHandle<Ar
 {
     auto index = Component<T>::typeID();
     ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[index].get());
-    ComponentHandle<T> tmp(entity, manager);
+    ComponentHandle<T> tmp(this, entity);
     handle = tmp;
     unpack<Args...>(entity, args ...);
 }
@@ -100,6 +102,13 @@ void World::removeComponent(Entity entity)
     ComponentMask oldMask = mEntityMasks[entity];
     mEntityMasks[entity].removeCompoent<T>();
     updateSystems(entity, oldMask);
+}
+
+template<typename T>
+T *World::getComponent(Entity entity)
+{
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
+    return manager->getComponent(entity);
 }
 
 #endif // WORLD_H
