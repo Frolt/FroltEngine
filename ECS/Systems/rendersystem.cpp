@@ -29,13 +29,13 @@ void RenderSystem::update(float)
         mWorld->unpack(entity, mesh, transform, material);
 
 //        mesh().mShader.use();
-        updateMaterial(mesh().mShader, material());
-        updateTransform(mesh().mShader, transform());
+        updateMaterialUniforms(mesh().mShader, material());
+        updateTransformUniforms(mesh().mShader, transform());
         draw(mesh);
     }
 }
 
-void RenderSystem::updateMaterial(Shader shader, const MaterialComponent &material) const
+void RenderSystem::updateMaterialUniforms(Shader shader, const MaterialComponent &material) const
 {
     shader.setBool("material.hasDiffMap", material.mHasDiffMap);
     shader.setBool("material.hasSpecMap", material.mHasSpecMap);
@@ -62,7 +62,7 @@ void RenderSystem::updateMaterial(Shader shader, const MaterialComponent &materi
 //    glActiveTexture(GL_TEXTURE0);
 }
 
-void RenderSystem::updateTransform(Shader shader, const TransformComponent &transform) const
+void RenderSystem::updateTransformUniforms(Shader shader, const TransformComponent &transform) const
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-#include "meshfarm.h"
+#include "meshfactory.h"
 #include <fstream>
 #include "ECS/Components/mesh_component.h"
 #include "vertex.h"
@@ -6,13 +6,13 @@
 #include "enums.h"
 #include "octahedron.h"
 
-MeshFarm::MeshFarm(Shader *defaultShader)
+MeshFactory::MeshFactory(Shader *defaultShader)
     : mDefaultShader{defaultShader}
 {
     initializeOpenGLFunctions();
 }
 
-MeshComponent MeshFarm::createCube(Shader *shader)
+MeshComponent MeshFactory::createCube(Shader *shader)
 {
     QString name = "cube";
     if (!shader)
@@ -26,7 +26,7 @@ MeshComponent MeshFarm::createCube(Shader *shader)
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
-MeshComponent MeshFarm::createRectangle(Shader *shader)
+MeshComponent MeshFactory::createRectangle(Shader *shader)
 {
     QString name = "rectangle";
     if (!shader)
@@ -41,7 +41,7 @@ MeshComponent MeshFarm::createRectangle(Shader *shader)
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
-MeshComponent MeshFarm::createTriangle(Shader *shader)
+MeshComponent MeshFactory::createTriangle(Shader *shader)
 {
     QString name = "triangle";
     if (!shader)
@@ -55,7 +55,7 @@ MeshComponent MeshFarm::createTriangle(Shader *shader)
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
-MeshComponent MeshFarm::createSphere(unsigned int subDivide, Shader *shader)
+MeshComponent MeshFactory::createSphere(unsigned int subDivide, Shader *shader)
 {
     QString name = "sphere" + QString::number(subDivide);
     if (!shader)
@@ -74,7 +74,7 @@ MeshComponent MeshFarm::createSphere(unsigned int subDivide, Shader *shader)
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
-unsigned int MeshFarm::createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
+unsigned int MeshFactory::createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
 {
     unsigned int VAO, VBO, EBO;
 
@@ -105,7 +105,7 @@ unsigned int MeshFarm::createWithIndices(std::vector<Vertex> &vertices, std::vec
     return static_cast<unsigned int>(mVAO.size()-1);
 }
 
-unsigned int MeshFarm::createWithoutIndices(std::vector<Vertex> &vertices)
+unsigned int MeshFactory::createWithoutIndices(std::vector<Vertex> &vertices)
 {
     unsigned int VAO, VBO;
 
@@ -132,7 +132,7 @@ unsigned int MeshFarm::createWithoutIndices(std::vector<Vertex> &vertices)
     return static_cast<unsigned int>(mVAO.size()-1);
 }
 
-std::vector<Vertex> MeshFarm::readVerticesFromFile(const QString &path)
+std::vector<Vertex> MeshFactory::readVerticesFromFile(const QString &path)
 {
     std::ifstream inf{Path::primitives + path.toStdString()};
     Q_ASSERT_X(inf, "SceneObject::readVerticesFromFile", "COULD_NOT_OPEN_FILE");

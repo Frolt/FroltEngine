@@ -14,7 +14,7 @@ public:
 
     void beginPlay() override;
     void update(float) override;
-    void setUniforms(const PointLightComponent &dirLight, const TransformComponent &transform) const;
+    void updateUniforms(const PointLightComponent &dirLight, const TransformComponent &transform) const;
 
 
 };

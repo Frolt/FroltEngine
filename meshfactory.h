@@ -1,5 +1,5 @@
-#ifndef MESHFARM_H
-#define MESHFARM_H
+#ifndef MESHFACTORY_H
+#define MESHFACTORY_H
 
 #include <vector>
 #include <QOpenGLFunctions_4_1_Core>
@@ -11,10 +11,10 @@ struct Vertex;
 struct MeshComponent;
 class Shader;
 
-class MeshFarm : protected QOpenGLFunctions_4_1_Core
+class MeshFactory : protected QOpenGLFunctions_4_1_Core
 {
 public:
-    MeshFarm(Shader *defaultShader);
+    MeshFactory(Shader *defaultShader);
     MeshComponent createCube(Shader *shader = nullptr);
     MeshComponent createRectangle(Shader *shader = nullptr);
     MeshComponent createTriangle(Shader *shader = nullptr);
@@ -33,4 +33,4 @@ private:
     Shader *mDefaultShader;
 };
 
-#endif // MESHFARM_H
+#endif // MESHFACTORY_H

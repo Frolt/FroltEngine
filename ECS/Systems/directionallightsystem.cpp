@@ -18,11 +18,11 @@ void DirectionalLightSystem::update(float)
     ComponentHandle<DirectionalLightComponent> dirLight;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, dirLight);
-        setUniforms(dirLight());
+        updateUniforms(dirLight());
     }
 }
 
-void DirectionalLightSystem::setUniforms(const DirectionalLightComponent &dirLight) const
+void DirectionalLightSystem::updateUniforms(const DirectionalLightComponent &dirLight) const
 {
 //    dirLight.mShader.use();
     dirLight.mShader.setVec3("dirLight.direction", dirLight.mDir);

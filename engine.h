@@ -12,8 +12,8 @@
 class QTimer;
 class Viewport;
 class World;
-class MeshFarm;
-class ObjectFarm;
+class MeshFactory;
+class EntityFactory;
 
 class Engine : public QObject, protected QOpenGLFunctions_4_1_Core
 {
@@ -34,9 +34,9 @@ public:
     float mDeltaTime{0.0f};
     // Worlds
     std::unique_ptr<World> mWorld;
-    // Farms
-    std::unique_ptr<MeshFarm> mMeshFarm;
-    std::unique_ptr<ObjectFarm> mObjectFarm;
+    // Factories
+    std::unique_ptr<MeshFactory> mMeshFactory;
+    std::unique_ptr<EntityFactory> mEntityFactory;
     // Shaders
     Shader mPhongShader;
 private:

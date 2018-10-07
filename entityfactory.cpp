@@ -1,4 +1,4 @@
-#include "objectfarm.h"
+#include "entityfactory.h"
 #include "ECS/entity.h"
 #include "ECS/Handles/entityhandle.h"
 #include "ECS/Handles/componenthandle.h"
@@ -9,31 +9,35 @@
 #include "ECS/Components/directionallight_component.h"
 #include "ECS/Components/pointlight_component.h"
 #include "ECS/Components/spotlight_component.h"
-#include "meshfarm.h"
+#include "meshfactory.h"
 #include "world.h"
 #include "octahedron.h"
 
 
-ObjectFarm::ObjectFarm(MeshFarm &meshFarm, World &world, Shader &shader)
-    : mMeshFarm{meshFarm}, mWorld{world}, mDefaultShader{shader}
+EntityFactory::EntityFactory(MeshFactory &meshFactory, World &world, Shader &shader)
+    : mMeshFactory{meshFactory}, mWorld{world}, mDefaultShader{shader}
 {
 
 }
 
-EntityHandle ObjectFarm::createDirectionalLight(const std::string &name, const am::Vec3 &color)
+EntityHandle EntityFactory::createDirectionalLight(const std::string &name, const am::Vec3 &color)
 {
     auto entity = mWorld.createEntity(name);
     DirectionalLightComponent dirLight(-am::up(), am::Vec{0.1}, am::Vec{1});
+    dirLight.mDiff = color;
+    dirLight.mAmb = color * 0.1f;
     dirLight.mShader = mDefaultShader;
     entity.addComponent(dirLight);
     return EntityHandle(&mWorld, entity());
 }
 
-EntityHandle ObjectFarm::createPointLight(const std::string &name, const am::Vec3 &pos, const am::Vec3 &color)
+EntityHandle EntityFactory::createPointLight(const std::string &name, const am::Vec3 &pos, const am::Vec3 &color)
 {
     auto entity = mWorld.createEntity(name);
     PointLightComponent pointLight{am::Vec{0.1}, am::Vec{1}};
     pointLight.mShader = mDefaultShader;
+    pointLight.mDiff = color;
+    pointLight.mAmb = color * 0.1f;
     TransformComponent transform;
     transform.mPosition = pos;
     entity.addComponent(transform);
@@ -41,11 +45,13 @@ EntityHandle ObjectFarm::createPointLight(const std::string &name, const am::Vec
     return EntityHandle(&mWorld, entity());
 }
 
-EntityHandle ObjectFarm::createSpotlight(const std::string &name, const am::Vec3 &pos, const am::Vec3 &color)
+EntityHandle EntityFactory::createSpotlight(const std::string &name, const am::Vec3 &pos, const am::Vec3 &color)
 {
     auto entity = mWorld.createEntity(name);
     SpotlightComponent spotlight(-am::forward(), am::Vec{0.1}, am::Vec{1});
     spotlight.mShader = mDefaultShader;
+    spotlight.mDiff = color;
+    spotlight.mAmb = color * 0.1f;
     TransformComponent transform;
     transform.mPosition = pos;
     entity.addComponent(transform);
@@ -53,10 +59,10 @@ EntityHandle ObjectFarm::createSpotlight(const std::string &name, const am::Vec3
     return EntityHandle(&mWorld, entity());
 }
 
-EntityHandle ObjectFarm::createCube(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
+EntityHandle EntityFactory::createCube(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
 {
     auto entity = mWorld.createEntity(name);
-    MeshComponent mesh = mMeshFarm.createCube();
+    MeshComponent mesh = mMeshFactory.createCube();
     MaterialComponent material;
     material.mDiffuseColor = color;
     TransformComponent transform;
@@ -67,10 +73,10 @@ EntityHandle ObjectFarm::createCube(const std::string &name, const am::Vec3 &col
     return EntityHandle(&mWorld, entity());
 }
 
-EntityHandle ObjectFarm::createSphere(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
+EntityHandle EntityFactory::createSphere(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
 {
     auto entity = mWorld.createEntity(name);
-    MeshComponent mesh = mMeshFarm.createSphere();
+    MeshComponent mesh = mMeshFactory.createSphere();
     MaterialComponent material;
     material.mDiffuseColor = color;
     TransformComponent transform;

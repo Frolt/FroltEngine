@@ -20,11 +20,11 @@ void SpotlightSystem::update(float)
     ComponentHandle<TransformComponent> transform;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, spotlight, transform);
-        setUniforms(spotlight(), transform());
+        updateUniforms(spotlight(), transform());
     }
 }
 
-void SpotlightSystem::setUniforms(const SpotlightComponent &spotlight, const TransformComponent &transform) const
+void SpotlightSystem::updateUniforms(const SpotlightComponent &spotlight, const TransformComponent &transform) const
 {
 //    spotlight.mShader.use();
     spotlight.mShader.setVec3("spotLight.direction", spotlight.mDir);

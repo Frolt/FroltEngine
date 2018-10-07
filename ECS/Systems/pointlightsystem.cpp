@@ -20,11 +20,11 @@ void PointLightSystem::update(float)
     ComponentHandle<TransformComponent> transform;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, pointLight, transform);
-        setUniforms(pointLight(), transform());
+        updateUniforms(pointLight(), transform());
     }
 }
 
-void PointLightSystem::setUniforms(const PointLightComponent &dirLight, const TransformComponent &transform) const
+void PointLightSystem::updateUniforms(const PointLightComponent &dirLight, const TransformComponent &transform) const
 {
 //    dirLight.mShader.use();
     dirLight.mShader.setVec3("pointLights[0].position", transform.mPosition);

@@ -13,8 +13,8 @@
 #include "ECS/Components/spotlight_component.h"
 #include "viewport.h"
 #include "world.h"
-#include "meshfarm.h"
-#include "objectfarm.h"
+#include "meshfactory.h"
+#include "entityfactory.h"
 #include "paths.h"
 #include "shader.h"
 
@@ -36,28 +36,28 @@ void Engine::initialize()
     mPhongShader = Shader{Path::shaders + "VertexShader.vert", Path::shaders + "LightObject.frag"};
     // Create worlds
     mWorld = std::make_unique<World>();
-    // Create farms
-    mMeshFarm = std::make_unique<MeshFarm>(&mPhongShader);
-    mObjectFarm = std::make_unique<ObjectFarm>(*mMeshFarm, *mWorld, mPhongShader);
+    // Create factories
+    mMeshFactory = std::make_unique<MeshFactory>(&mPhongShader);
+    mEntityFactory = std::make_unique<EntityFactory>(*mMeshFactory, *mWorld, mPhongShader);
     // Begin play
     mWorld->init();
 
     // Create entities
-    auto player = mObjectFarm->createSphere("alexander");
+    auto player = mEntityFactory->createSphere("alexander");
 
     // Testing performance (creates N cubes)
     for (unsigned int i = 0; i < 1e3; i++) {
         float randValueX = static_cast<float>(std::rand() % 100 - 50);
         float randValueY = static_cast<float>(std::rand() % 100 - 50);
         float randValueZ = static_cast<float>(std::rand() % 100 - 50);
-        auto cube = mObjectFarm->createCube("cube" + std::to_string(i), Colors::aqua, am::Vec3{randValueX, randValueY, randValueZ});
+        auto cube = mEntityFactory->createCube("cube" + std::to_string(i), Colors::aqua, am::Vec3{randValueX, randValueY, randValueZ});
         cube.addComponent(MovementComponent(am::up() * 1.0f));
     }
     mPhongShader.use();
 
-    auto dirLight = mObjectFarm->createDirectionalLight("dirLight");
-    auto pointLight = mObjectFarm->createPointLight("pointLight", am::Vec3{-10.0f, 5.0f, 0.0f});
-    auto spotlight = mObjectFarm->createSpotlight("spotlight", am::forward() * 20.0f);
+    auto dirLight = mEntityFactory->createDirectionalLight("dirLight");
+    auto pointLight = mEntityFactory->createPointLight("pointLight", am::Vec3{-10.0f, 5.0f, 0.0f});
+    auto spotlight = mEntityFactory->createSpotlight("spotlight", am::forward() * 20.0f);
 }
 
 void Engine::startGameLoop()

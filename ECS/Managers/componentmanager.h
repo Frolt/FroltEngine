@@ -44,7 +44,7 @@ void ComponentManager<T>::addComponent(const Entity &entity, const T &component)
     auto check = mEntityMap.insert(std::make_pair(entity, newIndex));
     // Crashes program if key aldready exist
     Q_ASSERT_X(check.second, "COMPONENTMANAGER::ADDCOMPONENT", "KEY ALREADY EXIST");
-    mComponents[newIndex] = component;
+    mComponents[newIndex] = std::move(component);
     mSize++;
 }
 

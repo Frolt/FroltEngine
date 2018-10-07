@@ -40,7 +40,6 @@ SOURCES += \
     ECS/Managers/basecomponentmanager.cpp \
     ECS/Handles/entityhandle.cpp \
     ECS/component_mask.cpp \
-    meshfarm.cpp \
     ECS/Systems/rendersystem.cpp \
     octahedron.cpp \
     mesh.cpp \
@@ -58,8 +57,9 @@ SOURCES += \
     ECS/Systems/pointlightsystem.cpp \
     ECS/Systems/spotlightsystem.cpp \
     paths.cpp \
-    objectfarm.cpp \
-    colors.cpp
+    colors.cpp \
+    meshfactory.cpp \
+    entityfactory.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -94,7 +94,6 @@ HEADERS += \
     ECS/Components/mesh_component.h \
     ECS/Components/material_component.h \
     ECS/component_mask.h \
-    meshfarm.h \
     ECS/Systems/rendersystem.h \
     octahedron.h \
     mesh.h \
@@ -107,8 +106,9 @@ HEADERS += \
     ECS/Systems/directionallightsystem.h \
     ECS/Systems/pointlightsystem.h \
     ECS/Systems/spotlightsystem.h \
-    objectfarm.h \
-    colors.h
+    colors.h \
+    entityfactory.h \
+    meshfactory.h
 
 FORMS += \
     mainwindow.ui

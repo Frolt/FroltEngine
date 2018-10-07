@@ -13,7 +13,7 @@ public:
 
     void beginPlay() override;
     void update(float) override;
-    void setUniforms(const DirectionalLightComponent &dirLight) const;
+    void updateUniforms(const DirectionalLightComponent &dirLight) const;
 };
 
 #endif // DIRECTIONALLIGHTSYSTEM_H

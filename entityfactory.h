@@ -1,24 +1,24 @@
-#ifndef OBJECTFARM_H
-#define OBJECTFARM_H
+#ifndef ENTITYFACTORY_H
+#define ENTITYFACTORY_H
 
 #include <string>
 #include "a_math.h"
 
 // Forward declarations
 struct EntityHandle;
-class MeshFarm;
+class MeshFactory;
 class World;
 class Shader;
 
-class ObjectFarm
+class EntityFactory
 {
 public:
-    ObjectFarm(MeshFarm &meshFarm, World &world, Shader &shader);
+    EntityFactory(MeshFactory &meshFactory, World &world, Shader &shader);
 
     // Lights
-    EntityHandle createDirectionalLight(const std::string &name, const am::Vec3 &color = Colors::orangeRed);
-    EntityHandle createPointLight(const std::string &name, const am::Vec3 &pos = {0}, const am::Vec3 &color = Colors::orangeRed);
-    EntityHandle createSpotlight(const std::string &name, const am::Vec3 &pos = {0}, const am::Vec3 &color = Colors::orangeRed);
+    EntityHandle createDirectionalLight(const std::string &name, const am::Vec3 &color = Colors::white);
+    EntityHandle createPointLight(const std::string &name, const am::Vec3 &pos = {0}, const am::Vec3 &color = Colors::white);
+    EntityHandle createSpotlight(const std::string &name, const am::Vec3 &pos = {0}, const am::Vec3 &color = Colors::white);
     // Meshes
     EntityHandle createCube(const std::string &name, const am::Vec3 &color = Colors::orangeRed, const am::Vec3 &pos = {0});
     EntityHandle createSphere(const std::string &name, const am::Vec3 &color = Colors::orangeRed, const am::Vec3 &pos = {0});
@@ -35,9 +35,9 @@ public:
     EntityHandle createTerrain(const std::string &name, const am::Vec3 &color = Colors::green, const am::Vec3 &pos = {0});
 
 private:
-    MeshFarm &mMeshFarm;
+    MeshFactory &mMeshFactory;
     World &mWorld;
     Shader &mDefaultShader;
 };
 
-#endif // OBJECTFARM_H
+#endif // ENTITYFACTORY_H
