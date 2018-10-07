@@ -1,23 +1,18 @@
 #include "entity.h"
 
 
-Entity::Entity()
-{
-
-}
-
-Entity::Entity(unsigned int ID, std::string name)
+Entity::Entity(unsigned int ID, const std::string &name)
     : mID{ID}, mName{name}
 {
 
 }
 
-bool Entity::operator==(const Entity &rhs)
+bool Entity::operator==(const Entity &rhs) const
 {
     return mID == rhs.mID;
 }
 
-bool operator<(const Entity &lhs, const Entity &rhs)
+bool Entity::operator<(const Entity &rhs) const
 {
-    return (lhs.mID < rhs.mID);
+    return (mID < rhs.mID);
 }

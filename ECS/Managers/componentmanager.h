@@ -1,10 +1,12 @@
 #ifndef COMPONENTMANAGER_H
 #define COMPONENTMANAGER_H
 
-#include <map>
 #include <unordered_map>
-#include <array>
+#include <map>
+#include <vector>
 #include <functional>
+#include <QtGlobal>
+#include <QDebug>
 #include "ECS/entity.h"
 #include "ECS/Managers/basecomponentmanager.h"
 
@@ -13,15 +15,16 @@ template <typename T>
 class ComponentManager : public BaseComponentManager
 {
 public:
-    void addComponent(Entity entity, const T &component);
-    T *getComponent(Entity entity);
-    void destroy(Entity entity);
+    ComponentManager(std::size_t size = 100000);
+    void addComponent(const Entity &entity, const T &component);
+    void destroyComponent(const Entity &entity);
+    T *getComponent(const Entity &entity);
     void iterateAll(std::function<void(T component)> lambda);
 
 private:
-    std::map<Entity, unsigned int> mEntityMap;
-    unsigned int mSize = 1;
-    std::array<T, 1024> mComponents;
+    std::unordered_map<Entity, unsigned int> mEntityMap;
+    unsigned int mSize{0};
+    std::vector<T> mComponents;
 };
 
 //--------------------------------------------------------------------------------------
@@ -29,40 +32,42 @@ private:
 //--------------------------------------------------------------------------------------
 
 template<typename T>
-void ComponentManager<T>::addComponent(Entity entity, const T &component)
+ComponentManager<T>::ComponentManager(std::size_t size)
+{
+    mComponents.resize(size);
+}
+
+template<typename T>
+void ComponentManager<T>::addComponent(const Entity &entity, const T &component)
 {
     unsigned int newIndex{mSize};
+    auto check = mEntityMap.insert(std::make_pair(entity, newIndex));
+    // Crashes program if key aldready exist
+    Q_ASSERT_X(check.second, "COMPONENTMANAGER::ADDCOMPONENT", "KEY ALREADY EXIST");
     mComponents[newIndex] = component;
-    mEntityMap[entity] = newIndex;
     mSize++;
 }
 
 template<typename T>
-T *ComponentManager<T>::getComponent(Entity entity)
+void ComponentManager<T>::destroyComponent(const Entity &entity)
 {
-    auto index = mEntityMap[entity];
-    if (index == 0)
-        qDebug() << "ERROR::ACCESSING INDEX ZERO IN --> \"ComponentManager<" << typeid (T).name() << ">::getComponent\"";
-    return &mComponents[index];
+    auto index = mEntityMap.at(entity);
+    mComponents[index] = mComponents[--mSize];
+    mEntityMap.erase(entity);
 }
 
 template<typename T>
-void ComponentManager<T>::destroy(Entity entity)
+T *ComponentManager<T>::getComponent(const Entity &entity)
 {
-    auto index = mEntityMap[entity];
-    if (index == 0)
-        qDebug() << "ERROR::ACCESSING INDEX ZERO IN --> \"ComponentManager<" << typeid (T).name() << ">::destroy\"";
-    mComponents[mEntityMap[entity]] = mComponents[mSize - 1];
-    mEntityMap.erase(entity);
-    mSize--;
-
+    auto index = mEntityMap.at(entity);
+    return &mComponents[index];
 }
 
 template<typename T>
 void ComponentManager<T>::iterateAll(std::function<void(T component)> lambda)
 {
-    for(unsigned int i = 1; i < mComponents.size; i++)
-      lambda(mComponents.data[i]);
+    for(unsigned int i = 0; i < mComponents.size; i++)
+        lambda(mComponents.data[i]);
 }
 
 #endif // COMPONENTMANAGER_H

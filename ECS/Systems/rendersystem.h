@@ -10,7 +10,7 @@ struct MaterialComponent;
 struct TransformComponent;
 struct MeshComponent;
 template<typename T>
-class ComponentHandle;
+struct ComponentHandle;
 
 class RenderSystem : public System, protected QOpenGLFunctions_4_1_Core
 {
@@ -19,9 +19,9 @@ public:
     void beginPlay() override;
     void update(float) override;
 
-    void draw(ComponentHandle<MeshComponent> &mesh);
-    void updateMaterial(Shader *shader, MaterialComponent &material);
-    void updateTransform(Shader *shader, TransformComponent &transform);
+    void updateMaterial(Shader shader, const MaterialComponent &material) const;
+    void updateTransform(Shader shader, const TransformComponent &transform) const;
+    void draw(const ComponentHandle<MeshComponent> &mesh);
 };
 
 #endif // RENDERSYSTEM_H

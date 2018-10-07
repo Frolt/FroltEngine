@@ -8,15 +8,20 @@ class World;
 
 struct EntityHandle
 {
-    EntityHandle();
-    EntityHandle(World *world, Entity entity);
+    EntityHandle() = default;
+    EntityHandle(World *world, const Entity &entity);
     void destroy();
     template<typename T>
     void addComponent(const T &component);
+    template<typename T>
+    void removeComponent();
     Entity &operator()();
+    const Entity &operator()() const;
 
-    World *mWorld;
+public:
     Entity mEntity;
+private:
+    World *mWorld;
 };
 
 //--------------------------------------------------------------------------------------
@@ -29,6 +34,12 @@ template<typename T>
 void EntityHandle::addComponent(const T &component)
 {
     mWorld->addComponent(mEntity, component);
+}
+
+template<typename T>
+void EntityHandle::removeComponent()
+{
+    mWorld->removeComponent<T>(mEntity);
 }
 
 #endif // ENTITYHANDLE_H

@@ -9,7 +9,7 @@
 LASReader::LASReader(const std::string &path)
 {
     mHeaderStock = std::make_unique<HeaderStock>();
-    std::ifstream inf(mapDir + path, std::ios::binary);
+    std::ifstream inf(Path::mapdata + path, std::ios::binary);
     readHeaderStock(inf);
     readPointData(inf);
 }

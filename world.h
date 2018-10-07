@@ -4,17 +4,18 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <map>
+#include "ECS/entity.h"
 
 // Forward declarations
 class EntityManager;
 struct EntityHandle;
 class System;
 class BaseComponentManager;
-struct Entity;
 struct ComponentMask;
 template<typename T>
-class ComponentHandle;
+struct ComponentHandle;
 
 class World
 {
@@ -23,32 +24,33 @@ public:
     ~World();
     void init();
     void update(float deltaTime);
-    void updateSystems(Entity &e, ComponentMask oldMask);
+    void updateSystems(const Entity &entity, ComponentMask oldMask);
 
     // Create, destroy and get entity
     EntityHandle createEntity(const std::string &name);
-    void destroyEntity(Entity entity);
+    void destroyEntity(const Entity &entity);
     EntityHandle getEntity(const std::string &name);
 
     // Add and remove component
     template<typename T>
-    void addComponent(Entity entity, const T &component);
+    void addComponent(const Entity &entity, const T &component);
     template<typename T>
-    void removeComponent(Entity entity);
+    void removeComponent(const Entity &entity);
     template<typename T>
-    T *getComponent(Entity entity);
+    T *getComponent(const Entity &entity);
 
     // Unpack function
     template<typename T>
-    void unpack(Entity entity, ComponentHandle<T> &handle);
+    void unpack(const Entity &entity, ComponentHandle<T> &handle);
     template<typename T, typename ...Args>
-    void unpack(Entity entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
+    void unpack(const Entity &entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
 
 private:
-    std::vector<std::unique_ptr<System>> mSystems;
-    std::vector<std::unique_ptr<BaseComponentManager>> mComponentManagers;
     std::unique_ptr<EntityManager> mEntityManager;
-    std::map<Entity, ComponentMask> mEntityMasks;
+    std::vector<std::unique_ptr<BaseComponentManager>> mComponentManagers;
+    std::vector<std::unique_ptr<System>> mSystems;
+    // TODO snakk med Ole, hash tregere enn reblack tree?
+    std::unordered_map<Entity, ComponentMask> mEntityMasks;
 };
 
 //--------------------------------------------------------------------------------------
@@ -58,32 +60,26 @@ private:
 #include "ECS/Handles/componenthandle.h"
 #include "ECS/Managers/componentmanager.h"
 #include "ECS/component.h"
-#include "ECS/entity.h"
 #include "ECS/component_mask.h"
 
 template<typename T>
-void World::unpack(Entity entity, ComponentHandle<T> &handle)
+void World::unpack(const Entity &entity, ComponentHandle<T> &handle)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
-    ComponentHandle<T> tmp(this, entity);
-    handle = tmp;
+    handle = ComponentHandle<T>{this, entity};
 }
 
 template<typename T, typename ...Args>
-void World::unpack(Entity entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
+void World::unpack(const Entity &entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
 {
-    auto index = Component<T>::typeID();
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[index].get());
-    ComponentHandle<T> tmp(this, entity);
-    handle = tmp;
+    handle = ComponentHandle<T>{this, entity};
     unpack<Args...>(entity, args ...);
 }
 
 template<typename T>
-void World::addComponent(Entity entity, const T &component)
+void World::addComponent(const Entity &entity, const T &component)
 {
     // add component
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     manager->addComponent(entity, component);
 
     // update mask
@@ -93,10 +89,10 @@ void World::addComponent(Entity entity, const T &component)
 }
 
 template<typename T>
-void World::removeComponent(Entity entity)
+void World::removeComponent(const Entity &entity)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
-    manager->destroy(entity);
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    manager->destroyComponent(entity);
 
     // update mask
     ComponentMask oldMask = mEntityMasks[entity];
@@ -105,9 +101,9 @@ void World::removeComponent(Entity entity)
 }
 
 template<typename T>
-T *World::getComponent(Entity entity)
+T *World::getComponent(const Entity &entity)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[Component<T>::typeID()].get());
+    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     return manager->getComponent(entity);
 }
 

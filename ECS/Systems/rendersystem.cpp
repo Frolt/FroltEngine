@@ -5,6 +5,7 @@
 #include "ECS/Handles/componenthandle.h"
 #include "world.h"
 #include "shader.h"
+#include "texture.h"
 
 RenderSystem::RenderSystem()
 {
@@ -27,48 +28,41 @@ void RenderSystem::update(float)
         ComponentHandle<MaterialComponent> material;
         mWorld->unpack(entity, mesh, transform, material);
 
-        mesh().mShader->use();
+//        mesh().mShader.use();
         updateMaterial(mesh().mShader, material());
         updateTransform(mesh().mShader, transform());
         draw(mesh);
     }
 }
 
-void RenderSystem::draw(ComponentHandle<MeshComponent> &mesh)
+void RenderSystem::updateMaterial(Shader shader, const MaterialComponent &material) const
 {
-    glBindVertexArray(mesh().mVAO);
+    shader.setBool("material.hasDiffMap", material.mHasDiffMap);
+    shader.setBool("material.hasSpecMap", material.mHasSpecMap);
+    shader.setBool("material.hasEmissionMap", material.mHasEmissionMap);
+    shader.setVec3("material.diffuseColor", material.mDiffuseColor);
+    shader.setVec3("material.specularColor", material.mSpecularColor);
+    shader.setFloat("material.shininess", material.mShininess);
 
-    if (mesh().mUseIndices)
-        glDrawElements(GL_TRIANGLES, mesh().mDrawCount, GL_UNSIGNED_INT, nullptr);
-    else
-        glDrawArrays(GL_TRIANGLES, 0, mesh().mDrawCount);
+//    // Set uniform samplers in shader
+//    unsigned int diffuseNr = 1;
+//    unsigned int specularNr = 1;
+//    for (unsigned int i = 0; i < material.mTextures.size(); i++) {
+//        glActiveTexture(GL_TEXTURE + i);
+//        std::string number;
+//        std::string name = material.mTextures[i].mType;
+//        if (name == "diffuseMap")
+//            number = std::to_string(diffuseNr++);
+//        if (name == "specularMap")
+//            number = std::to_string(specularNr++);
+//        shader.setInt("material." + name, i);
+//        glBindTexture(GL_TEXTURE_2D, material.mTextures[i].mID);
+//    }
+//    // Unbind texture
+//    glActiveTexture(GL_TEXTURE0);
 }
 
-void RenderSystem::updateMaterial(Shader *shader, MaterialComponent &material)
-{
-    shader->setBool("material.hasDiffMap", material.mHasDiffMap);
-    shader->setBool("material.hasSpecMap", material.mHasSpecMap);
-    shader->setBool("material.hasEmissionMap", material.mHasEmissionMap);
-    shader->setVec3("material.diffuseColor", material.mDiffuseColor);
-    shader->setVec3("material.specularColor", material.mSpecularColor);
-    shader->setFloat("material.shininess", material.mShininess);
-
-    // TODO add textures
-//    if (material.mHasDiffMap) {
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture(GL_TEXTURE_2D, material.mDiffuseMap->mID);
-//    }
-//    if (material.mHasSpecMap) {
-//        glActiveTexture(GL_TEXTURE1);
-//        glBindTexture(GL_TEXTURE_2D, material.mSpecularMap->mID);
-//    }
-//    if (material.mHasEmissionMap) {
-//        glActiveTexture(GL_TEXTURE2);
-//        glBindTexture(GL_TEXTURE_2D, material.mEmissionMap->mID);
-//    }
-}
-
-void RenderSystem::updateTransform(Shader *shader, TransformComponent &transform)
+void RenderSystem::updateTransform(Shader shader, const TransformComponent &transform) const
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
@@ -91,6 +85,16 @@ void RenderSystem::updateTransform(Shader *shader, TransformComponent &transform
     };
 
     // Update shader uniforms
-    shader->setMat4("model", modelMatrix);
-    shader->setMat3("normalMat", normalMatrix);
+    shader.setMat4("model", modelMatrix);
+    shader.setMat3("normalMat", normalMatrix);
+}
+
+void RenderSystem::draw(const ComponentHandle<MeshComponent> &mesh)
+{
+    glBindVertexArray(mesh().mVAO);
+
+    if (mesh().mUseIndices)
+        glDrawElements(GL_TRIANGLES, mesh().mDrawCount, GL_UNSIGNED_INT, nullptr);
+    else
+        glDrawArrays(GL_TRIANGLES, 0, mesh().mDrawCount);
 }

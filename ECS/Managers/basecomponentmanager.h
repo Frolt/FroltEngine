@@ -4,7 +4,7 @@
 class BaseComponentManager
 {
 public:
-    BaseComponentManager();
+    BaseComponentManager() = default;
     virtual ~BaseComponentManager();
     BaseComponentManager(const BaseComponentManager &other) = default;
     BaseComponentManager(BaseComponentManager &&other) = default;

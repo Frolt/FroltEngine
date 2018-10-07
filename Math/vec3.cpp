@@ -85,17 +85,17 @@ namespace am
         std::cout << "(" << x << "," << y << "," << z << ")\n";
     }
 
-    float Vec3::yaw()
+    float Vec3::yaw() const
     {
         return x;
     }
 
-    float Vec3::pitch()
+    float Vec3::pitch() const
     {
         return y;
     }
 
-    float Vec3::roll()
+    float Vec3::roll() const
     {
         return z;
     }

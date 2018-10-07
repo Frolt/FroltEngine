@@ -2,10 +2,12 @@
 #define INPUTSTATE_H
 
 #include <QSet>
+#include <QHash>
 #include "a_math.h"
 
 struct InputState
 {
+    // TODO Qhash?
     QSet<int> mPressedKeys;
     QSet<int> mPressedMouseButtons;
     am::Vec2 mMousePos;

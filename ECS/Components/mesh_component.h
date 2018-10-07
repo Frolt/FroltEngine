@@ -2,17 +2,14 @@
 #define MESH_COMPONENT_H
 
 #include "ECS/component.h"
-
-// Forward declarations
-class Shader;
+#include "shader.h"
 
 struct MeshComponent : public Component<MeshComponent>
 {
-    MeshComponent() {}
-    MeshComponent(Shader* shader, unsigned int VAO, unsigned int drawCount, bool useIndices = false)
-        : mShader{shader}, mVAO{VAO}, mDrawCount{drawCount}, mUseIndices{useIndices} {}
+    MeshComponent() = default;
+    MeshComponent(Shader shader, unsigned int VAO, unsigned int drawCount, bool useIndices = false);
 
-    Shader *mShader{nullptr};
+    Shader mShader;
     unsigned int mVAO{0};
     unsigned int mDrawCount{0};
     bool mUseIndices{false};

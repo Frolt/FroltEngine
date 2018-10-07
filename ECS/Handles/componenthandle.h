@@ -9,17 +9,16 @@ class ComponentManager;
 class World;
 
 template<typename T>
-class ComponentHandle
+struct ComponentHandle
 {
-public:
-    ComponentHandle();
-    ComponentHandle(World *world, Entity entity);
+    ComponentHandle() = default;
+    ComponentHandle(World *world, const Entity &entity);
     void destroy();
     T &operator()();
+    const T &operator()() const;
 
 public:
     T *mComponent{nullptr};
-
 private:
     World *mWorld;
     Entity mOwner;
@@ -33,13 +32,7 @@ private:
 #include "world.h"
 
 template<typename T>
-ComponentHandle<T>::ComponentHandle()
-{
-
-}
-
-template<typename T>
-ComponentHandle<T>::ComponentHandle(World *world, Entity entity)
+ComponentHandle<T>::ComponentHandle(World *world, const Entity &entity)
     : mWorld{world}, mOwner{entity}
 {
     mComponent = mWorld->getComponent<T>(entity);
@@ -53,6 +46,12 @@ void ComponentHandle<T>::destroy()
 
 template<typename T>
 T &ComponentHandle<T>::operator()()
+{
+    return *mComponent;
+}
+
+template<typename T>
+const T &ComponentHandle<T>::operator()() const
 {
     return *mComponent;
 }

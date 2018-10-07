@@ -6,10 +6,11 @@
 struct ComponentMask
 {
 public:
-    ComponentMask();
-    bool isNewMatch(ComponentMask oldMask, ComponentMask systemMask);
-    bool noLongerMatched(ComponentMask oldMask, ComponentMask systemMask);
-    bool matches(ComponentMask other);
+    ComponentMask() = default;
+    bool isNewMatch(ComponentMask oldMask, ComponentMask systemMask) const;
+    bool noLongerMatched(ComponentMask oldMask, ComponentMask systemMask) const;
+    bool matches(ComponentMask other) const;
+    const std::bitset<64> &getMask() const;
 
     template<typename T>
     void addComponent();
@@ -17,7 +18,7 @@ public:
     void removeCompoent();
 
 private:
-    std::bitset<32> mMask;
+    std::bitset<64> mMask;
 };
 
 //--------------------------------------------------------------------------------------
@@ -29,13 +30,13 @@ private:
 template<typename T>
 void ComponentMask::addComponent()
 {
-    mMask.set(Component<T>::typeID());
+    mMask.set(T::family());
 }
 
 template<typename T>
 void ComponentMask::removeCompoent()
 {
-    mMask.reset(Component<T>::typeID());
+    mMask.reset(T::family());
 }
 
 

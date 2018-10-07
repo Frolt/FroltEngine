@@ -2,7 +2,7 @@
 #include <QtGlobal>
 
 
-unsigned long long int EntityManager::mNextID = 0;
+unsigned long long int EntityManager::nextID = 0;
 
 EntityManager::EntityManager()
 {
@@ -11,24 +11,24 @@ EntityManager::EntityManager()
 
 Entity EntityManager::createEntity(const std::string &name)
 {
-    Entity e(mNextID++, name);
-    auto check = mEntities.insert(std::make_pair(e.mName, e));
-    // Crashes program if new entity's name is not unique
-    Q_ASSERT_X(check.second, "ENTITYMANAGER::CREATEENTITY", "THIS ENTITY ALREADY EXIST");
-    return e;
+    Entity entity(nextID++, name);
+    auto check = mEntities.insert(std::make_pair(entity.mName, entity));
+    // Crashes program if key aldready exist
+    Q_ASSERT_X(check.second, "ENTITYMANAGER::CREATEENTITY", "KEY ALREADY EXIST");
+    return entity;
 }
 
-void EntityManager::destroyEntity(Entity entity)
+void EntityManager::destroyEntity(const Entity &entity)
 {
     mEntities.erase(entity.mName);
 }
 
-Entity EntityManager::getEntity(const std::string &name)
+Entity EntityManager::getEntity(const std::string &name) const
 {
-    return mEntities[name];
+    return mEntities.at(name);
 }
 
-size_t EntityManager::numOfEntities()
+size_t EntityManager::numOfEntities() const
 {
     return mEntities.size();
 }

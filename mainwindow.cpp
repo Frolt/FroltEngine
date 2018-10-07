@@ -26,23 +26,23 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
+    // TODO snakk med Ole
     QSurfaceFormat format;
     format.setVersion(4, 1);
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setRenderableType(QSurfaceFormat::OpenGL);
-    format.setSamples(4);                                   // Set the number of samples used for multisampling
-    format.setDepthBufferSize(24);                          // The example rendering will need a depth buffer.
-    format.setOption(QSurfaceFormat::DebugContext);         //Should activate OpenGL debug Context used in RenderWindow::startOpenGLDebugger()
+    format.setSamples(4);
+    format.setDepthBufferSize(24);
+    format.setOption(QSurfaceFormat::DebugContext);
+    format.setSwapInterval(0); // Distable Vsync
 
     mViewport = new Viewport(format);
-    Q_ASSERT_X(mViewport, "MainWindow::init()", "Failed to create viewport");
     mViewportWidget = QWidget::createWindowContainer(mViewport);
     ui->viewport->addWidget(mViewportWidget);
     mViewportWidget->setFocus();
 
     // Settings
     setWindowTitle(QString("Frolt Engine"));
-//    setCursor(Qt::CrossCursor);
 //    showFullScreen();
 }
 
@@ -50,6 +50,7 @@ void MainWindow::connectSignalsSlots()
 {
     connect(ui->realExit, SIGNAL(clicked()), this, SLOT(close()));
     connect(mViewport, SIGNAL(ready()), this, SLOT(viewportReady()));
+    connect(mViewport, SIGNAL(FPS()), this, SLOT(showFPS()));
 }
 
 void MainWindow::viewportReady()
@@ -61,7 +62,6 @@ void MainWindow::viewportReady()
 
 void MainWindow::on_messageButton_clicked()
 {
-    // TODO testing stuff
     auto reply = QMessageBox::question(this, "A message title", "here is the message!",
                                        QMessageBox::StandardButton::Save |
                                        QMessageBox::StandardButton::Cancel |
@@ -70,10 +70,23 @@ void MainWindow::on_messageButton_clicked()
     if (reply == QMessageBox::Discard) {
         QApplication::quit();
     } else {
-        qDebug() << "lal";
+        qDebug() << "dust";
     }
 }
 void MainWindow::on_Exit_triggered()
 {
     QApplication::quit();
+}
+
+void MainWindow::showFPS()
+{
+    static int frameCount{0};
+    static float secCount{0};
+    frameCount++;
+    secCount += mEngine->mDeltaTime;
+    statusBar()->showMessage(" FPS: " + QString::number(static_cast<int>(frameCount / secCount)));
+    if (secCount > 1.0f) {
+        secCount = 0.0f;
+        frameCount = 0;
+    }
 }

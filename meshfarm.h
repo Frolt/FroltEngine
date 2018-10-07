@@ -2,8 +2,9 @@
 #define MESHFARM_H
 
 #include <vector>
-#include <tuple>
 #include <QOpenGLFunctions_4_1_Core>
+#include <QString>
+#include <QHash>
 
 // Forward declarations
 struct Vertex;
@@ -16,14 +17,16 @@ public:
     MeshFarm(Shader *defaultShader);
     MeshComponent createCube(Shader *shader = nullptr);
     MeshComponent createRectangle(Shader *shader = nullptr);
+    MeshComponent createTriangle(Shader *shader = nullptr);
+    MeshComponent createSphere(unsigned int subDivide = 3, Shader *shader = nullptr);
 
 private:
     unsigned int createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
     unsigned int createWithoutIndices(std::vector<Vertex> &vertices);
-    std::vector<Vertex> readVerticesFromFile(const std::string &path);
+    std::vector<Vertex> readVerticesFromFile(const QString &path);
 
 private:
-    std::map<std::string, unsigned int> mMeshMap;
+    QHash<QString, unsigned int> mMeshMap;
     std::vector<unsigned int> mVAO;
     std::vector<unsigned int> mDrawCount;
     std::vector<bool> mUseIndices;

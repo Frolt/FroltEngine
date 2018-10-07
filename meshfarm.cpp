@@ -1,46 +1,77 @@
 #include "meshfarm.h"
-#include "vertex.h"
 #include <fstream>
+#include "ECS/Components/mesh_component.h"
+#include "vertex.h"
 #include "paths.h"
 #include "enums.h"
-#include "ECS/Components/mesh_component.h"
+#include "octahedron.h"
 
 MeshFarm::MeshFarm(Shader *defaultShader)
     : mDefaultShader{defaultShader}
 {
     initializeOpenGLFunctions();
-    // Create all primitives
-    createCube();
-    createRectangle();
-
-    // TODO only creates meshes when one is needed=?? example: createCube() function only;
 }
 
 MeshComponent MeshFarm::createCube(Shader *shader)
 {
+    QString name = "cube";
     if (!shader)
         shader = mDefaultShader;
-    if (mMeshMap.find("cube") == mMeshMap.end()) {
-        qDebug() << "cube created";
-        std::vector<Vertex> vertices = readVerticesFromFile("cube.dat");
-        mMeshMap["cube"] = createWithoutIndices(vertices);
+    if (mMeshMap.find(name) == mMeshMap.end()) {
+        qDebug() << name + " created";
+        std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
+        mMeshMap[name] = createWithoutIndices(vertices);
     }
-    auto index = mMeshMap["cube"];
-    return MeshComponent(shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
+    auto index = mMeshMap[name];
+    return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
 MeshComponent MeshFarm::createRectangle(Shader *shader)
 {
+    QString name = "rectangle";
     if (!shader)
         shader = mDefaultShader;
-    if (mMeshMap.find("rectangle") == mMeshMap.end()) {
-        qDebug() << "rectangle created";
-        std::vector<Vertex> vertices = readVerticesFromFile("rectangle.dat");
+    if (mMeshMap.find(name) == mMeshMap.end()) {
+        qDebug() << name + " created";
+        std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
         std::vector<unsigned int> indices = { 0, 3, 1, 1, 3, 2 };
-        mMeshMap["rectangle"] = createWithIndices(vertices, indices);
+        mMeshMap[name] = createWithIndices(vertices, indices);
     }
-    auto index = mMeshMap["rectangle"];
-    return MeshComponent(shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
+    auto index = mMeshMap[name];
+    return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
+}
+
+MeshComponent MeshFarm::createTriangle(Shader *shader)
+{
+    QString name = "triangle";
+    if (!shader)
+        shader = mDefaultShader;
+    if (mMeshMap.find(name) == mMeshMap.end()) {
+        qDebug() << name + " created";
+        std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
+        mMeshMap[name] = createWithoutIndices(vertices);
+    }
+    auto index = mMeshMap[name];
+    return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
+}
+
+MeshComponent MeshFarm::createSphere(unsigned int subDivide, Shader *shader)
+{
+    QString name = "sphere" + QString::number(subDivide);
+    if (!shader)
+        shader = mDefaultShader;
+    if (mMeshMap.find(name) == mMeshMap.end()) {
+        qDebug() << name + " created";
+        // CREATE OCTAHEDRON
+        // -------------------------------------------------------
+        Octahedron sphere{subDivide};
+        std::vector<Vertex> vertices = sphere.getVertices();
+        mMeshMap[name] = createWithoutIndices(vertices);
+
+        // -------------------------------------------------------
+    }
+    auto index = mMeshMap[name];
+    return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
 unsigned int MeshFarm::createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
@@ -101,9 +132,9 @@ unsigned int MeshFarm::createWithoutIndices(std::vector<Vertex> &vertices)
     return static_cast<unsigned int>(mVAO.size()-1);
 }
 
-std::vector<Vertex> MeshFarm::readVerticesFromFile(const std::string &path)
+std::vector<Vertex> MeshFarm::readVerticesFromFile(const QString &path)
 {
-    std::ifstream inf{primitivesDir + path};
+    std::ifstream inf{Path::primitives + path.toStdString()};
     Q_ASSERT_X(inf, "SceneObject::readVerticesFromFile", "COULD_NOT_OPEN_FILE");
 
     std::vector<Vertex> vertices;
@@ -111,12 +142,14 @@ std::vector<Vertex> MeshFarm::readVerticesFromFile(const std::string &path)
     am::Vec3 normal;
     am::Vec2 uv;
     char skip;
+    std::string skipFirstLine;
+    std::getline(inf, skipFirstLine);
     while (inf) {
         inf >> skip >> pos.x >> skip >> pos.y >> skip >> pos.z >> skip;
         inf >> skip >> normal.x >> skip >> normal.y >> skip >> normal.z >> skip;
         inf >> skip >> uv.x >> skip >> uv.y >> skip;
-        vertices.push_back(Vertex{pos, normal, uv});
+        if (!inf.eof())
+            vertices.push_back(Vertex{pos, normal, uv});
     }
-    vertices.pop_back();
     return vertices;
 }

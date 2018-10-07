@@ -41,7 +41,25 @@ SOURCES += \
     ECS/Handles/entityhandle.cpp \
     ECS/component_mask.cpp \
     meshfarm.cpp \
-    ECS/Systems/rendersystem.cpp
+    ECS/Systems/rendersystem.cpp \
+    octahedron.cpp \
+    mesh.cpp \
+    model.cpp \
+    texture.cpp \
+    ECS/Components/material_component.cpp \
+    ECS/Components/mesh_component.cpp \
+    ECS/Components/movement_component.cpp \
+    ECS/Components/transform_component.cpp \
+    ECS/Components/light_component.cpp \
+    ECS/Components/directionallight_component.cpp \
+    ECS/Components/pointlight_component.cpp \
+    ECS/Components/spotlight_component.cpp \
+    ECS/Systems/directionallightsystem.cpp \
+    ECS/Systems/pointlightsystem.cpp \
+    ECS/Systems/spotlightsystem.cpp \
+    paths.cpp \
+    objectfarm.cpp \
+    colors.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -77,7 +95,20 @@ HEADERS += \
     ECS/Components/material_component.h \
     ECS/component_mask.h \
     meshfarm.h \
-    ECS/Systems/rendersystem.h
+    ECS/Systems/rendersystem.h \
+    octahedron.h \
+    mesh.h \
+    model.h \
+    texture.h \
+    ECS/Components/light_component.h \
+    ECS/Components/pointlight_component.h \
+    ECS/Components/spotlight_component.h \
+    ECS/Components/directionallight_component.h \
+    ECS/Systems/directionallightsystem.h \
+    ECS/Systems/pointlightsystem.h \
+    ECS/Systems/spotlightsystem.h \
+    objectfarm.h \
+    colors.h
 
 FORMS += \
     mainwindow.ui

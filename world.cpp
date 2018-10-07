@@ -1,5 +1,6 @@
 #include "world.h"
 #include "ECS/system.h"
+#include "ECS/component_mask.h"
 #include "ECS/Managers/entitymanager.h"
 #include "ECS/Managers/componentmanager.h"
 #include "ECS/Handles/entityhandle.h"
@@ -7,21 +8,40 @@
 #include "ECS/Components/movement_component.h"
 #include "ECS/Components/mesh_component.h"
 #include "ECS/Components/material_component.h"
-#include "ECS/component_mask.h"
+#include "ECS/Components/directionallight_component.h"
+#include "ECS/Components/pointlight_component.h"
+#include "ECS/Components/spotlight_component.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
+#include "ECS/Systems/directionallightsystem.h"
+#include "ECS/Systems/pointlightsystem.h"
+#include "ECS/Systems/spotlightsystem.h"
 
 World::World()
 {
+    mComponentManagers.resize(64);
     // Create entity manager
     mEntityManager = std::make_unique<EntityManager>();
     // Create component managers
-    mComponentManagers.push_back(std::make_unique<ComponentManager<TransformComponent>>());
-    mComponentManagers.push_back(std::make_unique<ComponentManager<MovementComponent>>());
-    mComponentManagers.push_back(std::make_unique<ComponentManager<MeshComponent>>());
-    mComponentManagers.push_back(std::make_unique<ComponentManager<MaterialComponent>>());
+    mComponentManagers[TransformComponent::family()] = std::make_unique<ComponentManager<TransformComponent>>();
+    mComponentManagers[MovementComponent::family()] = std::make_unique<ComponentManager<MovementComponent>>();
+    mComponentManagers[MeshComponent::family()] = std::make_unique<ComponentManager<MeshComponent>>();
+    mComponentManagers[MaterialComponent::family()] = std::make_unique<ComponentManager<MaterialComponent>>();
+    mComponentManagers[DirectionalLightComponent::family()] = std::make_unique<ComponentManager<DirectionalLightComponent>>(100);
+    mComponentManagers[PointLightComponent::family()] = std::make_unique<ComponentManager<PointLightComponent>>(100);
+    mComponentManagers[SpotlightComponent::family()] = std::make_unique<ComponentManager<SpotlightComponent>>(100);
+    qDebug() << "Transform \tindex[0] = " << TransformComponent::family();
+    qDebug() << "Movement \t\tindex[0] = " << MovementComponent::family();
+    qDebug() << "Mesh \t\tindex[0] = " << MeshComponent::family();
+    qDebug() << "Material \t\tindex[0] = " << MaterialComponent::family();
+    qDebug() << "Directional \tindex[0] = " << DirectionalLightComponent::family();
+    qDebug() << "PointLight \tindex[0] = " << PointLightComponent::family();
+    qDebug() << "Spotlight \tindex[0] = " << SpotlightComponent::family();
     // Create systems
     mSystems.push_back(std::make_unique<MovementSystem>());
+    mSystems.push_back(std::make_unique<DirectionalLightSystem>());
+    mSystems.push_back(std::make_unique<PointLightSystem>());
+    mSystems.push_back(std::make_unique<SpotlightSystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
     // Set world pointer for all systems
     for (auto &sys : mSystems)
@@ -45,34 +65,69 @@ void World::update(float deltaTime)
         sys->update(deltaTime);
 }
 
-void World::updateSystems(Entity &e, ComponentMask oldMask)
+void World::updateSystems(const Entity &entity, ComponentMask oldMask)
 {
-    ComponentMask newMask = mEntityMasks[e];
+    ComponentMask newMask = mEntityMasks[entity];
 
     for (auto &sys : mSystems) {
       if (newMask.isNewMatch(oldMask, sys->mSystemMask)) {
-        sys->registerEntity(e);
+        sys->registerEntity(entity);
       } else if (newMask.noLongerMatched(oldMask, sys->mSystemMask)) {
-        sys->deRegisterEntity(e);
+        sys->deRegisterEntity(entity);
       }
     }
 }
 
 EntityHandle World::createEntity(const std::string &name)
 {
-    auto e = mEntityManager->createEntity(name);
-//    mEntityMasks.insert(std::pair(e, ComponentMask()));
-    return EntityHandle(this, e);
+    auto entity = mEntityManager->createEntity(name);
+    mEntityMasks.insert(std::make_pair(entity, ComponentMask()));
+    return EntityHandle(this, entity);
 }
 
-void World::destroyEntity(Entity entity)
+#include <QBitArray>
+void World::destroyEntity(const Entity &entity)
 {
-    // TODO cleanup components
+    // TODO this is not a good system
+    auto mask = mEntityMasks[entity].getMask();
+    QBitArray test{64};
+    for (unsigned int i = 0; i < mask.size(); i++) {
+        test[i] = mask[i];
+    }
+    qDebug() << test;
+
+    for (unsigned int i = 0; i < mask.size(); i++) {
+        if (mask[i] == true) {
+            switch (i) {
+            case 0:
+                removeComponent<TransformComponent>(entity);
+                break;
+            case 1:
+                removeComponent<MovementComponent>(entity);
+                break;
+            case 2:
+                removeComponent<MeshComponent>(entity);
+                break;
+            case 3:
+                removeComponent<MaterialComponent>(entity);
+                break;
+            case 4:
+                removeComponent<DirectionalLightComponent>(entity);
+                break;
+            case 5:
+                removeComponent<PointLightComponent>(entity);
+                break;
+            case 6:
+                removeComponent<SpotlightComponent>(entity);
+                break;
+            default:
+                qDebug() << "something went really wrong";
+                break;
+            }
+        }
+    }
     mEntityMasks.erase(entity);
     mEntityManager->destroyEntity(entity);
-    // Check all components from entitymask
-    // then static cast all managers
-    // then remove all the components
 }
 
 EntityHandle World::getEntity(const std::string &name)

@@ -3,11 +3,21 @@
 
 #include <string>
 
-static std::string dir = "../";
-static std::string texDir = "../Assets/Textures/";
-static std::string shaderDir = "../Shaders/";
-static std::string primitivesDir = "../Assets/Primitives/";
-static std::string mapDir = "../LAS/MapData/";
-static std::string ModelDir = "../Assets/Models/";
+// TODO snakk med Ole, singleton?
+// TODO snakk med Ole, namespace isteden?
+
+struct Path
+{
+    static const std::string root;
+    static const std::string textures;
+    static const std::string shaders;
+    static const std::string primitives;
+    static const std::string mapdata;
+    static const std::string models;
+
+private:
+    Path() = default;
+};
+
 
 #endif // PATHS_H

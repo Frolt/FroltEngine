@@ -69,17 +69,17 @@ vec3 calcEmission();
 
 void main()
 {
-    vec3 color = vec3(0.0);
+    vec3 fragColor = vec3(0.0);
     vec3 normal = normalize(Normal);
     vec3 camDir = normalize(camPos - FragPos);
 
-//    color += calcDirLight(dirLight, normal, camDir);
+    fragColor += calcDirLight(dirLight, normal, camDir);
     for (int i = 0; i < NR_POINT_LIGHTS; i++)
-        color += calcPointLight(pointLights[i], normal, camDir);
-    color += calcSpotLight(spotLight, normal, camDir);
-//    color += calcEmission();
+        fragColor += calcPointLight(pointLights[i], normal, camDir);
+    fragColor += calcSpotLight(spotLight, normal, camDir);
+    fragColor += calcEmission();
 
-    FragColor = vec4(color, 1.0);
+    FragColor = vec4(fragColor, 1.0);
 }
 
 //---------------------------------------------------------------------------------
@@ -121,6 +121,7 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 camDir)
     float specStr = pow(max(dot(reflectDir, camDir), 0.0), material.shininess);
     // Attenuation
     float distance = length(light.position - FragPos);
+    light.constant = 1.0;
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     // Result
     vec3 amb, diff, spec;
@@ -152,6 +153,7 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 camDir)
     float specStr = pow(max(dot(reflectDir, camDir), 0.0) , material.shininess);
     // Attenuation
     float distance = length(light.position - FragPos);
+    light.constant = 1.0;
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     // Intensity
     float theta = dot(lightDir, normalize(-light.direction));

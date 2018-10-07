@@ -6,8 +6,8 @@
 
 int main(int argc, char *argv[])
 {
-    // TODO Move to viewport's constructor
-    QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
+    // TODO snakk med Ole
+//    QCoreApplication::setAttribute(Qt::AA_UseDesktopOpenGL);
     QApplication app(argc, argv);
     MainWindow window;
     window.show();

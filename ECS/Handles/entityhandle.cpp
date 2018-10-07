@@ -1,12 +1,8 @@
 #include "entityhandle.h"
 
-EntityHandle::EntityHandle()
-{
 
-}
-
-EntityHandle::EntityHandle(World *world, Entity entity)
-    : mWorld{world}, mEntity{entity}
+EntityHandle::EntityHandle(World *world, const Entity &entity)
+    : mEntity{entity}, mWorld{world}
 {
 
 }
@@ -17,6 +13,11 @@ void EntityHandle::destroy()
 }
 
 Entity &EntityHandle::operator()()
+{
+    return mEntity;
+}
+
+const Entity &EntityHandle::operator()() const
 {
     return mEntity;
 }

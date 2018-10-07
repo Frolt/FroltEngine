@@ -3,14 +3,7 @@
 
 #include <QWindow>
 #include <QOpenGLFunctions_4_1_Core>
-#include <QSet>
 #include "inputstate.h"
-#include "meshfarm.h"
-#include <memory>
-#include "a_math.h"
-#include "vertex.h"
-#include "shader.h"
-#include "paths.h"
 
 // Forward declarations
 class MainWindow;
@@ -40,6 +33,7 @@ public:
 
 signals:
     void ready();
+    void FPS();
 
 private:
     QOpenGLContext *mContext{nullptr};

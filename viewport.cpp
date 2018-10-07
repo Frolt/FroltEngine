@@ -1,13 +1,13 @@
 #include "viewport.h"
 #include <QOpenGLContext>
-#include <QOpenGLDebugLogger>
+//#include <QOpenGLDebugLogger>
 #include <QCoreApplication>
 #include <QKeyEvent>
 #include <QMouseEvent>
 
 Viewport::Viewport(const QSurfaceFormat &format)
 {
-    // TODO clean up
+    // TODO snakk med Ole
     setSurfaceType(QSurface::OpenGLSurface);
     setFormat(format);
     mContext = new QOpenGLContext(this);

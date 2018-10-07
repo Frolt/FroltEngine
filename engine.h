@@ -1,19 +1,19 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include <QElapsedTimer>
 #include <QObject>
+#include <QOpenGLFunctions_4_1_Core>
+#include <QElapsedTimer>
 #include <memory>
 #include <vector>
 #include "shader.h"
-#include "vertex.h"
-#include <QOpenGLFunctions_4_1_Core>
 
 // Forward declarations
 class QTimer;
 class Viewport;
 class World;
 class MeshFarm;
+class ObjectFarm;
 
 class Engine : public QObject, protected QOpenGLFunctions_4_1_Core
 {
@@ -36,8 +36,9 @@ public:
     std::unique_ptr<World> mWorld;
     // Farms
     std::unique_ptr<MeshFarm> mMeshFarm;
+    std::unique_ptr<ObjectFarm> mObjectFarm;
     // Shaders
-    std::unique_ptr<Shader> mPhongShader;
+    Shader mPhongShader;
 private:
     // Timers
     QElapsedTimer mTimer;

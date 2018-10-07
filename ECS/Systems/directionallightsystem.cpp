@@ -1,0 +1,35 @@
+#include "directionallightsystem.h"
+#include "ECS/Components/directionallight_component.h"
+#include "shader.h"
+#include "world.h"
+
+DirectionalLightSystem::DirectionalLightSystem()
+{
+    mSystemMask.addComponent<DirectionalLightComponent>();
+}
+
+void DirectionalLightSystem::beginPlay()
+{
+
+}
+
+void DirectionalLightSystem::update(float)
+{
+    ComponentHandle<DirectionalLightComponent> dirLight;
+    for (auto entity : mRegisteredEntities) {
+        mWorld->unpack(entity, dirLight);
+        setUniforms(dirLight());
+    }
+}
+
+void DirectionalLightSystem::setUniforms(const DirectionalLightComponent &dirLight) const
+{
+//    dirLight.mShader.use();
+    dirLight.mShader.setVec3("dirLight.direction", dirLight.mDir);
+    dirLight.mShader.setVec3("dirLight.ambient", dirLight.mAmb);
+    dirLight.mShader.setVec3("dirLight.diffuse", dirLight.mDiff);
+
+
+//    dirLight.mShader.setVec3("camPos", mCamera->getPos());
+//    dirLight.mShader.setFloat("time", getTime());
+}
