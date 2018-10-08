@@ -9,11 +9,12 @@ struct EntityHandle;
 class MeshFactory;
 class World;
 class Shader;
+class Engine;
 
 class EntityFactory
 {
 public:
-    EntityFactory(MeshFactory &meshFactory, World &world, Shader &shader);
+    EntityFactory(MeshFactory &meshFactory, World &world, Engine &engine, Shader &shader);
 
     // Lights
     EntityHandle createDirectionalLight(const std::string &name, const am::Vec3 &color = Colors::white);
@@ -25,6 +26,10 @@ public:
     // Player
     EntityHandle createPlayerCube(const std::string &name, const am::Vec3 &color = Colors::orangeRed, const am::Vec3 &pos = {0});
     EntityHandle createPlayerSphere(const std::string &name, const am::Vec3 &color = Colors::orangeRed, const am::Vec3 &pos = {0});
+    // Cameras
+    EntityHandle createFreeCamera(const std::string &name, const am::Vec3 &pos = {0});
+
+    // TODO Functions below are not implemented yet
     // AI
     EntityHandle createAICube(const std::string &name, const am::Vec3 &color = Colors::orangeRed, const am::Vec3 &pos = {0});
     EntityHandle createAISphere(const std::string &name, const am::Vec3 &color = Colors::orangeRed, const am::Vec3 &pos = {0});
@@ -37,6 +42,7 @@ public:
 private:
     MeshFactory &mMeshFactory;
     World &mWorld;
+    Engine &mEngine;
     Shader &mDefaultShader;
 };
 

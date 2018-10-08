@@ -3,10 +3,6 @@
 
 #include "ECS/system.h"
 
-// Forward declarations
-struct SpotlightComponent;
-struct TransformComponent;
-
 struct SpotlightSystem : public System
 {
 public:

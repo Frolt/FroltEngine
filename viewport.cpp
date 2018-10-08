@@ -64,11 +64,6 @@ void Viewport::keyReleaseEvent(QKeyEvent *event)
     mInputState.mPressedKeys -= event->key();
 }
 
-void Viewport::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    mInputState.mDoubleClick = event->flags();
-}
-
 void Viewport::mouseMoveEvent(QMouseEvent *event)
 {
     mInputState.mMousePos.x = event->pos().x();
@@ -78,13 +73,11 @@ void Viewport::mouseMoveEvent(QMouseEvent *event)
 void Viewport::mousePressEvent(QMouseEvent *event)
 {
     mInputState.mPressedMouseButtons += event->button();
-    mInputState.mDoubleClick = event->flags();
 }
 
 void Viewport::mouseReleaseEvent(QMouseEvent *event)
 {
     mInputState.mPressedMouseButtons -= event->button();
-    mInputState.mDoubleClick = event->flags();
 }
 
 void Viewport::wheelEvent(QWheelEvent *event)

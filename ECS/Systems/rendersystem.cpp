@@ -1,9 +1,4 @@
 #include "rendersystem.h"
-#include "ECS/Components/mesh_component.h"
-#include "ECS/Components/transform_component.h"
-#include "ECS/Components/material_component.h"
-#include "ECS/Handles/componenthandle.h"
-#include "world.h"
 #include "shader.h"
 #include "texture.h"
 

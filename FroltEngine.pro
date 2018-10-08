@@ -59,7 +59,12 @@ SOURCES += \
     paths.cpp \
     colors.cpp \
     meshfactory.cpp \
-    entityfactory.cpp
+    entityfactory.cpp \
+    ECS/Components/inputcomponent.cpp \
+    ECS/Systems/playersystem.cpp \
+    ECS/Components/cameracomponent.cpp \
+    ECS/Components/freecameracomponent.cpp \
+    ECS/Systems/freecamerasystem.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -108,7 +113,12 @@ HEADERS += \
     ECS/Systems/spotlightsystem.h \
     colors.h \
     entityfactory.h \
-    meshfactory.h
+    meshfactory.h \
+    ECS/Components/inputcomponent.h \
+    ECS/Systems/playersystem.h \
+    ECS/Components/cameracomponent.h \
+    ECS/Components/freecameracomponent.h \
+    ECS/Systems/freecamerasystem.h
 
 FORMS += \
     mainwindow.ui

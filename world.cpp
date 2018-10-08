@@ -11,11 +11,16 @@
 #include "ECS/Components/directionallight_component.h"
 #include "ECS/Components/pointlight_component.h"
 #include "ECS/Components/spotlight_component.h"
+#include "ECS/Components/inputcomponent.h"
+#include "ECS/Components/cameracomponent.h"
+#include "ECS/Components/freecameracomponent.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
 #include "ECS/Systems/directionallightsystem.h"
 #include "ECS/Systems/pointlightsystem.h"
 #include "ECS/Systems/spotlightsystem.h"
+#include "ECS/Systems/playersystem.h"
+#include "ECS/Systems/freecamerasystem.h"
 
 World::World()
 {
@@ -23,26 +28,31 @@ World::World()
     // Create entity manager
     mEntityManager = std::make_unique<EntityManager>();
     // Create component managers
-    mComponentManagers[TransformComponent::family()] = std::make_unique<ComponentManager<TransformComponent>>();
-    mComponentManagers[MovementComponent::family()] = std::make_unique<ComponentManager<MovementComponent>>();
-    mComponentManagers[MeshComponent::family()] = std::make_unique<ComponentManager<MeshComponent>>();
-    mComponentManagers[MaterialComponent::family()] = std::make_unique<ComponentManager<MaterialComponent>>();
+    mComponentManagers[TransformComponent::family()] = std::make_unique<ComponentManager<TransformComponent>>(100000);
+    mComponentManagers[MovementComponent::family()] = std::make_unique<ComponentManager<MovementComponent>>(100000);
+    mComponentManagers[MeshComponent::family()] = std::make_unique<ComponentManager<MeshComponent>>(100000);
+    mComponentManagers[MaterialComponent::family()] = std::make_unique<ComponentManager<MaterialComponent>>(100000);
     mComponentManagers[DirectionalLightComponent::family()] = std::make_unique<ComponentManager<DirectionalLightComponent>>(100);
     mComponentManagers[PointLightComponent::family()] = std::make_unique<ComponentManager<PointLightComponent>>(100);
     mComponentManagers[SpotlightComponent::family()] = std::make_unique<ComponentManager<SpotlightComponent>>(100);
-    qDebug() << "Transform \tindex[0] = " << TransformComponent::family();
-    qDebug() << "Movement \t\tindex[0] = " << MovementComponent::family();
-    qDebug() << "Mesh \t\tindex[0] = " << MeshComponent::family();
-    qDebug() << "Material \t\tindex[0] = " << MaterialComponent::family();
-    qDebug() << "Directional \tindex[0] = " << DirectionalLightComponent::family();
-    qDebug() << "PointLight \tindex[0] = " << PointLightComponent::family();
-    qDebug() << "Spotlight \tindex[0] = " << SpotlightComponent::family();
+    mComponentManagers[InputComponent::family()] = std::make_unique<ComponentManager<InputComponent>>(100000);
+    mComponentManagers[CameraComponent::family()] = std::make_unique<ComponentManager<CameraComponent>>(10);
+    mComponentManagers[FreeCameraComponent::family()] = std::make_unique<ComponentManager<FreeCameraComponent>>(10);
+//    qDebug() << "Transform \tindex[0] = " << TransformComponent::family();
+//    qDebug() << "Movement \t\tindex[0] = " << MovementComponent::family();
+//    qDebug() << "Mesh \t\tindex[0] = " << MeshComponent::family();
+//    qDebug() << "Material \t\tindex[0] = " << MaterialComponent::family();
+//    qDebug() << "Directional \tindex[0] = " << DirectionalLightComponent::family();
+//    qDebug() << "PointLight \tindex[0] = " << PointLightComponent::family();
+//    qDebug() << "Spotlight \tindex[0] = " << SpotlightComponent::family();
     // Create systems
     mSystems.push_back(std::make_unique<MovementSystem>());
     mSystems.push_back(std::make_unique<DirectionalLightSystem>());
     mSystems.push_back(std::make_unique<PointLightSystem>());
     mSystems.push_back(std::make_unique<SpotlightSystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
+    mSystems.push_back(std::make_unique<playerSystem>());
+    mSystems.push_back(std::make_unique<FreeCameraSystem>());
     // Set world pointer for all systems
     for (auto &sys : mSystems)
         sys->setWorld(this);
@@ -119,6 +129,9 @@ void World::destroyEntity(const Entity &entity)
                 break;
             case 6:
                 removeComponent<SpotlightComponent>(entity);
+                break;
+            case 7:
+                removeComponent<InputComponent>(entity);
                 break;
             default:
                 qDebug() << "something went really wrong";

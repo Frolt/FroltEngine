@@ -3,9 +3,6 @@
 
 #include "ECS/system.h"
 
-// Forward declarations
-struct DirectionalLightComponent;
-
 struct DirectionalLightSystem : public System
 {
 public:

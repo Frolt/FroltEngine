@@ -1,7 +1,5 @@
 #include "directionallightsystem.h"
-#include "ECS/Components/directionallight_component.h"
 #include "shader.h"
-#include "world.h"
 
 DirectionalLightSystem::DirectionalLightSystem()
 {

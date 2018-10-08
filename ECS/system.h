@@ -3,11 +3,22 @@
 
 #include <vector>
 #include <bitset>
+#include <QDebug>
 #include "entity.h"
+#include "ECS/Handles/entityhandle.h"
+#include "ECS/Handles/componenthandle.h"
 #include "ECS/component_mask.h"
-
-// Forward declarations
-class World;
+#include "ECS/Components/inputcomponent.h"
+#include "ECS/Components/transform_component.h"
+#include "ECS/Components/directionallight_component.h"
+#include "ECS/Components/spotlight_component.h"
+#include "ECS/Components/pointlight_component.h"
+#include "ECS/Components/movement_component.h"
+#include "ECS/Components/mesh_component.h"
+#include "ECS/Components/material_component.h"
+#include "ECS/Components/cameracomponent.h"
+#include "ECS/Components/freecameracomponent.h"
+#include "world.h"
 
 class System
 {

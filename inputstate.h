@@ -7,11 +7,9 @@
 
 struct InputState
 {
-    // TODO Qhash?
     QSet<int> mPressedKeys;
     QSet<int> mPressedMouseButtons;
     am::Vec2 mMousePos;
-    Qt::MouseEventFlags mDoubleClick;
     QPoint mWheelAngleDelta;
     QPoint mWheelPixelDelta;
 };

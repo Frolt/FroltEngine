@@ -1,7 +1,4 @@
 #include "pointlightsystem.h"
-#include "ECS/Components/pointlight_component.h"
-#include "ECS/Components/transform_component.h"
-#include "ECS/Handles/componenthandle.h"
 
 PointLightSystem::PointLightSystem()
 {

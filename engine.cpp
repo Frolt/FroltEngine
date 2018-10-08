@@ -38,15 +38,19 @@ void Engine::initialize()
     mWorld = std::make_unique<World>();
     // Create factories
     mMeshFactory = std::make_unique<MeshFactory>(&mPhongShader);
-    mEntityFactory = std::make_unique<EntityFactory>(*mMeshFactory, *mWorld, mPhongShader);
+    mEntityFactory = std::make_unique<EntityFactory>(*mMeshFactory, *mWorld, *this, mPhongShader);
     // Begin play
     mWorld->init();
 
     // Create entities
-    auto player = mEntityFactory->createSphere("alexander");
+//    auto player1 = mEntityFactory->createPlayerCube("alexander1");
+//    auto player2 = mEntityFactory->createPlayerCube("alexander2", Colors::blue, am::right() * 2);
+//    auto player3 = mEntityFactory->createPlayerSphere("alexander3", Colors::green, am::right() * -2);
+
+    auto camera = mEntityFactory->createFreeCamera("camera");
 
     // Testing performance (creates N cubes)
-    for (unsigned int i = 0; i < 1e3; i++) {
+    for (unsigned int i = 0; i < 1e2; i++) {
         float randValueX = static_cast<float>(std::rand() % 100 - 50);
         float randValueY = static_cast<float>(std::rand() % 100 - 50);
         float randValueZ = static_cast<float>(std::rand() % 100 - 50);
@@ -64,7 +68,7 @@ void Engine::startGameLoop()
 {
     mTimer.start();
     mTickTimer.start();
-    mGameLoopTimer->start(0);
+    mGameLoopTimer->start(1);
 }
 
 void Engine::render()
@@ -91,11 +95,7 @@ void Engine::gameLoop()
 
     // Set view and projection matrix
     am::Mat4 perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
-//    auto view = am::Mat4::lookAt(am::Vec{0.0f, 100.0f, 200.0f}, am::Vec{0.0f, 0.0f, 0.0f}, am::up());
-    auto view = am::Mat4::lookAt(am::Vec{10.0f, 5.0f, 10.0f}, am::Vec{0.0f, 0.0f, 0.0f}, am::up());
     mPhongShader.setMat4("projection", perspective);
-    mPhongShader.setMat4("view", view);
-    mPhongShader.setVec3("camPos", am::Vec{10.0f, 5.0f, 10.0f});
 
     mWorld->update(mDeltaTime);
     emit mViewport->FPS();

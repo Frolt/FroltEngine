@@ -1,9 +1,4 @@
 #include "movementsystem.h"
-#include <QDebug>
-#include "ECS/Handles/componenthandle.h"
-#include "ECS/Components/movement_component.h"
-#include "ECS/Components/transform_component.h"
-#include "world.h"
 
 MovementSystem::MovementSystem()
 {

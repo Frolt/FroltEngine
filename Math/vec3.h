@@ -20,6 +20,8 @@ namespace am
         Vec3 operator-(const Vec3 &rhs) const;					// v - v
         Vec3 &operator+=(const Vec3 &rhs);                      // v += v
         Vec3 &operator-=(const Vec3 &rhs);                      // v -= v
+        Vec3 &operator+=(float rhs);                            // v += f
+        Vec3 &operator-=(float rhs);                            // v -= f
         Vec3 operator-() const;									// -v
         Vec3 operator*(float rhs) const;						// v * f
         friend Vec3 operator*(const Vec3 &lhs, const Vec3 &rhs);// v * v
@@ -29,6 +31,9 @@ namespace am
         float length() const;
         void normalize();
         void print();
+        float &yaw();
+        float &pitch();
+        float &roll();
         float yaw() const;
         float pitch() const;
         float roll() const;

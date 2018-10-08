@@ -39,6 +39,7 @@ public:
     template<typename T>
     T *getComponent(const Entity &entity);
 
+    // TODO snakk med ole, støtter ikke user defined klasser, må recompile
     // Unpack function
     template<typename T>
     void unpack(const Entity &entity, ComponentHandle<T> &handle);

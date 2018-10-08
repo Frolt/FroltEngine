@@ -42,6 +42,22 @@ namespace am
         return *this;
     }
 
+    Vec3 &Vec3::operator+=(float rhs)
+    {
+        x+=rhs;
+        y+=rhs;
+        z+=rhs;
+        return *this;
+    }
+
+    Vec3 &Vec3::operator-=(float rhs)
+    {
+        x-=rhs;
+        y-=rhs;
+        z-=rhs;
+        return *this;
+    }
+
     Vec3 Vec3::operator-(const Vec3 &rhs) const
     {
         return { x - rhs.x, y - rhs.y, z - rhs.z };
@@ -83,6 +99,21 @@ namespace am
     void Vec3::print()
     {
         std::cout << "(" << x << "," << y << "," << z << ")\n";
+    }
+
+    float &Vec3::yaw()
+    {
+        return x;
+    }
+
+    float &Vec3::pitch()
+    {
+        return y;
+    }
+
+    float &Vec3::roll()
+    {
+        return z;
     }
 
     float Vec3::yaw() const

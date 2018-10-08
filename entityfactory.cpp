@@ -9,13 +9,18 @@
 #include "ECS/Components/directionallight_component.h"
 #include "ECS/Components/pointlight_component.h"
 #include "ECS/Components/spotlight_component.h"
+#include "ECS/Components/inputcomponent.h"
+#include "ECS/Components/cameracomponent.h"
+#include "ECS/Components/freecameracomponent.h"
 #include "meshfactory.h"
 #include "world.h"
+#include "engine.h"
+#include "viewport.h"
 #include "octahedron.h"
 
 
-EntityFactory::EntityFactory(MeshFactory &meshFactory, World &world, Shader &shader)
-    : mMeshFactory{meshFactory}, mWorld{world}, mDefaultShader{shader}
+EntityFactory::EntityFactory(MeshFactory &meshFactory, World &world, Engine &engine, Shader &shader)
+    : mMeshFactory{meshFactory}, mWorld{world}, mEngine{engine}, mDefaultShader{shader}
 {
 
 }
@@ -40,8 +45,8 @@ EntityHandle EntityFactory::createPointLight(const std::string &name, const am::
     pointLight.mAmb = color * 0.1f;
     TransformComponent transform;
     transform.mPosition = pos;
-    entity.addComponent(transform);
     entity.addComponent(pointLight);
+    entity.addComponent(transform);
     return EntityHandle(&mWorld, entity());
 }
 
@@ -54,8 +59,8 @@ EntityHandle EntityFactory::createSpotlight(const std::string &name, const am::V
     spotlight.mAmb = color * 0.1f;
     TransformComponent transform;
     transform.mPosition = pos;
-    entity.addComponent(transform);
     entity.addComponent(spotlight);
+    entity.addComponent(transform);
     return EntityHandle(&mWorld, entity());
 }
 
@@ -84,5 +89,59 @@ EntityHandle EntityFactory::createSphere(const std::string &name, const am::Vec3
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);
+    return EntityHandle(&mWorld, entity());
+}
+
+EntityHandle EntityFactory::createPlayerCube(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
+{
+    auto entity = mWorld.createEntity(name);
+    MeshComponent mesh = mMeshFactory.createCube();
+    MaterialComponent material;
+    material.mDiffuseColor = color;
+    TransformComponent transform;
+    transform.mPosition = pos;
+    MovementComponent movement;
+    InputComponent input(&mEngine.mViewport->mInputState);
+    entity.addComponent(mesh);
+    entity.addComponent(material);
+    entity.addComponent(transform);
+    entity.addComponent(movement);
+    entity.addComponent(input);
+    return EntityHandle(&mWorld, entity());
+}
+
+EntityHandle EntityFactory::createPlayerSphere(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
+{
+    auto entity = mWorld.createEntity(name);
+    MeshComponent mesh = mMeshFactory.createSphere();
+    MaterialComponent material;
+    material.mDiffuseColor = color;
+    TransformComponent transform;
+    transform.mPosition = pos;
+    MovementComponent movement;
+    InputComponent input(&mEngine.mViewport->mInputState);
+    entity.addComponent(mesh);
+    entity.addComponent(material);
+    entity.addComponent(transform);
+    entity.addComponent(movement);
+    entity.addComponent(input);
+    return EntityHandle(&mWorld, entity());
+}
+
+EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::Vec3 &pos)
+{
+    auto entity = mWorld.createEntity(name);
+    TransformComponent transform;
+    transform.mPosition = pos;
+    MovementComponent movement;
+    InputComponent input(&mEngine.mViewport->mInputState);
+    CameraComponent camera(mDefaultShader);
+    FreeCameraComponent freeCamera;
+    // TEST END
+    entity.addComponent(transform);
+    entity.addComponent(movement);
+    entity.addComponent(input);
+    entity.addComponent(camera);
+    entity.addComponent(freeCamera);
     return EntityHandle(&mWorld, entity());
 }

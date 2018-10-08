@@ -1,7 +1,4 @@
 #include "spotlightsystem.h"
-#include "ECS/Components/spotlight_component.h"
-#include "ECS/Components/transform_component.h"
-#include "ECS/Handles/componenthandle.h"
 
 SpotlightSystem::SpotlightSystem()
 {
