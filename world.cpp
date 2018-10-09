@@ -11,9 +11,10 @@
 #include "ECS/Components/directionallight_component.h"
 #include "ECS/Components/pointlight_component.h"
 #include "ECS/Components/spotlight_component.h"
-#include "ECS/Components/inputcomponent.h"
-#include "ECS/Components/cameracomponent.h"
-#include "ECS/Components/freecameracomponent.h"
+#include "ECS/Components/input_component.h"
+#include "ECS/Components/camera_component.h"
+#include "ECS/Components/free_camera_component.h"
+#include "ECS/Components/math_terrain_component.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
 #include "ECS/Systems/directionallightsystem.h"
@@ -38,6 +39,7 @@ World::World()
     mComponentManagers[InputComponent::family()] = std::make_unique<ComponentManager<InputComponent>>(100000);
     mComponentManagers[CameraComponent::family()] = std::make_unique<ComponentManager<CameraComponent>>(10);
     mComponentManagers[FreeCameraComponent::family()] = std::make_unique<ComponentManager<FreeCameraComponent>>(10);
+    mComponentManagers[MathTerrainComponent::family()] = std::make_unique<ComponentManager<MathTerrainComponent>>(1);
 //    qDebug() << "Transform \tindex[0] = " << TransformComponent::family();
 //    qDebug() << "Movement \t\tindex[0] = " << MovementComponent::family();
 //    qDebug() << "Mesh \t\tindex[0] = " << MeshComponent::family();

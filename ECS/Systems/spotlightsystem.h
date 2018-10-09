@@ -3,7 +3,7 @@
 
 #include "ECS/system.h"
 
-struct SpotlightSystem : public System
+class SpotlightSystem : public System
 {
 public:
     SpotlightSystem();

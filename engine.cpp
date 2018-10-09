@@ -46,7 +46,7 @@ void Engine::initialize()
 //    auto player1 = mEntityFactory->createPlayerCube("alexander1");
 //    auto player2 = mEntityFactory->createPlayerCube("alexander2", Colors::blue, am::right() * 2);
 //    auto player3 = mEntityFactory->createPlayerSphere("alexander3", Colors::green, am::right() * -2);
-
+    auto mathTerrain = mEntityFactory->createMathTerrain("mathTerrain");
     auto camera = mEntityFactory->createFreeCamera("camera");
 
     // Testing performance (creates N cubes)

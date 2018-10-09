@@ -3,11 +3,7 @@
 
 #include "ECS/system.h"
 
-// Forward declarations
-struct PointLightComponent;
-struct TransformComponent;
-
-struct PointLightSystem : public System
+class PointLightSystem : public System
 {
 public:
     PointLightSystem();

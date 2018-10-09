@@ -3,7 +3,7 @@
 
 #include "ECS/system.h"
 
-struct DirectionalLightSystem : public System
+class DirectionalLightSystem : public System
 {
 public:
     DirectionalLightSystem();

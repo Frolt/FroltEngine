@@ -28,6 +28,8 @@ public:
     EntityHandle createPlayerSphere(const std::string &name, const am::Vec3 &color = Colors::orangeRed, const am::Vec3 &pos = {0});
     // Cameras
     EntityHandle createFreeCamera(const std::string &name, const am::Vec3 &pos = {0});
+    // Terrain
+    EntityHandle createMathTerrain(const std::string &name, const am::Vec3 &color = Colors::green, int min = -100, int max = 100, const am::Vec3 &pos = {0});
 
     // TODO Functions below are not implemented yet
     // AI
@@ -36,8 +38,7 @@ public:
     // Camera
     EntityHandle createCamera(const std::string &name, const am::Vec3 &pos = {0});
     // Terrain
-    EntityHandle createLasTerrain(const std::string &name, const am::Vec3 &color = Colors::green, const am::Vec3 &pos = {0});
-    EntityHandle createTerrain(const std::string &name, const am::Vec3 &color = Colors::green, const am::Vec3 &pos = {0});
+    EntityHandle createLasTerrain(const std::string &name, const am::Vec3 &color = Colors::green, int min = -100, int max = 100, const am::Vec3 &pos = {0});
 
 private:
     MeshFactory &mMeshFactory;

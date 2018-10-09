@@ -1,5 +1,5 @@
-#ifndef FREECAMERACOMPONENT_H
-#define FREECAMERACOMPONENT_H
+#ifndef FREE_CAMERA_COMPONENT_H
+#define FREE_CAMERA_COMPONENT_H
 
 #include "ECS/component.h"
 #include "a_math.h"
@@ -20,4 +20,4 @@ struct FreeCameraComponent : public Component<FreeCameraComponent>
     float mZoomStr{3.0f};
 };
 
-#endif // FREECAMERACOMPONENT_H
+#endif // FREE_CAMERA_COMPONENT_H

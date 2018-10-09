@@ -11,7 +11,7 @@ public:
     void update(float deltaTime) override;
 
 private:
-    void processKeyboard(InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera, float deltaTime);
+    void processKeyboard(InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera);
     void processMouse(InputComponent &input, FreeCameraComponent &freeCamera, TransformComponent &transform);
     void processScroll();
     void updateCameraVectors(TransformComponent &transform, FreeCameraComponent &freeCamera);

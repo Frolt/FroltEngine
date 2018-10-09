@@ -1,5 +1,5 @@
-#ifndef INPUTCOMPONENT_H
-#define INPUTCOMPONENT_H
+#ifndef INPUT_COMPONENT_H
+#define INPUT_COMPONENT_H
 
 #include "ECS/component.h"
 #include <Qt>
@@ -24,4 +24,4 @@ struct InputComponent : public Component<InputComponent>
     InputState *mInputState;
 };
 
-#endif // INPUTCOMPONENT_H
+#endif // INPUT_COMPONENT_H

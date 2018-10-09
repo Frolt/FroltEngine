@@ -8,7 +8,7 @@
 #include "ECS/Handles/entityhandle.h"
 #include "ECS/Handles/componenthandle.h"
 #include "ECS/component_mask.h"
-#include "ECS/Components/inputcomponent.h"
+#include "ECS/Components/input_component.h"
 #include "ECS/Components/transform_component.h"
 #include "ECS/Components/directionallight_component.h"
 #include "ECS/Components/spotlight_component.h"
@@ -16,8 +16,8 @@
 #include "ECS/Components/movement_component.h"
 #include "ECS/Components/mesh_component.h"
 #include "ECS/Components/material_component.h"
-#include "ECS/Components/cameracomponent.h"
-#include "ECS/Components/freecameracomponent.h"
+#include "ECS/Components/camera_component.h"
+#include "ECS/Components/free_camera_component.h"
 #include "world.h"
 
 class System

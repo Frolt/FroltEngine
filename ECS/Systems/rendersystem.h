@@ -4,14 +4,6 @@
 #include "ECS/system.h"
 #include <QOpenGLFunctions_4_1_Core>
 
-// Forward declarations
-class Shader;
-struct MaterialComponent;
-struct TransformComponent;
-struct MeshComponent;
-template<typename T>
-struct ComponentHandle;
-
 class RenderSystem : public System, protected QOpenGLFunctions_4_1_Core
 {
 public:

@@ -29,7 +29,7 @@ void FreeCameraSystem::update(float deltaTime)
         ComponentHandle<InputComponent> input;
         ComponentHandle<MovementComponent> movement;
         mWorld->unpack(entity, transform, camera, freeCamera, input, movement);
-        processKeyboard(input(), movement(), freeCamera(), deltaTime);
+        processKeyboard(input(), movement(), freeCamera());
         processMouse(input(), freeCamera(), transform());
         processScroll();
         updateCameraVectors(transform(), freeCamera());
@@ -37,7 +37,7 @@ void FreeCameraSystem::update(float deltaTime)
     }
 }
 
-void FreeCameraSystem::processKeyboard(InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera, float deltaTime)
+void FreeCameraSystem::processKeyboard(InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera)
 {
     movement.mVelocity = am::zero();
     am::Vec tempVel;

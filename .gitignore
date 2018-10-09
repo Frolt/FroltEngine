@@ -11,6 +11,9 @@
 *.dylib
 *.las
 *.laz
+*.smp
+*.smproj
+*.smp.old
 
 # Qt-es
 

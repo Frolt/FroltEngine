@@ -12,12 +12,14 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 QMAKE_CXXFLAGS += /std:c++17
-# --------------------------------------------------------------
 
+# Includes
+# --------------------------------------------------------------
 INCLUDEPATH += $$PWD/Libraries
 INCLUDEPATH += $$PWD/Math
 
-
+# Source files
+# --------------------------------------------------------------
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
@@ -60,12 +62,17 @@ SOURCES += \
     colors.cpp \
     meshfactory.cpp \
     entityfactory.cpp \
-    ECS/Components/inputcomponent.cpp \
     ECS/Systems/playersystem.cpp \
-    ECS/Components/cameracomponent.cpp \
-    ECS/Components/freecameracomponent.cpp \
-    ECS/Systems/freecamerasystem.cpp
+    ECS/Systems/freecamerasystem.cpp \
+    ECS/Components/math_terrain_component.cpp \
+    ECS/Components/input_component.cpp \
+    ECS/Components/camera_component.cpp \
+    ECS/Components/free_camera_component.cpp \
+    ECS/Systems/mathterrainsystem.cpp \
+    mathterraingenerator.cpp
 
+# Header files
+# --------------------------------------------------------------
 HEADERS += \
     mainwindow.h \
     viewport.h \
@@ -114,11 +121,14 @@ HEADERS += \
     colors.h \
     entityfactory.h \
     meshfactory.h \
-    ECS/Components/inputcomponent.h \
     ECS/Systems/playersystem.h \
-    ECS/Components/cameracomponent.h \
-    ECS/Components/freecameracomponent.h \
-    ECS/Systems/freecamerasystem.h
+    ECS/Systems/freecamerasystem.h \
+    ECS/Components/math_terrain_component.h \
+    ECS/Components/free_camera_component.h \
+    ECS/Components/camera_component.h \
+    ECS/Components/input_component.h \
+    ECS/Systems/mathterrainsystem.h \
+    mathterraingenerator.h
 
 FORMS += \
     mainwindow.ui
@@ -128,7 +138,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-# --------------------------------------------------------------
 
 # External libraries
 # --------------------------------------------------------------
@@ -141,8 +150,9 @@ unix|win32: LIBS += -L$$PWD/Libraries/libs/ -lglm_static
 
 INCLUDEPATH += $$PWD/Libraries/Include
 DEPENDPATH += $$PWD/Libraries/Include
-# --------------------------------------------------------------
 
+# Shader files
+# --------------------------------------------------------------
 DISTFILES += \
     Shaders/ColorObject.frag \
     Shaders/LightObject.frag \

@@ -1,5 +1,5 @@
-#ifndef CAMERACOMPONENT_H
-#define CAMERACOMPONENT_H
+#ifndef CAMERA_COMPONENT_H
+#define CAMERA_COMPONENT_H
 
 #include "ECS/component.h"
 #include "a_math.h"
@@ -15,4 +15,4 @@ struct CameraComponent : public Component<CameraComponent>
     bool mActive{false};
 };
 
-#endif // CAMERACOMPONENT_H
+#endif // CAMERA_COMPONENT_H

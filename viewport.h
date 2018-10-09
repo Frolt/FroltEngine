@@ -9,7 +9,6 @@
 class MainWindow;
 class QOpenGLContext;
 class QOpenGLDebugLogger;
-class InputComponent;
 
 class Viewport : public QWindow, protected QOpenGLFunctions_4_1_Core
 {

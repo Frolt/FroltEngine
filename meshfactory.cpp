@@ -18,7 +18,7 @@ MeshComponent MeshFactory::createCube(Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created";
+        qDebug() << name + " created cube";
         std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
         mMeshMap[name] = createWithoutIndices(vertices);
     }
@@ -32,7 +32,7 @@ MeshComponent MeshFactory::createRectangle(Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created";
+        qDebug() << name + " created rectangle";
         std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
         std::vector<unsigned int> indices = { 0, 3, 1, 1, 3, 2 };
         mMeshMap[name] = createWithIndices(vertices, indices);
@@ -47,7 +47,7 @@ MeshComponent MeshFactory::createTriangle(Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created";
+        qDebug() << name + " created triangle";
         std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
         mMeshMap[name] = createWithoutIndices(vertices);
     }
@@ -61,7 +61,7 @@ MeshComponent MeshFactory::createSphere(unsigned int subDivide, Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created";
+        qDebug() << name + " created sphere";
         // CREATE OCTAHEDRON
         // -------------------------------------------------------
         Octahedron sphere{subDivide};
@@ -69,6 +69,19 @@ MeshComponent MeshFactory::createSphere(unsigned int subDivide, Shader *shader)
         mMeshMap[name] = createWithoutIndices(vertices);
 
         // -------------------------------------------------------
+    }
+    auto index = mMeshMap[name];
+    return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
+}
+
+MeshComponent MeshFactory::createTerrain(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, Shader *shader)
+{
+    QString name = "terrain";
+    if (!shader)
+        shader = mDefaultShader;
+    if (mMeshMap.find(name) == mMeshMap.end()) {
+        qDebug() << name + " created terrain";
+        mMeshMap[name] = createWithIndices(vertices, indices);
     }
     auto index = mMeshMap[name];
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);

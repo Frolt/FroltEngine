@@ -19,6 +19,7 @@ public:
     MeshComponent createRectangle(Shader *shader = nullptr);
     MeshComponent createTriangle(Shader *shader = nullptr);
     MeshComponent createSphere(unsigned int subDivide = 3, Shader *shader = nullptr);
+    MeshComponent createTerrain(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, Shader *shader = nullptr);
 
 private:
     unsigned int createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);
