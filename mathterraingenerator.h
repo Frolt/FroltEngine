@@ -19,7 +19,6 @@ private:
 
 public:
     int mRange{0};
-    unsigned int mVAO{0};
     std::vector<Vertex> mVertices;
     std::vector<unsigned int> mIndices;
     std::vector<std::array<int, 6>> mTriangles;

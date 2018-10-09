@@ -107,7 +107,7 @@ void World::destroyEntity(const Entity &entity)
         test[i] = mask[i];
     }
     qDebug() << test;
-
+    // TODO loop all managers
     for (unsigned int i = 0; i < mask.size(); i++) {
         if (mask[i] == true) {
             switch (i) {

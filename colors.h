@@ -4,29 +4,26 @@
 #include "vec3.h"
 
 // TODO snakk med Ole, namespace isteden?
-struct Colors
+namespace Colors
 {
-    static const am::Vec3 white;
-    static const am::Vec3 silver;
-    static const am::Vec3 gray;
-    static const am::Vec3 black;
-    static const am::Vec3 red;
-    static const am::Vec3 maroon;
-    static const am::Vec3 yellow;
-    static const am::Vec3 olive;
-    static const am::Vec3 lime;
-    static const am::Vec3 green;
-    static const am::Vec3 aqua;
-    static const am::Vec3 teal;
-    static const am::Vec3 blue;
-    static const am::Vec3 navy;
-    static const am::Vec3 fuchsia;
-    static const am::Vec3 purple;
-    static const am::Vec3 orange;
-    static const am::Vec3 orangeRed;
-
-private:
-    Colors() = default;
+    const am::Vec3 white{1.0f, 1.0f, 1.0f};
+    const am::Vec3 silver{0.752f, 0.752f, 0.752f};
+    const am::Vec3 gray{0.501f, 0.501f, 0.501f};
+    const am::Vec3 black{0.0f, 0.0f, 0.0f};
+    const am::Vec3 red{1.0f, 0.0f, 0.0f};
+    const am::Vec3 maroon{0.501f, 0.0f, 0.0f};
+    const am::Vec3 yellow{1.0f, 1.0f, 0.0f};
+    const am::Vec3 olive{0.501f, 0.501f, 0.0f};
+    const am::Vec3 lime{0.0f, 1.0f, 0.0f};
+    const am::Vec3 green{0.0f, 0.501f, 0.0f};
+    const am::Vec3 aqua{0.0f, 1.0f, 1.0f};
+    const am::Vec3 teal{0.0f, 0.501f, 0.501f};
+    const am::Vec3 blue{0.0f, 0.0f, 1.0f};
+    const am::Vec3 navy{0.0f, 0.0f, 0.501f};
+    const am::Vec3 fuchsia{1.0f, 0.0f, 1.0f};
+    const am::Vec3 purple{0.501f, 0.0f, 0.501f};
+    const am::Vec3 orange{1.0f, 0.647f, 0.0f};
+    const am::Vec3 orangeRed{1.0f, 0.270f, 0.0f};
 };
 
 #endif // COLORS_H
