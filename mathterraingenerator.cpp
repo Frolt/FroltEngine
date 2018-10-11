@@ -3,7 +3,6 @@
 MathTerrainGenerator::MathTerrainGenerator(int domainMin, int domainMax, float resolution)
 {
     float delta = 1.0f / resolution;
-    qDebug() << "domain min: " << domainMin << "domain max: " << domainMax;
     mRange = ((-domainMin + domainMax) / delta) + 1.0f;
     mVertices.resize(mRange * mRange);
     mIndices.resize(((mRange - 1) * (mRange - 1)) * 2 * 3);
@@ -17,7 +16,7 @@ MathTerrainGenerator::MathTerrainGenerator(int domainMin, int domainMax, float r
         }
     }
     makeIndices();
-//    FindNeighborTriangles();
+    FindNeighborTriangles();
 }
 
 float MathTerrainGenerator::calculateY(const float x, const float z)

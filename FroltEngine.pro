@@ -10,13 +10,14 @@ QT += core gui widgets
 TARGET = FroltEngine
 TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
-CONFIG += c++17
+#CONFIG += c++17
 QMAKE_CXXFLAGS += /std:c++17
 
 # Includes
 # --------------------------------------------------------------
 INCLUDEPATH += $$PWD/Libraries
 INCLUDEPATH += $$PWD/Math
+INCLUDEPATH += $$PWD/Factories
 
 # Source files
 # --------------------------------------------------------------
@@ -45,7 +46,6 @@ SOURCES += \
     ECS/Systems/rendersystem.cpp \
     octahedron.cpp \
     mesh.cpp \
-    model.cpp \
     texture.cpp \
     ECS/Components/material_component.cpp \
     ECS/Components/mesh_component.cpp \
@@ -60,16 +60,21 @@ SOURCES += \
     ECS/Systems/spotlightsystem.cpp \
     paths.cpp \
     colors.cpp \
-    meshfactory.cpp \
-    entityfactory.cpp \
+    Factories/meshfactory.cpp \
+    Factories/entityfactory.cpp \
     ECS/Systems/playersystem.cpp \
     ECS/Systems/freecamerasystem.cpp \
-    ECS/Components/math_terrain_component.cpp \
     ECS/Components/input_component.cpp \
     ECS/Components/camera_component.cpp \
     ECS/Components/free_camera_component.cpp \
-    ECS/Systems/mathterrainsystem.cpp \
-    mathterraingenerator.cpp
+    mathterraingenerator.cpp \
+    ECS/Components/terrain_component.cpp \
+    ECS/Systems/terrainsystem.cpp \
+    lazterraingenerator.cpp \
+    Factories/materialfactory.cpp \
+    modelloader.cpp \
+    ECS/Components/modelcomponent.cpp \
+    ECS/Systems/modelrendersystem.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -109,7 +114,6 @@ HEADERS += \
     ECS/Systems/rendersystem.h \
     octahedron.h \
     mesh.h \
-    model.h \
     texture.h \
     ECS/Components/light_component.h \
     ECS/Components/pointlight_component.h \
@@ -119,16 +123,21 @@ HEADERS += \
     ECS/Systems/pointlightsystem.h \
     ECS/Systems/spotlightsystem.h \
     colors.h \
-    entityfactory.h \
-    meshfactory.h \
+    Factories/entityfactory.h \
+    Factories/meshfactory.h \
     ECS/Systems/playersystem.h \
     ECS/Systems/freecamerasystem.h \
-    ECS/Components/math_terrain_component.h \
     ECS/Components/free_camera_component.h \
     ECS/Components/camera_component.h \
     ECS/Components/input_component.h \
-    ECS/Systems/mathterrainsystem.h \
-    mathterraingenerator.h
+    mathterraingenerator.h \
+    ECS/Components/terrain_component.h \
+    ECS/Systems/terrainsystem.h \
+    lazterraingenerator.h \
+    Factories/materialfactory.h \
+    modelloader.h \
+    ECS/Components/modelcomponent.h \
+    ECS/Systems/modelrendersystem.h
 
 FORMS += \
     mainwindow.ui

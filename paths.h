@@ -3,20 +3,14 @@
 
 #include <string>
 
-// TODO snakk med Ole, singleton?
-// TODO snakk med Ole, namespace isteden?
-
-struct Path
+namespace Path
 {
-    static const std::string root;
-    static const std::string textures;
-    static const std::string shaders;
-    static const std::string primitives;
-    static const std::string mapdata;
-    static const std::string models;
-
-private:
-    Path() = default;
+    const std::string root = "../";
+    const std::string textures = "../Assets/Textures/";
+    const std::string shaders = "../Shaders/";
+    const std::string primitives = "../Assets/Primitives/";
+    const std::string mapdata = "../LAS/MapData/";
+    const std::string models = "../Assets/Models/";
 };
 
 

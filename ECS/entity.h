@@ -6,13 +6,19 @@
 
 struct Entity
 {
-    Entity() = default;
+    Entity();
     Entity(unsigned int ID, const std::string &name);
+    ~Entity();
+    Entity(const Entity &other);
+    Entity(Entity &&other);
+    Entity &operator=(const Entity &other);
+    Entity &operator=(Entity &&other);
+
     bool operator==(const Entity &rhs) const;
     bool operator<(const Entity &rhs) const;
 
     // Variables
-    unsigned int mID = 0;
+    unsigned int mID{0};
     std::string mName;
 };
 

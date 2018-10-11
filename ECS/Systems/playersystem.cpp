@@ -17,7 +17,7 @@ void playerSystem::update(float deltaTime)
         ComponentHandle<InputComponent> input;
         ComponentHandle<MovementComponent> movement;
         mWorld->unpack(entity, input, movement);
-        processInput(input(), movement(), deltaTime);
+        processInput(input, movement, deltaTime);
     }
 }
 

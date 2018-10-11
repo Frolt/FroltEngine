@@ -14,7 +14,8 @@
 #include "ECS/Components/input_component.h"
 #include "ECS/Components/camera_component.h"
 #include "ECS/Components/free_camera_component.h"
-#include "ECS/Components/math_terrain_component.h"
+#include "ECS/Components/terrain_component.h"
+#include "ECS/Components/modelcomponent.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
 #include "ECS/Systems/directionallightsystem.h"
@@ -22,6 +23,8 @@
 #include "ECS/Systems/spotlightsystem.h"
 #include "ECS/Systems/playersystem.h"
 #include "ECS/Systems/freecamerasystem.h"
+#include "ECS/Systems/terrainsystem.h"
+#include "ECS/Systems/modelrendersystem.h"
 
 World::World()
 {
@@ -39,7 +42,8 @@ World::World()
     mComponentManagers[InputComponent::family()] = std::make_unique<ComponentManager<InputComponent>>(100000);
     mComponentManagers[CameraComponent::family()] = std::make_unique<ComponentManager<CameraComponent>>(10);
     mComponentManagers[FreeCameraComponent::family()] = std::make_unique<ComponentManager<FreeCameraComponent>>(10);
-    mComponentManagers[MathTerrainComponent::family()] = std::make_unique<ComponentManager<MathTerrainComponent>>(1);
+    mComponentManagers[TerrainComponent::family()] = std::make_unique<ComponentManager<TerrainComponent>>(100);
+    mComponentManagers[ModelComponent::family()] = std::make_unique<ComponentManager<ModelComponent>>(100000);
 //    qDebug() << "Transform \tindex[0] = " << TransformComponent::family();
 //    qDebug() << "Movement \t\tindex[0] = " << MovementComponent::family();
 //    qDebug() << "Mesh \t\tindex[0] = " << MeshComponent::family();
@@ -52,9 +56,11 @@ World::World()
     mSystems.push_back(std::make_unique<DirectionalLightSystem>());
     mSystems.push_back(std::make_unique<PointLightSystem>());
     mSystems.push_back(std::make_unique<SpotlightSystem>());
-    mSystems.push_back(std::make_unique<RenderSystem>());
     mSystems.push_back(std::make_unique<playerSystem>());
     mSystems.push_back(std::make_unique<FreeCameraSystem>());
+    mSystems.push_back(std::make_unique<TerrainSystem>());
+    mSystems.push_back(std::make_unique<modelRenderSystem>());
+    mSystems.push_back(std::make_unique<RenderSystem>());
     // Set world pointer for all systems
     for (auto &sys : mSystems)
         sys->setWorld(this);
@@ -97,52 +103,18 @@ EntityHandle World::createEntity(const std::string &name)
     return EntityHandle(this, entity);
 }
 
-#include <QBitArray>
 void World::destroyEntity(const Entity &entity)
 {
-    // TODO this is not a good system
-    auto mask = mEntityMasks[entity].getMask();
-    QBitArray test{64};
-    for (unsigned int i = 0; i < mask.size(); i++) {
-        test[i] = mask[i];
+    for (auto &manager : mComponentManagers) {
+        if (!manager)
+            break;
+        manager->destroyComponent(entity);
     }
-    qDebug() << test;
-    // TODO loop all managers
-    for (unsigned int i = 0; i < mask.size(); i++) {
-        if (mask[i] == true) {
-            switch (i) {
-            case 0:
-                removeComponent<TransformComponent>(entity);
-                break;
-            case 1:
-                removeComponent<MovementComponent>(entity);
-                break;
-            case 2:
-                removeComponent<MeshComponent>(entity);
-                break;
-            case 3:
-                removeComponent<MaterialComponent>(entity);
-                break;
-            case 4:
-                removeComponent<DirectionalLightComponent>(entity);
-                break;
-            case 5:
-                removeComponent<PointLightComponent>(entity);
-                break;
-            case 6:
-                removeComponent<SpotlightComponent>(entity);
-                break;
-            case 7:
-                removeComponent<InputComponent>(entity);
-                break;
-            default:
-                qDebug() << "something went really wrong";
-                break;
-            }
-        }
-    }
+    // update mask
+    ComponentMask oldMask = mEntityMasks[entity];
+    mEntityMasks[entity].reset();
+    updateSystems(entity, oldMask);
     mEntityMasks.erase(entity);
-    mEntityManager->destroyEntity(entity);
 }
 
 EntityHandle World::getEntity(const std::string &name)

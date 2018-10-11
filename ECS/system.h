@@ -18,6 +18,9 @@
 #include "ECS/Components/material_component.h"
 #include "ECS/Components/camera_component.h"
 #include "ECS/Components/free_camera_component.h"
+#include "ECS/Components/terrain_component.h"
+#include "ECS/Components/modelcomponent.h"
+
 #include "world.h"
 
 class System

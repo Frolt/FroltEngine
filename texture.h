@@ -1,12 +1,11 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <QOpenGLFunctions_4_1_Core>
 #include <string>
 
-class Texture : protected QOpenGLFunctions_4_1_Core
+struct Texture
 {
-public:
+    Texture() = default;
     Texture(const std::string& path);
 
     unsigned int mID;

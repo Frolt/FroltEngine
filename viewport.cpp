@@ -27,7 +27,7 @@ void Viewport::initialize()
     initializeOpenGLFunctions();
 
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+//    glEnable(GL_CULL_FACE);
     glClearColor(0.180f, 0.419f, 1.0f, 1.0f);
 
     emit ready();

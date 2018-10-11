@@ -20,3 +20,8 @@ const std::bitset<64> &ComponentMask::getMask() const
 {
     return mMask;
 }
+
+void ComponentMask::reset()
+{
+    mMask.reset();
+}

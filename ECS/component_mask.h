@@ -11,6 +11,7 @@ public:
     bool noLongerMatched(ComponentMask oldMask, ComponentMask systemMask) const;
     bool matches(ComponentMask other) const;
     const std::bitset<64> &getMask() const;
+    void reset();
 
     template<typename T>
     void addComponent();

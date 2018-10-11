@@ -17,8 +17,9 @@ class ComponentManager : public BaseComponentManager
 public:
     ComponentManager(std::size_t size = 100000);
     void addComponent(const Entity &entity, const T &component);
-    void destroyComponent(const Entity &entity);
+    void destroyComponent(const Entity &entity) override;
     T *getComponent(const Entity &entity);
+    bool hasComponent(const Entity &entity);
     void iterateAll(std::function<void(T component)> lambda);
 
 private:
@@ -51,9 +52,20 @@ void ComponentManager<T>::addComponent(const Entity &entity, const T &component)
 template<typename T>
 void ComponentManager<T>::destroyComponent(const Entity &entity)
 {
-    auto index = mEntityMap.at(entity);
-    mComponents[index] = mComponents[--mSize];
-    mEntityMap.erase(entity);
+    if (mEntityMap.find(entity) != mEntityMap.end()) {
+        // Moves the last component into the index we want to delete
+        auto index = mEntityMap.at(entity);
+        mComponents[index] = std::move(mComponents[--mSize]);
+        mEntityMap.erase(entity);
+
+        // Find the key that pointed to the last component and redirect it to the new index
+        for (auto &element : mEntityMap) {
+            if (element.second == mSize) {
+                element.second = index;
+                break;
+            }
+        }
+    }
 }
 
 template<typename T>
@@ -61,6 +73,15 @@ T *ComponentManager<T>::getComponent(const Entity &entity)
 {
     auto index = mEntityMap.at(entity);
     return &mComponents[index];
+}
+
+template<typename T>
+bool ComponentManager<T>::hasComponent(const Entity &entity)
+{
+    if (mEntityMap.find(entity) != mEntityMap.end())
+        return true;
+    else
+        return false;
 }
 
 template<typename T>

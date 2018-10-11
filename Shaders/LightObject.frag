@@ -1,5 +1,4 @@
 #version 410 core
-#define NR_POINT_LIGHTS 1
 
 // Material
 struct Material {
@@ -8,6 +7,7 @@ struct Material {
     sampler2D diffuseMap3;
     sampler2D specularMap1;
     sampler2D specularMap2;
+    sampler2D specularMap3;
     sampler2D emissionMap;
     vec3 diffuseColor;
     vec3 specularColor;
@@ -15,6 +15,7 @@ struct Material {
     bool hasDiffMap;
     bool hasSpecMap;
     bool hasEmissionMap;
+    bool isLight;
 };
 // Directional light
 struct DirLight {
@@ -25,7 +26,6 @@ struct DirLight {
 // Point light
 struct PointLight {
     vec3 position;
-    vec3 ambient;
     vec3 diffuse;
     float constant;
     float linear;
@@ -35,7 +35,6 @@ struct PointLight {
 struct SpotLight {
     vec3 position;
     vec3 direction;
-    vec3 ambient;
     vec3 diffuse;
     float innerCone;
     float outerCone;
@@ -44,13 +43,15 @@ struct SpotLight {
     float quadratic;
 };
 
+// Number of lights supported
+const int numOfPointLights = 5;
+const int numOfspotlights = 5;
 // Uniforms
 uniform Material material;
 uniform DirLight dirLight;
-uniform PointLight pointLights[NR_POINT_LIGHTS];
-uniform SpotLight spotLight;
+uniform PointLight pointLights[numOfPointLights];
+uniform SpotLight spotLights[numOfspotlights];
 uniform vec3 camPos;
-uniform float time;
 
 // From vertex shader
 in vec3 Pos;
@@ -70,15 +71,20 @@ vec3 calcEmission();
 void main()
 {
     vec3 fragColor = vec3(0.0);
-    vec3 normal = normalize(Normal);
-    vec3 camDir = normalize(camPos - FragPos);
+    if (material.isLight) {
+        fragColor = material.diffuseColor;
+    } else {
+        vec3 normal = normalize(Normal);
+        vec3 camDir = normalize(camPos - FragPos);
+        fragColor += calcDirLight(dirLight, normal, camDir);
+        for (int i = 0; i < numOfPointLights; i++)
+            fragColor += calcPointLight(pointLights[i], normal, camDir);
+        for (int i = 0; i < numOfspotlights; i++)
+            fragColor += calcSpotLight(spotLights[i], normal, camDir);
+        fragColor += calcEmission();
+    }
 
-    fragColor += calcDirLight(dirLight, normal, camDir);
-    for (int i = 0; i < NR_POINT_LIGHTS; i++)
-        fragColor += calcPointLight(pointLights[i], normal, camDir);
-    fragColor += calcSpotLight(spotLight, normal, camDir);
-    fragColor += calcEmission();
-
+    // Final fragment color
     FragColor = vec4(fragColor, 1.0);
 }
 
@@ -124,12 +130,10 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 camDir)
     light.constant = 1.0;
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
     // Result
-    vec3 amb, diff, spec;
+    vec3 diff, spec;
     if (material.hasDiffMap) {
-        amb = light.ambient * texture(material.diffuseMap1, UV).rgb;
         diff = light.diffuse * diffStr * texture(material.diffuseMap1, UV).rgb;
     } else {
-        amb = light.ambient * material.diffuseColor;
         diff = light.diffuse * diffStr * material.diffuseColor;
     }
     if (material.hasSpecMap) {
@@ -137,10 +141,9 @@ vec3 calcPointLight(PointLight light, vec3 normal, vec3 camDir)
     } else {
         spec = light.diffuse * specStr * material.specularColor;
     }
-    amb *= attenuation;
     diff *= attenuation;
     spec *= attenuation;
-    return (amb + diff + spec);
+    return (diff + spec);
 }
 
 vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 camDir)
@@ -159,12 +162,10 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 camDir)
     float theta = dot(lightDir, normalize(-light.direction));
     float intensity = clamp((theta - light.outerCone) / (light.innerCone - light.outerCone), 0.0, 1.0);
     // Result
-    vec3 amb, diff, spec;
+    vec3 diff, spec;
     if (material.hasDiffMap) {
-        amb = light.ambient * texture(material.diffuseMap1, UV).rgb;
         diff = light.diffuse * diffStr * texture(material.diffuseMap1, UV).rgb;
     } else {
-        amb = light.ambient * material.diffuseColor;
         diff = light.diffuse * diffStr * material.diffuseColor;
     }
     if (material.hasSpecMap) {
@@ -172,10 +173,9 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 camDir)
     } else {
         spec = light.diffuse * specStr * material.specularColor;
     }
-    amb *= attenuation * intensity;
     diff *= attenuation * intensity;
     spec *= attenuation * intensity;
-    return (amb + diff + spec);
+    return (diff + spec);
 }
 
 vec3 calcEmission()

@@ -16,6 +16,7 @@ struct ComponentHandle
     void destroy();
     T &operator()();
     const T &operator()() const;
+    operator T&();
 
 public:
     T *mComponent{nullptr};
@@ -52,6 +53,12 @@ T &ComponentHandle<T>::operator()()
 
 template<typename T>
 const T &ComponentHandle<T>::operator()() const
+{
+    return *mComponent;
+}
+
+template<typename T>
+ComponentHandle<T>::operator T&()
 {
     return *mComponent;
 }

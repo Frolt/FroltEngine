@@ -13,7 +13,7 @@ public:
 private:
     void processKeyboard(InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera);
     void processMouse(InputComponent &input, FreeCameraComponent &freeCamera, TransformComponent &transform);
-    void processScroll();
+    void processScroll(FreeCameraComponent &freeCamera, InputComponent &input);
     void updateCameraVectors(TransformComponent &transform, FreeCameraComponent &freeCamera);
     void updateUniforms(TransformComponent &transform, FreeCameraComponent &freeCamera, CameraComponent &camera);
 };

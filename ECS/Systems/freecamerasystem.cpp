@@ -19,7 +19,7 @@ void FreeCameraSystem::beginPlay()
     }
 }
 
-void FreeCameraSystem::update(float deltaTime)
+void FreeCameraSystem::update(float)
 {
     for (auto entity : mRegisteredEntities) {
 //        qDebug() << "freeCameraSystem update!";
@@ -29,11 +29,11 @@ void FreeCameraSystem::update(float deltaTime)
         ComponentHandle<InputComponent> input;
         ComponentHandle<MovementComponent> movement;
         mWorld->unpack(entity, transform, camera, freeCamera, input, movement);
-        processKeyboard(input(), movement(), freeCamera());
-        processMouse(input(), freeCamera(), transform());
-        processScroll();
-        updateCameraVectors(transform(), freeCamera());
-        updateUniforms(transform(), freeCamera(), camera());
+        processKeyboard(input, movement, freeCamera);
+        processMouse(input, freeCamera, transform);
+        processScroll(freeCamera, input);
+        updateCameraVectors(transform, freeCamera);
+        updateUniforms(transform, freeCamera, camera);
     }
 }
 
@@ -83,9 +83,14 @@ void FreeCameraSystem::processMouse(InputComponent &input, FreeCameraComponent &
     }
 }
 
-void FreeCameraSystem::processScroll()
+void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, InputComponent &input)
 {
-    // TODO
+    static int lastWheelPos{0};
+    int currentWheelPos = input.wheelAngleDelta().y();
+    float scrollDelta = static_cast<float>(currentWheelPos - lastWheelPos);
+    freeCamera.mMoveSpeed += (scrollDelta / 120.0f) * freeCamera.mMoveStr;
+    freeCamera.mMoveSpeed = am::clamp(freeCamera.mMoveSpeed, 10.0f, 1000.0f);
+    lastWheelPos = currentWheelPos;
 }
 
 void FreeCameraSystem::updateCameraVectors(TransformComponent &transform, FreeCameraComponent &freeCamera)
@@ -103,9 +108,8 @@ void FreeCameraSystem::updateCameraVectors(TransformComponent &transform, FreeCa
 void FreeCameraSystem::updateUniforms(TransformComponent &transform, FreeCameraComponent &freeCamera, CameraComponent &camera)
 {
     auto view = am::Mat4::lookAt(transform.mPosition, transform.mPosition + freeCamera.mFront, freeCamera.mWorldUp);
-    // TODO set projection matrix here
-//    auto perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
-//    camera.mShader.setMat4("projection", perspective);
+//    auto projection = am::Mat4::perspective(am::toRadians(freeCamera.mZoom), freeCamera.mAspect, 0.1f, 1000.0f);
+//    camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", transform.mPosition);
 

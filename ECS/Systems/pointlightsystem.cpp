@@ -17,18 +17,16 @@ void PointLightSystem::update(float)
     ComponentHandle<TransformComponent> transform;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, pointLight, transform);
-        updateUniforms(pointLight(), transform());
+        updateUniforms(pointLight, transform);
     }
 }
 
 void PointLightSystem::updateUniforms(const PointLightComponent &dirLight, const TransformComponent &transform) const
 {
 //    dirLight.mShader.use();
-    dirLight.mShader.setVec3("pointLights[0].position", transform.mPosition);
-    dirLight.mShader.setVec3("pointLights[0].ambient", dirLight.mAmb);
-    dirLight.mShader.setVec3("pointLights[0].diffuse", dirLight.mDiff);
-    dirLight.mShader.setVec3("pointLights[0].specular", dirLight.mSpec);
-    dirLight.mShader.setFloat("pointLights[0].constant", dirLight.mConstant);
-    dirLight.mShader.setFloat("pointLights[0].linear", dirLight.mLinear);
-    dirLight.mShader.setFloat("pointLights[0].quadratic", dirLight.mQuadratic);
+    dirLight.mShader.setVec3("pointLights[" + std::to_string(dirLight.mLightInstance) + "].position", transform.mPosition);
+    dirLight.mShader.setVec3("pointLights[" + std::to_string(dirLight.mLightInstance) + "].diffuse", dirLight.mDiff);
+    dirLight.mShader.setFloat("pointLights[" + std::to_string(dirLight.mLightInstance) + "].constant", dirLight.mConstant);
+    dirLight.mShader.setFloat("pointLights[" + std::to_string(dirLight.mLightInstance) + "].linear", dirLight.mLinear);
+    dirLight.mShader.setFloat("pointLights[" + std::to_string(dirLight.mLightInstance) + "].quadratic", dirLight.mQuadratic);
 }

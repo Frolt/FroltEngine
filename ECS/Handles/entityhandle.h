@@ -15,14 +15,18 @@ struct EntityHandle
     void addComponent(const T &component);
     template<typename T>
     void removeComponent();
+    template<typename T>
+    bool hasComponent();
     Entity &operator()();
     const Entity &operator()() const;
+    operator Entity();
 
 public:
     Entity mEntity;
 private:
     World *mWorld;
 };
+
 
 //--------------------------------------------------------------------------------------
 // FUNCTION DEFINITIONS
@@ -40,6 +44,12 @@ template<typename T>
 void EntityHandle::removeComponent()
 {
     mWorld->removeComponent<T>(mEntity);
+}
+
+template<typename T>
+bool EntityHandle::hasComponent()
+{
+    return mWorld->hasComponent<T>(mEntity);
 }
 
 #endif // ENTITYHANDLE_H

@@ -22,39 +22,46 @@ void RenderSystem::update(float)
         ComponentHandle<TransformComponent> transform;
         ComponentHandle<MaterialComponent> material;
         mWorld->unpack(entity, mesh, transform, material);
-
 //        mesh().mShader.use();
-        updateMaterialUniforms(mesh().mShader, material());
-        updateTransformUniforms(mesh().mShader, transform());
+        updateMaterialUniforms(mesh().mShader, material);
+        updateTransformUniforms(mesh().mShader, transform);
         draw(mesh);
     }
 }
 
-void RenderSystem::updateMaterialUniforms(Shader shader, const MaterialComponent &material) const
+void RenderSystem::updateMaterialUniforms(Shader shader, MaterialComponent &material)
 {
+    // Set uniform samplers(textures)
+    unsigned int diffuseNr = 1;
+    unsigned int specularNr = 1;
+    unsigned int emissionNr = 1;
+    for (unsigned int i = 0; i < material.mTextures.size(); i++) {
+        glActiveTexture(GL_TEXTURE + i);
+        std::string number;
+        std::string name = material.mTextures[i].mType;
+        if (name == "diffuseMap") {
+            number = std::to_string(diffuseNr++);
+            material.mHasDiffMap = true;
+        } else if (name == "specularMap") {
+            number = std::to_string(specularNr++);
+            material.mHasSpecMap = true;
+        } else if (name == "emissionMap") {
+            number = std::to_string(emissionNr++);
+            material.mHasEmissionMap = true;
+        }
+        shader.setInt("material." + name + number, i);
+        glBindTexture(GL_TEXTURE_2D, material.mTextures[i].mID);
+    }
+    glActiveTexture(GL_TEXTURE0);
+
+    // Set rest of uniforms
+    shader.setBool("material.isLight", material.mIsLight);
     shader.setBool("material.hasDiffMap", material.mHasDiffMap);
     shader.setBool("material.hasSpecMap", material.mHasSpecMap);
     shader.setBool("material.hasEmissionMap", material.mHasEmissionMap);
     shader.setVec3("material.diffuseColor", material.mDiffuseColor);
     shader.setVec3("material.specularColor", material.mSpecularColor);
     shader.setFloat("material.shininess", material.mShininess);
-
-//    // Set uniform samplers in shader
-//    unsigned int diffuseNr = 1;
-//    unsigned int specularNr = 1;
-//    for (unsigned int i = 0; i < material.mTextures.size(); i++) {
-//        glActiveTexture(GL_TEXTURE + i);
-//        std::string number;
-//        std::string name = material.mTextures[i].mType;
-//        if (name == "diffuseMap")
-//            number = std::to_string(diffuseNr++);
-//        if (name == "specularMap")
-//            number = std::to_string(specularNr++);
-//        shader.setInt("material." + name, i);
-//        glBindTexture(GL_TEXTURE_2D, material.mTextures[i].mID);
-//    }
-//    // Unbind texture
-//    glActiveTexture(GL_TEXTURE0);
 }
 
 void RenderSystem::updateTransformUniforms(Shader shader, const TransformComponent &transform) const
@@ -84,12 +91,12 @@ void RenderSystem::updateTransformUniforms(Shader shader, const TransformCompone
     shader.setMat3("normalMat", normalMatrix);
 }
 
-void RenderSystem::draw(const ComponentHandle<MeshComponent> &mesh)
+void RenderSystem::draw(MeshComponent &mesh)
 {
-    glBindVertexArray(mesh().mVAO);
+    glBindVertexArray(mesh.mVAO);
 
-    if (mesh().mUseIndices)
-        glDrawElements(GL_TRIANGLES, mesh().mDrawCount, GL_UNSIGNED_INT, nullptr);
+    if (mesh.mUseIndices)
+        glDrawElements(GL_TRIANGLES, mesh.mDrawCount, GL_UNSIGNED_INT, nullptr);
     else
-        glDrawArrays(GL_TRIANGLES, 0, mesh().mDrawCount);
+        glDrawArrays(GL_TRIANGLES, 0, mesh.mDrawCount);
 }

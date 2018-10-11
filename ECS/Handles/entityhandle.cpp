@@ -21,3 +21,8 @@ const Entity &EntityHandle::operator()() const
 {
     return mEntity;
 }
+
+EntityHandle::operator Entity()
+{
+    return mEntity;
+}

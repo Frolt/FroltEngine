@@ -30,6 +30,8 @@ public:
     EntityHandle createEntity(const std::string &name);
     void destroyEntity(const Entity &entity);
     EntityHandle getEntity(const std::string &name);
+    template<typename T>
+    bool hasComponent(const Entity &entity);
 
     // Add and remove component
     template<typename T>
@@ -54,6 +56,7 @@ private:
     std::unordered_map<Entity, ComponentMask> mEntityMasks;
 };
 
+
 //--------------------------------------------------------------------------------------
 // FUNCTION DEFINITIONS
 //--------------------------------------------------------------------------------------
@@ -62,6 +65,13 @@ private:
 #include "ECS/Managers/componentmanager.h"
 #include "ECS/component.h"
 #include "ECS/component_mask.h"
+
+template<typename T>
+bool World::hasComponent(const Entity &entity)
+{
+    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    return manager->hasComponent(entity);
+}
 
 template<typename T>
 void World::unpack(const Entity &entity, ComponentHandle<T> &handle)
@@ -80,7 +90,7 @@ template<typename T>
 void World::addComponent(const Entity &entity, const T &component)
 {
     // add component
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     manager->addComponent(entity, component);
 
     // update mask
@@ -92,7 +102,7 @@ void World::addComponent(const Entity &entity, const T &component)
 template<typename T>
 void World::removeComponent(const Entity &entity)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     manager->destroyComponent(entity);
 
     // update mask
@@ -104,7 +114,7 @@ void World::removeComponent(const Entity &entity)
 template<typename T>
 T *World::getComponent(const Entity &entity)
 {
-    ComponentManager<T> *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     return manager->getComponent(entity);
 }
 

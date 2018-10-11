@@ -105,20 +105,6 @@ color: rgb(0, 0, 0);</string>
       </item>
      </layout>
     </item>
-    <item row="0" column="4">
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="QListView" name="listView">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="0" column="2" colspan="2">
      <layout class="QVBoxLayout" name="viewport"/>
     </item>

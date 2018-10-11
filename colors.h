@@ -4,7 +4,7 @@
 #include "vec3.h"
 
 // TODO snakk med Ole, namespace isteden?
-namespace Colors
+namespace Color
 {
     const am::Vec3 white{1.0f, 1.0f, 1.0f};
     const am::Vec3 silver{0.752f, 0.752f, 0.752f};

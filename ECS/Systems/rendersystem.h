@@ -11,9 +11,9 @@ public:
     void beginPlay() override;
     void update(float) override;
 
-    void updateMaterialUniforms(Shader shader, const MaterialComponent &material) const;
+    void updateMaterialUniforms(Shader shader, MaterialComponent &material);
     void updateTransformUniforms(Shader shader, const TransformComponent &transform) const;
-    void draw(const ComponentHandle<MeshComponent> &mesh);
+    void draw(MeshComponent &mesh);
 };
 
 #endif // RENDERSYSTEM_H

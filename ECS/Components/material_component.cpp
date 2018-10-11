@@ -6,9 +6,3 @@ MaterialComponent::MaterialComponent(const am::Vec3 &diffColor, const am::Vec3 &
 {
 
 }
-
-//MaterialComponent::MaterialComponent(const std::vector<Texture> &textures, float shininess)
-//    : mTextures{textures}, mShininess{shininess}
-//{
-
-//}

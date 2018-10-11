@@ -7,9 +7,10 @@
 
 struct SpotlightComponent : public LightComponent, public Component<SpotlightComponent>
 {
-    SpotlightComponent(const am::Vec3 &dir = -am::up(), const am::Vec3 &amb = {0},
-                       const am::Vec3 &diff = {1}, const am::Vec3 &spec = {0.5});
+    SpotlightComponent() = default;
+    SpotlightComponent(int lightInstance, const am::Vec3 &dir = -am::up(), const am::Vec3 &diff = {1});
 
+    int mLightInstance;
     am::Vec3 mDir;
     float mInnerCone{30.0f};
     float mOuterCone{40.0f};

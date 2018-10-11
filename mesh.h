@@ -8,19 +8,20 @@
 #include "texture.h"
 #include "shader.h"
 
-class Mesh : protected QOpenGLFunctions_4_1_Core
+class Mesh
 {
 public:
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<std::shared_ptr<Texture>> textures);
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
     void draw(Shader &shader);
 private:
     void setupMesh();
 
-private:
+public:
     unsigned int mVAO;
     std::vector<Vertex> mVertices;
     std::vector<unsigned int> mIndices;
-    std::vector<std::shared_ptr<Texture>> mTextures;
+    std::vector<Texture> mTextures;
+    QOpenGLFunctions_4_1_Core *gl = new QOpenGLFunctions_4_1_Core;
 };
 
 #endif // MESH_H

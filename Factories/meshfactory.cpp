@@ -1,10 +1,12 @@
 #include "meshfactory.h"
 #include <fstream>
 #include "ECS/Components/mesh_component.h"
+#include "ECS/Components/modelcomponent.h"
 #include "vertex.h"
 #include "paths.h"
 #include "enums.h"
 #include "octahedron.h"
+#include "modelloader.h"
 
 MeshFactory::MeshFactory(Shader *defaultShader)
     : mDefaultShader{defaultShader}
@@ -18,7 +20,7 @@ MeshComponent MeshFactory::createCube(Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created cube";
+        qDebug() << " created cube (" << name << ")";
         std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
         mMeshMap[name] = createWithoutIndices(vertices);
     }
@@ -32,7 +34,7 @@ MeshComponent MeshFactory::createRectangle(Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created rectangle";
+        qDebug() << " created rectangle (" << name << ")";
         std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
         std::vector<unsigned int> indices = { 0, 3, 1, 1, 3, 2 };
         mMeshMap[name] = createWithIndices(vertices, indices);
@@ -47,7 +49,7 @@ MeshComponent MeshFactory::createTriangle(Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created triangle";
+        qDebug() << " created triangle (" << name << ")";
         std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
         mMeshMap[name] = createWithoutIndices(vertices);
     }
@@ -61,7 +63,7 @@ MeshComponent MeshFactory::createSphere(unsigned int subDivide, Shader *shader)
     if (!shader)
         shader = mDefaultShader;
     if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created sphere";
+        qDebug() << " created sphere (" << name << ")";
         // CREATE OCTAHEDRON
         // -------------------------------------------------------
         Octahedron sphere{subDivide};
@@ -74,17 +76,29 @@ MeshComponent MeshFactory::createSphere(unsigned int subDivide, Shader *shader)
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
-MeshComponent MeshFactory::createTerrain(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, Shader *shader)
+MeshComponent MeshFactory::createTerrain(const std::string &name, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, Shader *shader)
 {
-    QString name = "terrain";
+    QString Name = name.c_str();
     if (!shader)
         shader = mDefaultShader;
-    if (mMeshMap.find(name) == mMeshMap.end()) {
-        qDebug() << name + " created terrain";
-        mMeshMap[name] = createWithIndices(vertices, indices);
+    if (mMeshMap.find(Name) == mMeshMap.end()) {
+        qDebug() << " created terrain (" << Name << ")";
+        mMeshMap[Name] = createWithIndices(vertices, indices);
     }
-    auto index = mMeshMap[name];
+    auto index = mMeshMap[Name];
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
+}
+
+ModelComponent MeshFactory::createModel(const std::string &path)
+{
+    QString key = path.c_str();
+    if (mModels.find(key) == mModels.end()) {
+        ModelLoader loader{path};
+        ModelComponent model{*mDefaultShader};
+        model.mMeshes = loader.mMeshes;
+        mModels[key] = model;
+    }
+    return mModels[key];
 }
 
 unsigned int MeshFactory::createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)
@@ -148,7 +162,7 @@ unsigned int MeshFactory::createWithoutIndices(std::vector<Vertex> &vertices)
 std::vector<Vertex> MeshFactory::readVerticesFromFile(const QString &path)
 {
     std::ifstream inf{Path::primitives + path.toStdString()};
-    Q_ASSERT_X(inf, "SceneObject::readVerticesFromFile", "COULD_NOT_OPEN_FILE");
+    Q_ASSERT_X(inf, "SceneObject::readVerticesFromFile", "COULD_NOT_OPEN_FILE IN: \"FroltEngine/Assets/Primitives\"");
 
     std::vector<Vertex> vertices;
     am::Vec3 pos;
