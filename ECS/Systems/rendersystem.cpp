@@ -17,10 +17,10 @@ void RenderSystem::beginPlay()
 
 void RenderSystem::update(float)
 {
+    ch::Mesh mesh;
+    ch::Transform transform;
+    ch::Material material;
     for (auto entity : mRegisteredEntities) {
-        ComponentHandle<MeshComponent> mesh;
-        ComponentHandle<TransformComponent> transform;
-        ComponentHandle<MaterialComponent> material;
         mWorld->unpack(entity, mesh, transform, material);
 //        mesh().mShader.use();
         updateMaterialUniforms(mesh().mShader, material);
@@ -64,7 +64,7 @@ void RenderSystem::updateMaterialUniforms(Shader shader, MaterialComponent &mate
     shader.setFloat("material.shininess", material.mShininess);
 }
 
-void RenderSystem::updateTransformUniforms(Shader shader, const TransformComponent &transform) const
+void RenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform) const
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
@@ -91,7 +91,7 @@ void RenderSystem::updateTransformUniforms(Shader shader, const TransformCompone
     shader.setMat3("normalMat", normalMatrix);
 }
 
-void RenderSystem::draw(MeshComponent &mesh)
+void RenderSystem::draw(const MeshComponent &mesh)
 {
     glBindVertexArray(mesh.mVAO);
 

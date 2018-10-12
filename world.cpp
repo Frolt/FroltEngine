@@ -15,7 +15,8 @@
 #include "ECS/Components/camera_component.h"
 #include "ECS/Components/free_camera_component.h"
 #include "ECS/Components/terrain_component.h"
-#include "ECS/Components/modelcomponent.h"
+#include "ECS/Components/model_component.h"
+#include "ECS/Components/collisioncomponent.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
 #include "ECS/Systems/directionallightsystem.h"
@@ -25,8 +26,10 @@
 #include "ECS/Systems/freecamerasystem.h"
 #include "ECS/Systems/terrainsystem.h"
 #include "ECS/Systems/modelrendersystem.h"
+#include "ECS/Systems/physicssystem.h"
 
-World::World()
+World::World(Engine *engine)
+    : mEngine{*engine}
 {
     mComponentManagers.resize(64);
     // Create entity manager
@@ -44,13 +47,7 @@ World::World()
     mComponentManagers[FreeCameraComponent::family()] = std::make_unique<ComponentManager<FreeCameraComponent>>(10);
     mComponentManagers[TerrainComponent::family()] = std::make_unique<ComponentManager<TerrainComponent>>(100);
     mComponentManagers[ModelComponent::family()] = std::make_unique<ComponentManager<ModelComponent>>(100000);
-//    qDebug() << "Transform \tindex[0] = " << TransformComponent::family();
-//    qDebug() << "Movement \t\tindex[0] = " << MovementComponent::family();
-//    qDebug() << "Mesh \t\tindex[0] = " << MeshComponent::family();
-//    qDebug() << "Material \t\tindex[0] = " << MaterialComponent::family();
-//    qDebug() << "Directional \tindex[0] = " << DirectionalLightComponent::family();
-//    qDebug() << "PointLight \tindex[0] = " << PointLightComponent::family();
-//    qDebug() << "Spotlight \tindex[0] = " << SpotlightComponent::family();
+    mComponentManagers[CollisionComponent::family()] = std::make_unique<ComponentManager<CollisionComponent>>(100000);
     // Create systems
     mSystems.push_back(std::make_unique<MovementSystem>());
     mSystems.push_back(std::make_unique<DirectionalLightSystem>());
@@ -60,6 +57,7 @@ World::World()
     mSystems.push_back(std::make_unique<FreeCameraSystem>());
     mSystems.push_back(std::make_unique<TerrainSystem>());
     mSystems.push_back(std::make_unique<modelRenderSystem>());
+    mSystems.push_back(std::make_unique<PhysicsSystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
     // Set world pointer for all systems
     for (auto &sys : mSystems)

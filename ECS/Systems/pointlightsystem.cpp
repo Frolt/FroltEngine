@@ -13,8 +13,8 @@ void PointLightSystem::beginPlay()
 
 void PointLightSystem::update(float)
 {
-    ComponentHandle<PointLightComponent> pointLight;
-    ComponentHandle<TransformComponent> transform;
+    ch::PointLight pointLight;
+    ch::Transform transform;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, pointLight, transform);
         updateUniforms(pointLight, transform);

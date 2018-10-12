@@ -36,7 +36,7 @@ void MainWindow::init()
     format.setOption(QSurfaceFormat::DebugContext);
     format.setSwapInterval(0); // Distable Vsync
 
-    mViewport = new Viewport(format);
+    mViewport = new Viewport(format, this);
     mViewportWidget = QWidget::createWindowContainer(mViewport);
     ui->viewport->addWidget(mViewportWidget);
     mViewportWidget->setFocus();

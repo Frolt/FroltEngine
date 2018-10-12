@@ -4,8 +4,10 @@
 #include <QCoreApplication>
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include "mainwindow.h"
 
-Viewport::Viewport(const QSurfaceFormat &format)
+Viewport::Viewport(const QSurfaceFormat &format, MainWindow *mainWindow)
+    : mMainWindow{mainWindow}
 {
     // TODO snakk med Ole
     setSurfaceType(QSurface::OpenGLSurface);

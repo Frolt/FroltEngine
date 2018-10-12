@@ -1,12 +1,13 @@
 #ifndef VEC4_H
 #define VEC4_H
 
-
-#include "vec3.h"
 #include <QDebug>
 
 namespace am
 {
+    // Forward declarations
+    struct Vec3;
+
     struct Vec4
     {
         Vec4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f);

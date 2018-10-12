@@ -4,16 +4,22 @@
 #include <vector>
 #include <array>
 #include <QDebug>
-#include "vec3.h"
+
 
 namespace am
 {
+// Forward declarations
+struct Vec3;
+struct Vec4;
+
     struct Vec2
     {
         // Constructor
         Vec2(float x = 0.0f, float y = 0.0f);
         Vec2(const int v);
         Vec2(const double v);
+        Vec2(const Vec3 &vec3);
+        Vec2(const Vec4 &vec4);
 
         // Operators
         Vec2 operator+ (const Vec2 &rhs) const;                 // v + v

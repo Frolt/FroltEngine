@@ -11,9 +11,9 @@ FreeCameraSystem::FreeCameraSystem()
 
 void FreeCameraSystem::beginPlay()
 {
+    ch::Transform transform;
+    ch::FreeCamera freeCamera;
     for (auto entity : mRegisteredEntities) {
-        ComponentHandle<TransformComponent> transform;
-        ComponentHandle<FreeCameraComponent> freeCamera;
         mWorld->unpack(entity, transform, freeCamera);
         updateCameraVectors(transform(), freeCamera());
     }
@@ -21,13 +21,12 @@ void FreeCameraSystem::beginPlay()
 
 void FreeCameraSystem::update(float)
 {
+    ch::Transform transform;
+    ch::Camera camera;
+    ch::FreeCamera freeCamera;
+    ch::Input input;
+    ch::Movement movement;
     for (auto entity : mRegisteredEntities) {
-//        qDebug() << "freeCameraSystem update!";
-        ComponentHandle<TransformComponent> transform;
-        ComponentHandle<CameraComponent> camera;
-        ComponentHandle<FreeCameraComponent> freeCamera;
-        ComponentHandle<InputComponent> input;
-        ComponentHandle<MovementComponent> movement;
         mWorld->unpack(entity, transform, camera, freeCamera, input, movement);
         processKeyboard(input, movement, freeCamera);
         processMouse(input, freeCamera, transform);
@@ -37,7 +36,7 @@ void FreeCameraSystem::update(float)
     }
 }
 
-void FreeCameraSystem::processKeyboard(InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera)
+void FreeCameraSystem::processKeyboard(const InputComponent &input, MovementComponent &movement, const FreeCameraComponent &freeCamera) const
 {
     movement.mVelocity = am::zero();
     am::Vec tempVel;
@@ -58,7 +57,7 @@ void FreeCameraSystem::processKeyboard(InputComponent &input, MovementComponent 
     movement.mVelocity = tempVel;
 }
 
-void FreeCameraSystem::processMouse(InputComponent &input, FreeCameraComponent &freeCamera, TransformComponent &transform)
+void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const
 {
     // in renderwindow
     // FIND CAMERA ROTATION VALUES
@@ -83,7 +82,7 @@ void FreeCameraSystem::processMouse(InputComponent &input, FreeCameraComponent &
     }
 }
 
-void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, InputComponent &input)
+void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, const InputComponent &input) const
 {
     static int lastWheelPos{0};
     int currentWheelPos = input.wheelAngleDelta().y();
@@ -93,7 +92,7 @@ void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, InputCompo
     lastWheelPos = currentWheelPos;
 }
 
-void FreeCameraSystem::updateCameraVectors(TransformComponent &transform, FreeCameraComponent &freeCamera)
+void FreeCameraSystem::updateCameraVectors(const TransformComponent &transform, FreeCameraComponent &freeCamera) const
 {
     am::Vec front;
     front.x = cos(am::toRadians(transform.mEulerAngles.yaw())) * cos(am::toRadians(transform.mEulerAngles.pitch()));
@@ -105,7 +104,7 @@ void FreeCameraSystem::updateCameraVectors(TransformComponent &transform, FreeCa
     freeCamera.mUp = -am::normalize(am::cross(freeCamera.mFront, freeCamera.mRight));
 }
 
-void FreeCameraSystem::updateUniforms(TransformComponent &transform, FreeCameraComponent &freeCamera, CameraComponent &camera)
+void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera) const
 {
     auto view = am::Mat4::lookAt(transform.mPosition, transform.mPosition + freeCamera.mFront, freeCamera.mWorldUp);
 //    auto projection = am::Mat4::perspective(am::toRadians(freeCamera.mZoom), freeCamera.mAspect, 0.1f, 1000.0f);

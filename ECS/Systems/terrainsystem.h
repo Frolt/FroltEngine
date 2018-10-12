@@ -10,7 +10,7 @@ public:
 
     void beginPlay() override;
     void update(float deltaTime) override;
-    void applyTransformation(TerrainComponent &terrain, TransformComponent &transform);
+    void applyTransformation(TerrainComponent &terrain, const TransformComponent &transform);
 };
 
 #endif // TERRAINSYSTEM_H

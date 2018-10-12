@@ -9,6 +9,7 @@ struct TerrainComponent : public Component<TerrainComponent>
 {
     bool mStatic{true};
     std::vector<Vertex> mVertices;
+    std::vector<unsigned int> mIndices;
     std::vector<std::array<int, 6>> mTriangles;
 };
 

@@ -10,7 +10,7 @@ public:
 
     void beginPlay() override;
     void update(float deltaTime) override;
-    void processInput(const InputComponent &input, MovementComponent &movement, float deltaTime);
+    void processInput(const InputComponent &input, MovementComponent &movement, float deltaTime) const;
 };
 
 #endif // PLAYERSYSTEM_H

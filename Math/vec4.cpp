@@ -1,5 +1,6 @@
 #include "vec4.h"
 #include <iostream>
+#include "vec3.h"
 
 namespace am
 {

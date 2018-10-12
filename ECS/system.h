@@ -19,7 +19,8 @@
 #include "ECS/Components/camera_component.h"
 #include "ECS/Components/free_camera_component.h"
 #include "ECS/Components/terrain_component.h"
-#include "ECS/Components/modelcomponent.h"
+#include "ECS/Components/model_component.h"
+#include "ECS/Components/collisioncomponent.h"
 
 #include "world.h"
 

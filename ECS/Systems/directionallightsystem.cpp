@@ -13,7 +13,7 @@ void DirectionalLightSystem::beginPlay()
 
 void DirectionalLightSystem::update(float)
 {
-    ComponentHandle<DirectionalLightComponent> dirLight;
+    ch::DirLight dirLight;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, dirLight);
         updateUniforms(dirLight);

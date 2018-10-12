@@ -16,11 +16,12 @@ class BaseComponentManager;
 struct ComponentMask;
 template<typename T>
 struct ComponentHandle;
+class Engine;
 
 class World
 {
 public:
-    World();
+    World(Engine *engine);
     ~World();
     void init();
     void update(float deltaTime);
@@ -54,6 +55,9 @@ private:
     std::vector<std::unique_ptr<System>> mSystems;
     // TODO snakk med Ole, hash tregere enn reblack tree?
     std::unordered_map<Entity, ComponentMask> mEntityMasks;
+    // TODO snakk med Ole, engine ref i world
+public:
+    Engine &mEngine;
 };
 
 

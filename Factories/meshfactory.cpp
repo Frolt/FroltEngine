@@ -1,7 +1,7 @@
 #include "meshfactory.h"
 #include <fstream>
 #include "ECS/Components/mesh_component.h"
-#include "ECS/Components/modelcomponent.h"
+#include "ECS/Components/model_component.h"
 #include "vertex.h"
 #include "paths.h"
 #include "enums.h"

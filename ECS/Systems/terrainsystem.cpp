@@ -7,9 +7,9 @@ TerrainSystem::TerrainSystem()
 
 void TerrainSystem::beginPlay()
 {
+    ch::Terrain terrain;
+    ch::Transform transform;
     for (auto entity : mRegisteredEntities) {
-        ComponentHandle<TerrainComponent> terrain;
-        ComponentHandle<TransformComponent> transform;
         mWorld->unpack(entity, terrain, transform);
         applyTransformation(terrain, transform);
     }
@@ -17,16 +17,17 @@ void TerrainSystem::beginPlay()
 
 void TerrainSystem::update(float )
 {
+    ch::Terrain terrain;
+    ch::Transform transform;
     for (auto entity : mRegisteredEntities) {
-        ComponentHandle<TerrainComponent> terrain;
-        ComponentHandle<TransformComponent> transform;
         mWorld->unpack(entity, terrain, transform);
-        if (terrain().mStatic == false)
+        if (terrain().mStatic == false) {
             applyTransformation(terrain, transform);
+        }
     }
 }
 
-void TerrainSystem::applyTransformation(TerrainComponent &terrain, TransformComponent &transform)
+void TerrainSystem::applyTransformation(TerrainComponent &terrain, const TransformComponent &transform)
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
@@ -37,7 +38,9 @@ void TerrainSystem::applyTransformation(TerrainComponent &terrain, TransformComp
     modelMatrix.rotate(transform.mEulerAngles.roll(), am::forward());
     modelMatrix.scale(transform.mScale);
 
-    for (auto vertex : terrain.mVertices) {
-        vertex.mPosition = modelMatrix * vertex.mPosition;
+    for (auto &vertex : terrain.mVertices) {
+        am::Vec4 pos{vertex.mPosition};
+        am::Vec4 res = modelMatrix * pos;
+        vertex.mPosition = am::Vec3{res};
     }
 }

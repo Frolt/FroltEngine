@@ -13,7 +13,7 @@
 #include "ECS/Components/camera_component.h"
 #include "ECS/Components/free_camera_component.h"
 #include "ECS/Components/terrain_component.h"
-#include "ECS/Components/modelcomponent.h"
+#include "ECS/Components/model_component.h"
 #include "meshfactory.h"
 #include "materialfactory.h"
 #include "world.h"
@@ -118,7 +118,6 @@ EntityHandle EntityFactory::createModel(const std::string &name, const std::stri
     // Consists of: Mesh, Material, Transform
     auto entity = mWorld.createEntity(name);
     ModelComponent model{mMeshFactory.createModel(path)};
-    model.mMeshes.front().mTextures.push_back(mMaterialFactory.getDiffuseTexture("palmBark"));
     TransformComponent transform;
     transform.mPosition = pos;
     MaterialComponent material;
@@ -178,6 +177,7 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
     transform.mPosition = pos;
+    transform.mEulerAngles.yaw() = -90.0f;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
     CameraComponent camera(mDefaultShader);
@@ -195,7 +195,7 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
 {
     // TODO snakk med ole, constuctor i struct?
     // Consists of: Transform, Mesh, Material, Terrain
-    MathTerrainGenerator terrainGen{min, max};
+    MathTerrainGenerator terrainGen{min, max, 0.1f};
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
     transform.mPosition = pos;
@@ -205,6 +205,7 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
     TerrainComponent terrain;
     terrain.mTriangles = terrainGen.mTriangles;
     terrain.mVertices = terrainGen.mVertices;
+    terrain.mIndices = terrainGen.mIndices;
     entity.addComponent(transform);
     entity.addComponent(mesh);
     entity.addComponent(material);
@@ -215,7 +216,7 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
 EntityHandle EntityFactory::createLasTerrain(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
 {
     // Consists of: Transform, Mesh, Material, Terrain
-    LazTerrainGenerator terrainGen;
+    LazTerrainGenerator terrainGen("data.las", 10.0f);
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
     transform.mPosition = pos;
@@ -224,6 +225,7 @@ EntityHandle EntityFactory::createLasTerrain(const std::string &name, const am::
     material.mDiffuseColor = color;
     TerrainComponent terrain;
     terrain.mVertices = terrainGen.mVertices;
+    terrain.mIndices = terrainGen.mIndices;
     entity.addComponent(transform);
     entity.addComponent(mesh);
     entity.addComponent(material);

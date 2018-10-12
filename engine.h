@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 #include "shader.h"
+#include "ECS/Handles/entityhandle.h"
 
 // Forward declarations
 class QTimer;
@@ -41,6 +42,8 @@ public:
     std::unique_ptr<EntityFactory> mEntityFactory;
     // Shaders
     Shader mPhongShader;
+    // Terrains
+    EntityHandle mTerrain1;
 private:
     // Timers
     QElapsedTimer mTimer;

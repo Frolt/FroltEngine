@@ -1,5 +1,5 @@
-#ifndef MODELCOMPONENT_H
-#define MODELCOMPONENT_H
+#ifndef MODEL_COMPONENT_H
+#define MODEL_COMPONENT_H
 
 #include <vector>
 #include "ECS/component.h"
@@ -15,4 +15,4 @@ struct ModelComponent : public Component<ModelComponent>
     std::vector<Mesh> mMeshes;
 };
 
-#endif // MODELCOMPONENT_H
+#endif // MODEL_COMPONENT_H

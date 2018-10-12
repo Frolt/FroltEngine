@@ -28,7 +28,7 @@ private slots:
     void on_Exit_triggered();
     void showFPS();
 
-private:
+public:
     // All QObjects clean up after themself
     Ui::MainWindow *ui{nullptr};
     QWidget *mViewportWidget{nullptr};

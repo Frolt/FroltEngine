@@ -11,8 +11,8 @@ public:
 
     void beginPlay() override;
     void update(float deltaTime) override;
-    void updateMaterialUniforms(Shader shader, MaterialComponent &material);
-    void updateTransformUniforms(Shader shader, const TransformComponent &transform) const;
+    void updateMaterialUniforms(const Shader shader, const MaterialComponent &material) const;
+    void updateTransformUniforms(const Shader shader, const TransformComponent &transform) const;
     void draw(ModelComponent &model);
 };
 

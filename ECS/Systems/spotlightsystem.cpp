@@ -13,8 +13,8 @@ void SpotlightSystem::beginPlay()
 
 void SpotlightSystem::update(float)
 {
-    ComponentHandle<SpotlightComponent> spotlight;
-    ComponentHandle<TransformComponent> transform;
+    ch::Spotlight spotlight;
+    ch::Transform transform;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, spotlight, transform);
         updateUniforms(spotlight, transform);

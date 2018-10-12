@@ -73,8 +73,10 @@ SOURCES += \
     lazterraingenerator.cpp \
     Factories/materialfactory.cpp \
     modelloader.cpp \
-    ECS/Components/modelcomponent.cpp \
-    ECS/Systems/modelrendersystem.cpp
+    ECS/Systems/modelrendersystem.cpp \
+    ECS/Components/model_component.cpp \
+    ECS/Components/collisioncomponent.cpp \
+    ECS/Systems/physicssystem.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -136,8 +138,10 @@ HEADERS += \
     lazterraingenerator.h \
     Factories/materialfactory.h \
     modelloader.h \
-    ECS/Components/modelcomponent.h \
-    ECS/Systems/modelrendersystem.h
+    ECS/Systems/modelrendersystem.h \
+    ECS/Components/model_component.h \
+    ECS/Components/collisioncomponent.h \
+    ECS/Systems/physicssystem.h
 
 FORMS += \
     mainwindow.ui

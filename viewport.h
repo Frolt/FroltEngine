@@ -9,12 +9,13 @@
 class MainWindow;
 class QOpenGLContext;
 class QOpenGLDebugLogger;
+class MainWindow;
 
 class Viewport : public QWindow, protected QOpenGLFunctions_4_1_Core
 {
     Q_OBJECT
 public:
-    Viewport(const QSurfaceFormat &format);
+    Viewport(const QSurfaceFormat &format, MainWindow *mainWindow);
     ~Viewport() override;
     void initialize();
     void preRender();
@@ -37,6 +38,7 @@ private:
     QOpenGLContext *mContext{nullptr};
     QOpenGLDebugLogger *mOpenGLDebugLogger{nullptr};
     bool mInitialized{false};
+    MainWindow *mMainWindow;
 public:
     InputState mInputState;
     float mAspect{0.0f};

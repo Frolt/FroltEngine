@@ -14,10 +14,10 @@ void modelRenderSystem::beginPlay()
 
 void modelRenderSystem::update(float)
 {
+    ch::Model model;
+    ch::Transform transform;
+    ch::Material material;
     for (auto entity : mRegisteredEntities) {
-        ComponentHandle<ModelComponent> model;
-        ComponentHandle<TransformComponent> transform;
-        ComponentHandle<MaterialComponent> material;
         mWorld->unpack(entity, model, transform, material);
 //        model().mShader.use();
         updateMaterialUniforms(model().mShader, material);
@@ -26,7 +26,7 @@ void modelRenderSystem::update(float)
     }
 }
 
-void modelRenderSystem::updateMaterialUniforms(Shader shader, MaterialComponent &material)
+void modelRenderSystem::updateMaterialUniforms(const Shader shader, const MaterialComponent &material) const
 {
     // Set rest of uniforms
     shader.setBool("material.isLight", material.mIsLight);
@@ -38,7 +38,7 @@ void modelRenderSystem::updateMaterialUniforms(Shader shader, MaterialComponent 
     shader.setFloat("material.shininess", material.mShininess);
 }
 
-void modelRenderSystem::updateTransformUniforms(Shader shader, const TransformComponent &transform) const
+void modelRenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform) const
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------

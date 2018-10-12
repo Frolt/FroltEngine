@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include "vec3.h"
+#include "vec4.h"
 
 namespace am
 {
@@ -18,6 +20,16 @@ namespace am
 
     Vec2::Vec2(const double v) :
         x{ static_cast<float>(v) }, y{ static_cast<float>(v) }
+    {
+    }
+
+    Vec2::Vec2(const Vec3 &vec3)
+        : x{vec3.x}, y{vec3.y}
+    {
+    }
+
+    Vec2::Vec2(const Vec4 &vec4)
+        : x{vec4.x}, y{vec4.y}
     {
     }
 

@@ -11,11 +11,11 @@ public:
     void update(float deltaTime) override;
 
 private:
-    void processKeyboard(InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera);
-    void processMouse(InputComponent &input, FreeCameraComponent &freeCamera, TransformComponent &transform);
-    void processScroll(FreeCameraComponent &freeCamera, InputComponent &input);
-    void updateCameraVectors(TransformComponent &transform, FreeCameraComponent &freeCamera);
-    void updateUniforms(TransformComponent &transform, FreeCameraComponent &freeCamera, CameraComponent &camera);
+    void processKeyboard(const InputComponent &input, MovementComponent &movement, const FreeCameraComponent &freeCamera) const;
+    void processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const;
+    void processScroll(FreeCameraComponent &freeCamera, const InputComponent &input) const;
+    void updateCameraVectors(const TransformComponent &transform, FreeCameraComponent &freeCamera) const;
+    void updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera) const;
 };
 
 #endif // FREECAMERASYSTEM_H
