@@ -44,6 +44,7 @@ public:
     Shader mPhongShader;
     // Terrains
     EntityHandle mTerrain1;
+    EntityHandle mTestTriangle;
 private:
     // Timers
     QElapsedTimer mTimer;

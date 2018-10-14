@@ -20,7 +20,7 @@
 #include "ECS/Components/free_camera_component.h"
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/model_component.h"
-#include "ECS/Components/collisioncomponent.h"
+#include "ECS/Components/physics_component.h"
 
 #include "world.h"
 

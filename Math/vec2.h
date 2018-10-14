@@ -30,6 +30,8 @@ struct Vec4;
         Vec2 operator*(float lhs) const;						// v * f
         friend Vec2 operator*(const Vec2 &lhs, const Vec2 &rhs);// v * v
         friend Vec3 operator*(float lhs, const Vec3 &rhs);      // f * v
+        friend Vec2 operator/(float lhs, const Vec2 &rhs);      // f / v
+        friend Vec2 operator/(const Vec2 &lhs, float rhs);      // v / f
 
         // Functions
         float length() const;

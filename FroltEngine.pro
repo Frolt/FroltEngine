@@ -75,8 +75,8 @@ SOURCES += \
     modelloader.cpp \
     ECS/Systems/modelrendersystem.cpp \
     ECS/Components/model_component.cpp \
-    ECS/Components/collisioncomponent.cpp \
-    ECS/Systems/physicssystem.cpp
+    ECS/Systems/physicssystem.cpp \
+    ECS/Components/physics_component.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -140,8 +140,8 @@ HEADERS += \
     modelloader.h \
     ECS/Systems/modelrendersystem.h \
     ECS/Components/model_component.h \
-    ECS/Components/collisioncomponent.h \
-    ECS/Systems/physicssystem.h
+    ECS/Systems/physicssystem.h \
+    ECS/Components/physics_component.h
 
 FORMS += \
     mainwindow.ui

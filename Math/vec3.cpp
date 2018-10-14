@@ -162,20 +162,27 @@ namespace am
 
 namespace am
 {
-    Vec3 cross(const Vec3 &v1, const Vec3 &v2)
+    Vec3 cross(const Vec3 &a, const Vec3 &b)
     {
-        return { v1.y * v2.z - v1.z * v2.y, -(v1.x * v2.z - v1.z * v2.x), v1.x * v2.y - v1.y * v2.x };
+        return { a.y * b.z - a.z * b.y, -(a.x * b.z - a.z * b.x), a.x * b.y - a.y * b.x };
     }
 
-    float dot(const Vec3 &v1, const Vec3 &v2)
+    float dot(const Vec3 &a, const Vec3 &b)
     {
-        return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+        return a.x * b.x + a.y * b.y + a.z * b.z;
     }
 
     Vec3 normalize(const Vec3 &v)
     {
         auto l = sqrt(pow(v.x, 2.0f) + pow(v.y, 2.0f) + pow(v.z, 2.0f));
         return { v.x / l, v.y / l, v.z / l };
+    }
+
+    Vec3 projection(const Vec3 &a, const Vec3 &b)
+    {
+        auto numerator = dot(a, b);
+        auto denominator = a.length();
+        return (numerator / std::powf(denominator, 2.0f)) * a;
     }
 }
 

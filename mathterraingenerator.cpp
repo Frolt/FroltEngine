@@ -12,7 +12,7 @@ MathTerrainGenerator::MathTerrainGenerator(int domainMin, int domainMax, float r
         for (float x = domainMin; x <= domainMax; x += delta) {
             auto y = calculateY(x, z);
             auto normal = calculateNormal(x, z);
-            mVertices[i++] = Vertex{ { x, y, z }, normal };
+            mVertices[i++] = Vertex{ { x, y, z }, normal, am::Vec2{x, z} / 20.0f};
         }
     }
     makeIndices();

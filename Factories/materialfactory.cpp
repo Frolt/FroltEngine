@@ -40,13 +40,18 @@ Texture MaterialFactory::getEmissionTexture(const std::string &key)
 void MaterialFactory::loadTextures()
 {
     mTextures["container"] = Texture(Path::textures + "container.png");
-    mTextures["containerSpecular"] = Texture(Path::textures + "container_specular.png");
+    mTextures["containerSpec"] = Texture(Path::textures + "container_specular.png");
     mTextures["wall"] = Texture(Path::textures + "wall.jpg");
     mTextures["inn"] = Texture(Path::textures + "innLogo.jpg");
     mTextures["awesomeface"] = Texture(Path::textures + "awesomeface.png");
     mTextures["wood"] = Texture(Path::textures + "wood.jpg");
     mTextures["matrix"] = Texture(Path::textures + "matrix.jpg");
     mTextures["kermit"] = Texture(Path::textures + "kermit.jpg");
-    mTextures["palmBark"] = Texture(Path::textures + "palm_bark.png");
-    mTextures["palmLeaves"] = Texture(Path::textures + "palm leafs.png");
+    mTextures["snow1"] = Texture(Path::textures + "snow1.jpg");
+    mTextures["snow2"] = Texture(Path::textures + "snow2.jpg");
+    mTextures["grass"] = Texture(Path::textures + "grass1.jpg");
+    mTextures["stoneTile"] = Texture(Path::textures + "stoneTile.jpg");
+    mTextures["dessert"] = Texture(Path::textures + "dessert1.jpg");
+    mTextures["soilCrack"] = Texture(Path::textures + "soilCrack.jpg");
+    mTextures["innSpec"] = Texture(Path::textures + "innLogoSpec.jpg");
 }

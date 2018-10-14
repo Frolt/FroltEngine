@@ -21,7 +21,8 @@ public:
     MeshComponent createTriangle(Shader *shader = nullptr);
     MeshComponent createSphere(unsigned int subDivide = 3, Shader *shader = nullptr);
     MeshComponent createTerrain(const std::string &name, std::vector<Vertex> &vertices, std::vector<unsigned int> &indices, Shader *shader = nullptr);
-    ModelComponent createModel(const std::string &path);
+    ModelComponent createModel(const std::string &path, Shader *shader = nullptr);
+    MeshComponent createTestTriangle(Shader *shader = nullptr);
 
 private:
     unsigned int createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices);

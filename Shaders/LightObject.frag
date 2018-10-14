@@ -46,6 +46,7 @@ struct SpotLight {
 // Number of lights supported
 const int numOfPointLights = 5;
 const int numOfspotlights = 5;
+const int numOfMaps = 3;
 // Uniforms
 uniform Material material;
 uniform DirLight dirLight;
@@ -86,6 +87,11 @@ void main()
 
     // Final fragment color
     FragColor = vec4(fragColor, 1.0);
+//    float near = 0.1f;
+//    float far = 1000.0f;
+//    float depth = gl_FragCoord.z * 2.0 - 1.0;
+//    float linearDepth =
+//    FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
 }
 
 //---------------------------------------------------------------------------------
@@ -103,14 +109,14 @@ vec3 calcDirLight(DirLight light, vec3 normal, vec3 camDir)
     // Result
     vec3 amb, diff, spec;
     if (material.hasDiffMap) {
-        amb = light.ambient * texture(material.diffuseMap1, UV).rgb;
-        diff = light.diffuse * diffStr * texture(material.diffuseMap1, UV).rgb;
+        amb = light.ambient * texture(material.diffuseMap1, UV).rgb * texture(material.diffuseMap2, UV).rgb * texture(material.diffuseMap3, UV).rgb;
+        diff = light.diffuse * diffStr * texture(material.diffuseMap1, UV).rgb * texture(material.diffuseMap2, UV).rgb * texture(material.diffuseMap3, UV).rgb;
     } else {
         amb = light.ambient * material.diffuseColor;
         diff = light.diffuse * diffStr * material.diffuseColor;
     }
     if (material.hasSpecMap) {
-        spec = light.diffuse * specStr * texture(material.specularMap1, UV).rgb;
+        spec = light.diffuse * specStr * texture(material.specularMap1, UV).rgb * texture(material.specularMap2, UV).rgb * texture(material.specularMap3, UV).rgb;
     } else {
         spec = light.diffuse * specStr * material.specularColor;
     }

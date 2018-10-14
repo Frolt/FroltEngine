@@ -33,6 +33,9 @@ public:
     // Terrain
     EntityHandle createMathTerrain(const std::string &name, const am::Vec3 &color = Color::green, int min = -100, int max = 100, const am::Vec3 &pos = {0});
     EntityHandle createLasTerrain(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
+    // Testing
+    EntityHandle createTestTriangle(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
+    EntityHandle createPhysicsBall(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
 
     // TODO Functions below are not implemented yet
     // AI

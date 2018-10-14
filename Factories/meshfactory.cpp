@@ -89,9 +89,11 @@ MeshComponent MeshFactory::createTerrain(const std::string &name, std::vector<Ve
     return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
-ModelComponent MeshFactory::createModel(const std::string &path)
+ModelComponent MeshFactory::createModel(const std::string &path, Shader *shader)
 {
     QString key = path.c_str();
+    if (!shader)
+        shader = mDefaultShader;
     if (mModels.find(key) == mModels.end()) {
         ModelLoader loader{path};
         ModelComponent model{*mDefaultShader};
@@ -99,6 +101,21 @@ ModelComponent MeshFactory::createModel(const std::string &path)
         mModels[key] = model;
     }
     return mModels[key];
+}
+
+MeshComponent MeshFactory::createTestTriangle(Shader *shader)
+{
+    QString name = "testTriangle";
+    if (!shader)
+        shader = mDefaultShader;
+    if (mMeshMap.find(name) == mMeshMap.end()) {
+        qDebug() << " created testTriangle (" << name << ")";
+        std::vector<Vertex> vertices = readVerticesFromFile(name + ".dat");
+        std::vector<unsigned int> indices = { 0, 1, 2, 1, 3, 2 };
+        mMeshMap[name] = createWithIndices(vertices, indices);
+    }
+    auto index = mMeshMap[name];
+    return MeshComponent(*shader, mVAO[index], mDrawCount[index], mUseIndices[index]);
 }
 
 unsigned int MeshFactory::createWithIndices(std::vector<Vertex> &vertices, std::vector<unsigned int> &indices)

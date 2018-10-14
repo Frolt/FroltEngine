@@ -24,9 +24,9 @@ public:
 
 private slots:
     void viewportReady();
-    void on_messageButton_clicked();
-    void on_Exit_triggered();
     void showFPS();
+
+    void on_Exit_triggered();
 
 public:
     // All QObjects clean up after themself

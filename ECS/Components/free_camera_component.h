@@ -14,10 +14,11 @@ struct FreeCameraComponent : public Component<FreeCameraComponent>
     am::Vec mRight;
     am::Vec mWorldUp = am::up();
 
-    float mAspect{0.0f};
+    float mZoomStr{5.0f};
+    float mZoom{45.0f};
     float mMoveSpeed{50.0f};
     float mMoveStr{10.0f};
-    float mMouseSense{0.3f};
+    float mMouseSense{0.2f};
 };
 
 #endif // FREE_CAMERA_COMPONENT_H

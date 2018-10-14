@@ -48,7 +48,6 @@ void MainWindow::init()
 
 void MainWindow::connectSignalsSlots()
 {
-    connect(ui->realExit, SIGNAL(clicked()), this, SLOT(close()));
     connect(mViewport, SIGNAL(ready()), this, SLOT(viewportReady()));
     connect(mViewport, SIGNAL(FPS()), this, SLOT(showFPS()));
 }
@@ -58,24 +57,6 @@ void MainWindow::viewportReady()
     mEngine = new Engine(mViewport);
     QOpenGLContext *context = QOpenGLContext::currentContext();
     Q_ASSERT(context);
-}
-
-void MainWindow::on_messageButton_clicked()
-{
-    auto reply = QMessageBox::question(this, "A message title", "here is the message!",
-                                       QMessageBox::StandardButton::Save |
-                                       QMessageBox::StandardButton::Cancel |
-                                       QMessageBox::StandardButton::Discard,
-                                       QMessageBox::StandardButton::Cancel);
-    if (reply == QMessageBox::Discard) {
-        QApplication::quit();
-    } else {
-        qDebug() << "dust";
-    }
-}
-void MainWindow::on_Exit_triggered()
-{
-    QApplication::quit();
 }
 
 void MainWindow::showFPS()
@@ -89,4 +70,9 @@ void MainWindow::showFPS()
         secCount = 0.0f;
         frameCount = 0;
     }
+}
+
+void MainWindow::on_Exit_triggered()
+{
+    QCoreApplication::quit();
 }

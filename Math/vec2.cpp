@@ -67,6 +67,16 @@ namespace am
         return { x * lhs, y * lhs };
     }
 
+    Vec2 operator/(float lhs, const Vec2 &rhs)
+    {
+        return {rhs.x / lhs, rhs.y / lhs};
+    }
+
+    Vec2 operator/(const Vec2 &lhs, float rhs)
+    {
+        return {lhs.x / rhs, lhs.y / rhs};
+    }
+
     Vec2 operator*(const Vec2 &lhs, const Vec2 &rhs)
     {
         return { lhs.x * rhs.x, lhs.y * rhs.y };

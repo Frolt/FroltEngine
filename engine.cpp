@@ -14,7 +14,7 @@
 #include "ECS/Components/camera_component.h"
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/input_component.h"
-#include "ECS/Components/collisioncomponent.h"
+#include "ECS/Components/physics_component.h"
 #include "viewport.h"
 #include "world.h"
 #include "meshfactory.h"
@@ -40,14 +40,6 @@ void Engine::initialize()
 
     // Create shaders
     mPhongShader = Shader{Path::shaders + "VertexShader.vert", Path::shaders + "LightObject.frag"};
-    // TODO put somewhere else?
-//    mPhongShader.setInt("material.diffuseMap1", 0);
-//    mPhongShader.setInt("material.diffuseMap2", 1);
-//    mPhongShader.setInt("material.diffuseMap3", 2);
-//    mPhongShader.setInt("material.specularMap1", 3);
-//    mPhongShader.setInt("material.specularMap2", 4);
-//    mPhongShader.setInt("material.specularMap3", 5);
-//    mPhongShader.setInt("material.emissionMap", 6);
     // Set  projection matrix
     am::Mat4 perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
     mPhongShader.setMat4("projection", perspective);
@@ -61,29 +53,25 @@ void Engine::initialize()
     mPhongShader.use();
 
     // Create entities
-    auto player1 = mEntityFactory->createPlayerCube("alexander1", Color::orangeRed);
-    player1.addComponent(CollisionComponent());
-    auto player2 = mEntityFactory->createPlayerCube("alexander2", Color::blue, am::right() * 10);
-    player2.addComponent(CollisionComponent());
-    auto player3 = mEntityFactory->createPlayerSphere("alexander3", Color::lime, am::forward() * -10);
-    player3.addComponent(CollisionComponent());
+//    auto player1 = mEntityFactory->createPlayerSphere("alexander1", Color::orangeRed);
+//    player1.addComponent(CollisionComponent());
 
-    auto model1 = mEntityFactory->createModel("model1", Path::models + "alien/alien.fbx", am::Vec{10.0f, 0.0f, 10.0f});
-    auto model2 = mEntityFactory->createModel("model2", Path::models + "crystal.fbx", am::Vec{-10.0f, 0.0f, -10.0f});
+    // TESTING
+    mTestTriangle = mEntityFactory->createTestTriangle("testTriangle");
+    auto physicsBall1 =  mEntityFactory->createPhysicsBall("physicsBall1", Color::purple, am::Vec{0.0f, 20.0f, -18.0f});
+    auto physicsBall2 =  mEntityFactory->createPhysicsBall("physicsBall2", Color::purple, am::Vec{-2.0f, 30.0f, -8.0f});
+    auto physicsBall3 =  mEntityFactory->createPhysicsBall("physicsBall3", Color::purple, am::Vec{-10.0f, 20.0f, -2.0f});
+    auto physicsBall4 =  mEntityFactory->createPhysicsBall("physicsBall4", Color::purple, am::Vec{-15.0f, 17.0f, -10.0f});
+    auto physicsBall5 =  mEntityFactory->createPhysicsBall("physicsBall5", Color::purple, am::Vec{6.0f, 10.0f, 11.0f});
 
+//    auto model1 = mEntityFactory->createModel("model1", Path::models + "alien/alien.fbx", am::Vec{20.0f, 20.0f, 10.0f});
+//    auto model2 = mEntityFactory->createModel("model2", Path::models + "nanosuit/nanosuit.obj", am::Vec{-10.0f, 0.0f, -10.0f});
+
+//    mTerrain1 = mEntityFactory->createLasTerrain("lasTerrain", Color::blue);
     mTerrain1 = mEntityFactory->createMathTerrain("mathTerrain", Color::silver);
-//    auto mathTerrain1 = mEntityFactory->createMathTerrain("mathTerrain1", Color::white, -100, 100, am::forward() * -200.0f);
-//    auto mathTerrain2 = mEntityFactory->createMathTerrain("mathTerrain2", Color::navy, -100, 100, am::forward() * 200.0f);
-//    auto mathTerrain3 = mEntityFactory->createMathTerrain("mathTerrain3", Color::orangeRed, -100, 100, am::right() * 200.0f);
-//    auto mathTerrain4 = mEntityFactory->createMathTerrain("mathTerrain4", Color::teal, -100, 100, am::right() * -200.0f);
-//    auto mathTerrain5 = mEntityFactory->createMathTerrain("mathTerrain5", Color::maroon, -100, 100, am::Vec{1.0f, 0.0f, 1.0f} * 200.0f);
-//    auto mathTerrain6 = mEntityFactory->createMathTerrain("mathTerrain6", Color::lime, -100, 100, am::Vec{1.0f, 0.0f, 1.0f} * -200.0f);
-//    auto mathTerrain7 = mEntityFactory->createMathTerrain("mathTerrain7", Color::olive, -100, 100, am::Vec{1.0f, 0.0f, -1.0f} * 200.0f);
-//    auto mathTerrain8 = mEntityFactory->createMathTerrain("mathTerrain8", Color::purple, -100, 100, am::Vec{1.0f, 0.0f, -1.0f} * -200.0f);
-//    auto lasTerrain = mEntityFactory->createLasTerrain("lasTerrain");
     auto camera = mEntityFactory->createFreeCamera("camera", am::Vec{0.0f, 20.0f, 40.0f});
 
-    // Testing performance (creates N cubes)
+//    // Testing performance (creates N cubes)
 //    for (unsigned int i = 0; i < 1e2; i++) {
 //        float randValueX = static_cast<float>(std::rand() % 100 - 50);
 //        float randValueY = static_cast<float>(std::rand() % 100 - 50);
@@ -92,9 +80,9 @@ void Engine::initialize()
 //        cube.addComponent(MovementComponent(am::up() * 1.0f));
 //    }
 
-//    auto dirLight = mEntityFactory->createDirectionalLight("dirLight");
+    auto dirLight = mEntityFactory->createDirectionalLight("dirLight");
     auto pointLight1 = mEntityFactory->createPointLight("pointLight1", am::Vec3{20.0f, 20.0f, -100.0f}, Color::red);
-    auto pointLight2 = mEntityFactory->createPointLight("pointLight2", am::Vec3{-30.0f, 20.0f, 0.0f}, Color::teal);
+    auto pointLight2 = mEntityFactory->createPointLight("pointLight2", am::Vec3{-30.0f, 20.0f, 0.0f}, Color::yellow);
     auto pointLight3 = mEntityFactory->createPointLight("pointLight3", am::Vec3{60.0f, 20.0f, 100.0f}, Color::orange);
     auto spotlight1 = mEntityFactory->createSpotlight("spotlight1", am::Vec(-30.0f, 40.0f, 50.0f), -am::up(), Color::white);
     auto spotlight2 = mEntityFactory->createSpotlight("spotlight2", am::Vec(80.0f, 30.0f, 20.0f), -am::up());

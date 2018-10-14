@@ -1,4 +1,6 @@
 #include "freecamerasystem.h"
+#include "engine.h"
+#include "viewport.h"
 
 FreeCameraSystem::FreeCameraSystem()
 {
@@ -36,25 +38,37 @@ void FreeCameraSystem::update(float)
     }
 }
 
-void FreeCameraSystem::processKeyboard(const InputComponent &input, MovementComponent &movement, const FreeCameraComponent &freeCamera) const
+void FreeCameraSystem::processKeyboard(const InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera) const
 {
-    movement.mVelocity = am::zero();
-    am::Vec tempVel;
+    am::Vec vel;
 
+    // Camera movement
     if (input.keyPressed(Qt::Key_W))
-        tempVel += freeCamera.mFront * freeCamera.mMoveSpeed;
+        vel += freeCamera.mFront * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_A))
-        tempVel -= freeCamera.mRight * freeCamera.mMoveSpeed;
+        vel -= freeCamera.mRight * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_S))
-        tempVel -= freeCamera.mFront * freeCamera.mMoveSpeed;
+        vel -= freeCamera.mFront * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_D))
-        tempVel += freeCamera.mRight * freeCamera.mMoveSpeed;
+        vel += freeCamera.mRight * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_Space))
-        tempVel += freeCamera.mWorldUp * freeCamera.mMoveSpeed;
+        vel += freeCamera.mWorldUp * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_Control))
-        tempVel -= freeCamera.mWorldUp * freeCamera.mMoveSpeed;
+        vel -= freeCamera.mWorldUp * freeCamera.mMoveSpeed;
+    movement.mVelocity = vel;
 
-    movement.mVelocity = tempVel;
+    // Zoom
+    static bool canZoom{true};
+    if (input.keyPressed(Qt::Key_Plus) && canZoom) {
+        freeCamera.mZoom -= freeCamera.mZoomStr;
+        canZoom = false;
+    } else if (input.keyPressed(Qt::Key_Minus) && canZoom) {
+        freeCamera.mZoom += freeCamera.mZoomStr;
+        canZoom = false;
+    } else if (!input.keyPressed(Qt::Key_Plus) && !input.keyPressed(Qt::Key_Minus)) {
+        canZoom = true;
+    }
+    freeCamera.mZoom = am::clamp(freeCamera.mZoom, 10.0f, 45.0f);
 }
 
 void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const
@@ -84,11 +98,23 @@ void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCamer
 
 void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, const InputComponent &input) const
 {
-    static int lastWheelPos{0};
+    static int lastWheelPos{input.wheelAngleDelta().y()};
     int currentWheelPos = input.wheelAngleDelta().y();
     float scrollDelta = static_cast<float>(currentWheelPos - lastWheelPos);
-    freeCamera.mMoveSpeed += (scrollDelta / 120.0f) * freeCamera.mMoveStr;
-    freeCamera.mMoveSpeed = am::clamp(freeCamera.mMoveSpeed, 10.0f, 1000.0f);
+
+    if (input.keyPressed(Qt::Key_Shift)) {
+        // Zoom
+        auto str = scrollDelta / 120.0f * freeCamera.mZoomStr;
+        qDebug() << str;
+        freeCamera.mZoom -= str;
+        freeCamera.mZoom = am::clamp(freeCamera.mZoom, 10.0f, 45.0f);
+    } else {
+        // Camera speed
+        freeCamera.mMoveSpeed += (scrollDelta / 120.0f) * freeCamera.mMoveStr;
+        freeCamera.mMoveSpeed = am::clamp(freeCamera.mMoveSpeed, 10.0f, 1000.0f);
+    }
+
+
     lastWheelPos = currentWheelPos;
 }
 
@@ -107,8 +133,8 @@ void FreeCameraSystem::updateCameraVectors(const TransformComponent &transform, 
 void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera) const
 {
     auto view = am::Mat4::lookAt(transform.mPosition, transform.mPosition + freeCamera.mFront, freeCamera.mWorldUp);
-//    auto projection = am::Mat4::perspective(am::toRadians(freeCamera.mZoom), freeCamera.mAspect, 0.1f, 1000.0f);
-//    camera.mShader.setMat4("projection", projection);
+    auto projection = am::Mat4::perspective(am::toRadians(freeCamera.mZoom), mWorld->mEngine.mViewport->mAspect, 0.1f, 1000.0f);
+    camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", transform.mPosition);
 

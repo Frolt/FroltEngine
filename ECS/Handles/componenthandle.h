@@ -9,7 +9,7 @@ class ComponentManager;
 class World;
 struct TransformComponent;
 struct CameraComponent;
-struct CollisionComponent;
+struct PhysicsComponent;
 struct DirectionalLightComponent;
 struct FreeCameraComponent;
 struct InputComponent;
@@ -42,7 +42,7 @@ private:
 namespace ch {
     using Transform = ComponentHandle<TransformComponent>;
     using Camera = ComponentHandle<CameraComponent>;
-    using Collision = ComponentHandle<CollisionComponent>;
+    using Physics = ComponentHandle<PhysicsComponent>;
     using DirLight = ComponentHandle<DirectionalLightComponent>;
     using FreeCamera = ComponentHandle<FreeCameraComponent>;
     using Input = ComponentHandle<InputComponent>;

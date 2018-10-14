@@ -14,6 +14,7 @@
 #include "ECS/Components/free_camera_component.h"
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/model_component.h"
+#include "ECS/Components/physics_component.h"
 #include "meshfactory.h"
 #include "materialfactory.h"
 #include "world.h"
@@ -36,7 +37,7 @@ EntityHandle EntityFactory::createDirectionalLight(const std::string &name, cons
     auto entity = mWorld.createEntity(name);
     DirectionalLightComponent dirLight(-am::up(), am::Vec{0.1}, am::Vec{1});
     dirLight.mDiff = color;
-    dirLight.mAmb = color * 0.1f;
+    dirLight.mAmb = color * 0.0f;
     dirLight.mShader = mDefaultShader;
     entity.addComponent(dirLight);
     return entity;
@@ -90,6 +91,9 @@ EntityHandle EntityFactory::createCube(const std::string &name, const am::Vec3 &
     MeshComponent mesh{mMeshFactory.createCube()};
     MaterialComponent material;
     material.mDiffuseColor = color;
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("inn"));
+//    material.mTextures.push_back(mMaterialFactory.getEmissionTexture("innSpec"));
+//    material.mTextures.push_back(mMaterialFactory.getSpecularTexture("innSpec"));
     TransformComponent transform;
     transform.mPosition = pos;
     entity.addComponent(mesh);
@@ -121,10 +125,8 @@ EntityHandle EntityFactory::createModel(const std::string &name, const std::stri
     TransformComponent transform;
     transform.mPosition = pos;
     MaterialComponent material;
-//    material.mHasDiffMap = true;
-//    material.mHasEmissionMap = true;
-//    material.mHasSpecMap = true;
-    material.mDiffuseColor = Color::green;
+    material.mHasDiffMap = true;
+    material.mHasSpecMap = true;
     entity.addComponent(model);
     entity.addComponent(transform);
     entity.addComponent(material);
@@ -158,7 +160,7 @@ EntityHandle EntityFactory::createPlayerSphere(const std::string &name, const am
     MeshComponent mesh{mMeshFactory.createSphere()};
     MaterialComponent material;
     material.mDiffuseColor = color;
-    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("container"));
+//    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("container"));
     TransformComponent transform;
     transform.mPosition = pos;
     MovementComponent movement;
@@ -182,7 +184,6 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
     InputComponent input(&mEngine.mViewport->mInputState);
     CameraComponent camera(mDefaultShader);
     FreeCameraComponent freeCamera;
-    freeCamera.mAspect = mEngine.mViewport->mAspect;
     entity.addComponent(transform);
     entity.addComponent(movement);
     entity.addComponent(input);
@@ -202,6 +203,7 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
     MeshComponent mesh{mMeshFactory.createTerrain(std::to_string(-min * max), terrainGen.mVertices, terrainGen.mIndices)};
     MaterialComponent material;
     material.mDiffuseColor = color;
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("soilCrack"));
     TerrainComponent terrain;
     terrain.mTriangles = terrainGen.mTriangles;
     terrain.mVertices = terrainGen.mVertices;
@@ -230,5 +232,49 @@ EntityHandle EntityFactory::createLasTerrain(const std::string &name, const am::
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(terrain);
+    return entity;
+}
+
+EntityHandle EntityFactory::createTestTriangle(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
+{
+    auto entity = mWorld.createEntity(name);
+    TransformComponent transform(pos);
+    MaterialComponent material;
+    material.mDiffuseColor = color;
+    MeshComponent mesh = mMeshFactory.createTestTriangle();
+    TerrainComponent terrain;
+    std::vector<Vertex> vertices = {
+        { am::Vec3{ 0.0f,  10.0f, -20.0f },   am::Vec3{ 0.0f, 0.707f, 0.707f },   am::Vec2{ 2.0f, 2.0f } },
+        { am::Vec3{ -20.0f, 0.0f, 0.0f },	am::Vec3{ 0.0f, 1.0f, 0.0f },	am::Vec2{ 2.0f, 0.0f } },
+        { am::Vec3{ 20.0f, 0.0f, 0.0f },   am::Vec3{ 0.0f, 1.0f, 0.0f },   am::Vec2{ 0.0f, 0.0f } },
+        { am::Vec3{ 0.0f,  10.0f, 20.0f },	am::Vec3{ 0.0f, 0.707f, -0.707f },	am::Vec2{ 0.0f, 2.0f } }
+    };
+    std::vector<unsigned int> indices = { 0, 1, 2, 1, 3, 2 };
+    terrain.mVertices = vertices;
+    terrain.mIndices = indices;
+    entity.addComponent(transform);
+    entity.addComponent(material);
+    entity.addComponent(mesh);
+    entity.addComponent(terrain);
+    return entity;
+}
+
+EntityHandle EntityFactory::createPhysicsBall(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
+{
+    // Consists of: Mesh, Material, Transform, Movement, Input
+    auto entity = mWorld.createEntity(name);
+    MeshComponent mesh{mMeshFactory.createSphere()};
+    MaterialComponent material;
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("grass"));
+    material.mDiffuseColor = color;
+    TransformComponent transform;
+    transform.mPosition = pos;
+    MovementComponent movement;
+    PhysicsComponent physics;
+    entity.addComponent(mesh);
+    entity.addComponent(material);
+    entity.addComponent(transform);
+    entity.addComponent(movement);
+    entity.addComponent(physics);
     return entity;
 }

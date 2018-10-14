@@ -28,8 +28,9 @@ void Viewport::initialize()
     mContext->makeCurrent(this);
     initializeOpenGLFunctions();
 
+    glFrontFace(GL_CCW);
     glEnable(GL_DEPTH_TEST);
-//    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glClearColor(0.180f, 0.419f, 1.0f, 1.0f);
 
     emit ready();
@@ -53,7 +54,7 @@ void Viewport::exposeEvent(QExposeEvent *)
 
     const int retinaScale = static_cast<int>(devicePixelRatio());
     glViewport(0, 0, width() * retinaScale, height() * retinaScale);
-    mAspect = static_cast<float>(width()) / static_cast<float>(height());    
+    mAspect = static_cast<float>(width()) / static_cast<float>(height());
 }
 
 void Viewport::keyPressEvent(QKeyEvent *event)

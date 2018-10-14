@@ -52,9 +52,10 @@ namespace am
         float z;
     };
 
-    Vec3 cross(const Vec3 &v1, const Vec3 &v2);
-    float dot(const Vec3 &v1, const Vec3 &v2);
+    Vec3 cross(const Vec3 &a, const Vec3 &b);
+    float dot(const Vec3 &v1, const Vec3 &b);
     Vec3 normalize(const Vec3 &v);
+    Vec3 projection(const Vec3 &a, const Vec3 &b);
 }
 
 #endif // VEC3_H
