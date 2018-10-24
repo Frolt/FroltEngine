@@ -26,7 +26,7 @@ namespace am
 
     // Curves
     Vec3 bezierCurve(std::vector<Vec3> points, float t, int degree = 3);
-    Vec3 bSpline(const std::vector<Vec3>& points, const std::vector<float>& t, float x, int degree = 3);
+    Vec3 bSpline(const std::vector<Vec3>& points, const std::vector<float>& t, float x, unsigned int degree = 3);
 
     // Basic vector directions
     Vec3 up();

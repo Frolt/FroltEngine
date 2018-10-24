@@ -69,14 +69,15 @@ SOURCES += \
     ECS/Components/free_camera_component.cpp \
     mathterraingenerator.cpp \
     ECS/Components/terrain_component.cpp \
-    ECS/Systems/terrainsystem.cpp \
     lazterraingenerator.cpp \
     Factories/materialfactory.cpp \
     modelloader.cpp \
     ECS/Systems/modelrendersystem.cpp \
     ECS/Components/model_component.cpp \
     ECS/Systems/physicssystem.cpp \
-    ECS/Components/physics_component.cpp
+    ECS/Components/physics_component.cpp \
+    ECS/Components/bspline_component.cpp \
+    ECS/Systems/aisystem.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -134,14 +135,15 @@ HEADERS += \
     ECS/Components/input_component.h \
     mathterraingenerator.h \
     ECS/Components/terrain_component.h \
-    ECS/Systems/terrainsystem.h \
     lazterraingenerator.h \
     Factories/materialfactory.h \
     modelloader.h \
     ECS/Systems/modelrendersystem.h \
     ECS/Components/model_component.h \
     ECS/Systems/physicssystem.h \
-    ECS/Components/physics_component.h
+    ECS/Components/physics_component.h \
+    ECS/Components/bspline_component.h \
+    ECS/Systems/aisystem.h
 
 FORMS += \
     mainwindow.ui

@@ -21,6 +21,7 @@
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/model_component.h"
 #include "ECS/Components/physics_component.h"
+#include "ECS/Components/bspline_component.h"
 
 #include "world.h"
 

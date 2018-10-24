@@ -105,7 +105,6 @@ void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, const Inpu
     if (input.keyPressed(Qt::Key_Shift)) {
         // Zoom
         auto str = scrollDelta / 120.0f * freeCamera.mZoomStr;
-        qDebug() << str;
         freeCamera.mZoom -= str;
         freeCamera.mZoom = am::clamp(freeCamera.mZoom, 10.0f, 45.0f);
     } else {

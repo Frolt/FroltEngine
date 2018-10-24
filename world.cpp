@@ -17,6 +17,7 @@
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/model_component.h"
 #include "ECS/Components/physics_component.h"
+#include "ECS/Components/bspline_component.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
 #include "ECS/Systems/directionallightsystem.h"
@@ -24,9 +25,9 @@
 #include "ECS/Systems/spotlightsystem.h"
 #include "ECS/Systems/playersystem.h"
 #include "ECS/Systems/freecamerasystem.h"
-#include "ECS/Systems/terrainsystem.h"
 #include "ECS/Systems/modelrendersystem.h"
 #include "ECS/Systems/physicssystem.h"
+#include "ECS/Systems/aisystem.h"
 
 World::World(Engine *engine)
     : mEngine{*engine}
@@ -48,6 +49,7 @@ World::World(Engine *engine)
     mComponentManagers[TerrainComponent::family()] = std::make_unique<ComponentManager<TerrainComponent>>(100);
     mComponentManagers[ModelComponent::family()] = std::make_unique<ComponentManager<ModelComponent>>(100000);
     mComponentManagers[PhysicsComponent::family()] = std::make_unique<ComponentManager<PhysicsComponent>>(100000);
+    mComponentManagers[BSplineComponent::family()] = std::make_unique<ComponentManager<BSplineComponent>>(100000);
     // Create systems
     mSystems.push_back(std::make_unique<MovementSystem>());
     mSystems.push_back(std::make_unique<DirectionalLightSystem>());
@@ -55,9 +57,9 @@ World::World(Engine *engine)
     mSystems.push_back(std::make_unique<SpotlightSystem>());
     mSystems.push_back(std::make_unique<playerSystem>());
     mSystems.push_back(std::make_unique<FreeCameraSystem>());
-    mSystems.push_back(std::make_unique<TerrainSystem>());
     mSystems.push_back(std::make_unique<modelRenderSystem>());
     mSystems.push_back(std::make_unique<PhysicsSystem>());
+    mSystems.push_back(std::make_unique<AISystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
     // Set world pointer for all systems
     for (auto &sys : mSystems)

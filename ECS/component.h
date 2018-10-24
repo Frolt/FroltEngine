@@ -5,7 +5,7 @@
 
 // Counter wrapper
 struct ComponentCounter {
-  static int counter;
+  static unsigned int counter;
 };
 
 // Interface for components
@@ -15,7 +15,7 @@ struct Component
 protected:
     Component() = default;
 public:
-    static int family();
+    static unsigned int family();
 };
 
 //--------------------------------------------------------------------------------------
@@ -23,17 +23,17 @@ public:
 //--------------------------------------------------------------------------------------
 
 template<typename T>
-int Component<T>::family()
+unsigned int Component<T>::family()
 {
     // id will only initialize once
-    static int id = ComponentCounter::counter++;
+    static unsigned int id = ComponentCounter::counter++;
     return id;
 }
 
 // TODO Not using atm
 // Static method for getting component type id
 template <typename T>
-static int getComponentFamily() {
+static unsigned int getComponentFamily() {
   return Component<T>::family();
 }
 

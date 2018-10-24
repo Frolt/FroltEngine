@@ -15,6 +15,7 @@
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/model_component.h"
 #include "ECS/Components/physics_component.h"
+#include "ECS/Components/bspline_component.h"
 #include "meshfactory.h"
 #include "materialfactory.h"
 #include "world.h"
@@ -37,7 +38,7 @@ EntityHandle EntityFactory::createDirectionalLight(const std::string &name, cons
     auto entity = mWorld.createEntity(name);
     DirectionalLightComponent dirLight(-am::up(), am::Vec{0.1}, am::Vec{1});
     dirLight.mDiff = color;
-    dirLight.mAmb = color * 0.0f;
+    dirLight.mAmb = color * 0.1f;
     dirLight.mShader = mDefaultShader;
     entity.addComponent(dirLight);
     return entity;
@@ -91,7 +92,7 @@ EntityHandle EntityFactory::createCube(const std::string &name, const am::Vec3 &
     MeshComponent mesh{mMeshFactory.createCube()};
     MaterialComponent material;
     material.mDiffuseColor = color;
-    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("inn"));
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("kermit"));
 //    material.mTextures.push_back(mMaterialFactory.getEmissionTexture("innSpec"));
 //    material.mTextures.push_back(mMaterialFactory.getSpecularTexture("innSpec"));
     TransformComponent transform;
@@ -203,9 +204,8 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
     MeshComponent mesh{mMeshFactory.createTerrain(std::to_string(-min * max), terrainGen.mVertices, terrainGen.mIndices)};
     MaterialComponent material;
     material.mDiffuseColor = color;
-    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("soilCrack"));
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("dessert"));
     TerrainComponent terrain;
-    terrain.mTriangles = terrainGen.mTriangles;
     terrain.mVertices = terrainGen.mVertices;
     terrain.mIndices = terrainGen.mIndices;
     entity.addComponent(transform);
@@ -218,7 +218,7 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
 EntityHandle EntityFactory::createLasTerrain(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
 {
     // Consists of: Transform, Mesh, Material, Terrain
-    LazTerrainGenerator terrainGen("data.las", 10.0f);
+    LazTerrainGenerator terrainGen("data.las", 1.0f);
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
     transform.mPosition = pos;
@@ -276,5 +276,22 @@ EntityHandle EntityFactory::createPhysicsBall(const std::string &name, const am:
     entity.addComponent(transform);
     entity.addComponent(movement);
     entity.addComponent(physics);
+    return entity;
+}
+
+EntityHandle EntityFactory::createAISphere(const std::string &name, const am::Vec3 &color, const am::Vec3 &pos)
+{
+    // Consists of: Mesh, Material, Transform, Movement, Input
+    auto entity = mWorld.createEntity(name);
+    MeshComponent mesh{mMeshFactory.createSphere()};
+    MaterialComponent material;
+    material.mDiffuseColor = color;
+    TransformComponent transform;
+    transform.mPosition = pos;
+    BSplineComponent bSpline;
+    entity.addComponent(mesh);
+    entity.addComponent(material);
+    entity.addComponent(transform);
+    entity.addComponent(bSpline);
     return entity;
 }

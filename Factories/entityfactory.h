@@ -36,11 +36,13 @@ public:
     // Testing
     EntityHandle createTestTriangle(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
     EntityHandle createPhysicsBall(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
+    // AI
+    EntityHandle createAISphere(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
+
 
     // TODO Functions below are not implemented yet
     // AI
     EntityHandle createAICube(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &pos = {0});
-    EntityHandle createAISphere(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &pos = {0});
     // Camera
     EntityHandle createCamera(const std::string &name, const am::Vec3 &pos = {0});
 

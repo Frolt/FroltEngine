@@ -34,7 +34,7 @@ void MainWindow::init()
     format.setSamples(4);
     format.setDepthBufferSize(24);
     format.setOption(QSurfaceFormat::DebugContext);
-    format.setSwapInterval(0); // Distable Vsync
+//    format.setSwapInterval(0); // Distable Vsync
 
     mViewport = new Viewport(format, this);
     mViewportWidget = QWidget::createWindowContainer(mViewport);
@@ -43,7 +43,7 @@ void MainWindow::init()
 
     // Settings
     setWindowTitle(QString("Frolt Engine"));
-//    showFullScreen();
+    showFullScreen();
 }
 
 void MainWindow::connectSignalsSlots()

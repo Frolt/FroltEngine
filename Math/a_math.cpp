@@ -31,7 +31,7 @@ namespace am
         return points[0];
     }
 
-    Vec3 bSpline(const std::vector<Vec3>& points, const std::vector<float>& t, float x, int degree)
+    Vec3 bSpline(const std::vector<Vec3>& points, const std::vector<float>& t, float x, unsigned int degree)
     {
         // CALCULATE VALID KNOT INTERVAL 'MY'
         int my;
