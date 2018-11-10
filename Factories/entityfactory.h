@@ -28,6 +28,7 @@ public:
     // Player
     EntityHandle createPlayerCube(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &pos = {0});
     EntityHandle createPlayerSphere(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &pos = {0});
+    EntityHandle createPlayerModel(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &pos = {0});
     // Cameras
     EntityHandle createFreeCamera(const std::string &name, const am::Vec3 &pos = {0});
     // Terrain
@@ -38,6 +39,7 @@ public:
     EntityHandle createPhysicsBall(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
     // AI
     EntityHandle createAISphere(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
+    EntityHandle createAIModel(const std::string &name , const std::string &path, const am::Vec3 &color = Color::green, const am::Vec3 &pos = {0});
 
 
     // TODO Functions below are not implemented yet

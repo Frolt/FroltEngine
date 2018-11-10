@@ -15,6 +15,8 @@
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/input_component.h"
 #include "ECS/Components/physics_component.h"
+#include "ECS/Components/trophy_component.h"
+#include "ECS/Components/collision_component.h"
 #include "viewport.h"
 #include "world.h"
 #include "meshfactory.h"
@@ -53,37 +55,49 @@ void Engine::initialize()
     mPhongShader.use();
 
     // Create entities
-//    auto player1 = mEntityFactory->createPlayerSphere("alexander1", Color::orangeRed);
-//    player1.addComponent(CollisionComponent());
+    auto player1 = mEntityFactory->createPlayerModel("player", Color::orangeRed, am::Vec(-25.0f, 0.0f, 0.0f));
+    player1.addComponent(PhysicsComponent());
+    player1.addComponent(CollisionComponent());
 
-    // TESTING
-//    auto physicsBall1 =  mEntityFactory->createPhysicsBall("physicsBall1", Color::purple, am::Vec{0.0f, 20.0f, -18.0f});
-//    auto physicsBall2 =  mEntityFactory->createPhysicsBall("physicsBall2", Color::purple, am::Vec{-2.0f, 30.0f, -8.0f});
-//    auto physicsBall3 =  mEntityFactory->createPhysicsBall("physicsBall3", Color::purple, am::Vec{-10.0f, 20.0f, -2.0f});
-//    auto physicsBall4 =  mEntityFactory->createPhysicsBall("physicsBall4", Color::purple, am::Vec{-15.0f, 17.0f, -10.0f});
-//    auto physicsBall5 =  mEntityFactory->createPhysicsBall("physicsBall5", Color::purple, am::Vec{6.0f, 10.0f, 11.0f});
+//    auto model1 = mEntityFactory->createModel("model1", Path::models + "alien/alien.fbx", am::Vec{20.0f, 20.0f, 10.0f});
+//    auto model2 = mEntityFactory->createModel("model2", Path::models + "nanosuit/nanosuit.obj", am::Vec{-10.0f, 0.0f, -10.0f});
 
-    auto model1 = mEntityFactory->createModel("model1", Path::models + "alien/alien.fbx", am::Vec{20.0f, 20.0f, 10.0f});
-    auto model2 = mEntityFactory->createModel("model2", Path::models + "nanosuit/nanosuit.obj", am::Vec{-10.0f, 0.0f, -10.0f});
+    mTerrain1 = mEntityFactory->createMathTerrain("mathTerrain");
 
-//    auto lasTerrain = mEntityFactory->createLasTerrain("lasTerrain", Color::blue);
-    mTerrain1 = mEntityFactory->createMathTerrain("mathTerrain", Color::silver);
+    // TEST FLOOR
+//    auto floor = mEntityFactory->createCube("floor");
+//    ch::Transform transform;
+//    ch::Material material;
+//    mWorld->unpack(floor, transform, material);
+//    transform().mScale = am::Vec3(50.0f, 1.0f, 50.0f);
+//    transform().mPosition = -am::up() * 2.0f;
+
     auto camera = mEntityFactory->createFreeCamera("camera", am::Vec{0.0f, 20.0f, 40.0f});
-    auto AISphere = mEntityFactory->createAISphere("AISphere", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+    auto AISphere = mEntityFactory->createAIModel("AISphere", "nanosuit/nanosuit.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+    AISphere.addComponent(CollisionComponent());
+    AISphere.addComponent(PhysicsComponent());
 
-    // Testing performance (creates N cubes)
-    for (unsigned int i = 0; i < 1e1; i++) {
-        float randValueX = static_cast<float>(std::rand() % 100 - 50);
-        float randValueY = static_cast<float>(std::rand() % 100 - 50);
-        float randValueZ = static_cast<float>(std::rand() % 100 - 50);
-        auto cube = mEntityFactory->createCube("cube" + std::to_string(i), Color::aqua, am::Vec3{randValueX, randValueY, randValueZ});
-        cube.addComponent(MovementComponent(am::up() * 1.0f));
-    }
+    auto startPos = mEntityFactory->createSphere("startPos", Color::green, am::Vec3{-20.0f, -15.0f, 0.0f});
+    auto endPos = mEntityFactory->createSphere("endPos", Color::red, am::Vec3{20.0f, 18.0f, 0.0f});
+    mTrophies.push_back(mEntityFactory->createModel("trophy1", "trophy/treasure_chest.obj", am::Vec{-10.0f, -8.0f, -10.0f}));
+    mTrophies.back().addComponent(CollisionComponent());
+    mTrophies.push_back(mEntityFactory->createModel("trophy2", "trophy/treasure_chest.obj", am::Vec{0.0f, 1.0f, 10.0f}));
+    mTrophies.back().addComponent(CollisionComponent());
+    mTrophies.push_back(mEntityFactory->createModel("trophy3", "trophy/treasure_chest.obj", am::Vec{10.0f, 10.0f, -3.0f}));
+    mTrophies.back().addComponent(CollisionComponent());
 
-    auto dirLight = mEntityFactory->createDirectionalLight("dirLight");
+//    // Testing performance (creates N cubes)
+//    for (unsigned int i = 0; i < 1e1; i++) {
+//        float randValueX = static_cast<float>(std::rand() % 100 - 50);
+//        float randValueY = static_cast<float>(std::rand() % 100 - 50);
+//        float randValueZ = static_cast<float>(std::rand() % 100 - 50);
+//        auto cube = mEntityFactory->createCube("cube" + std::to_string(i), Color::aqua, am::Vec3{randValueX, randValueY, randValueZ});
+//        cube.addComponent(MovementComponent(am::up() * 1.0f));
+//    }
+
+    auto dirLight = mEntityFactory->createDirectionalLight("dirLight", am::Vec{0.929f, 0.788f, 0.686f});
     auto pointLight1 = mEntityFactory->createPointLight("pointLight1", am::Vec3{20.0f, 20.0f, -100.0f}, Color::red);
-//    pointLight1.addComponent(MovementComponent(am::forward() * 10.0f));
-    auto pointLight2 = mEntityFactory->createPointLight("pointLight2", am::Vec3{-30.0f, 20.0f, 0.0f}, Color::yellow);
+    auto pointLight2 = mEntityFactory->createPointLight("pointLight2", am::Vec3{-30.0f, 23630000.0f, 0.0f}, Color::yellow);
     auto pointLight3 = mEntityFactory->createPointLight("pointLight3", am::Vec3{60.0f, 20.0f, 100.0f}, Color::orange);
     auto spotlight1 = mEntityFactory->createSpotlight("spotlight1", am::Vec(-30.0f, 40.0f, 50.0f), -am::up(), Color::white);
     auto spotlight2 = mEntityFactory->createSpotlight("spotlight2", am::Vec(80.0f, 30.0f, 20.0f), -am::up());

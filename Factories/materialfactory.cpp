@@ -51,7 +51,7 @@ void MaterialFactory::loadTextures()
     mTextures["snow2"] = Texture(Path::textures + "snow2.jpg");
     mTextures["grass"] = Texture(Path::textures + "grass1.jpg");
     mTextures["stoneTile"] = Texture(Path::textures + "stoneTile.jpg");
-    mTextures["dessert"] = Texture(Path::textures + "dessert1.jpg");
+    mTextures["desert"] = Texture(Path::textures + "dessert1.jpg");
     mTextures["soilCrack"] = Texture(Path::textures + "soilCrack.jpg");
     mTextures["innSpec"] = Texture(Path::textures + "innLogoSpec.jpg");
 }

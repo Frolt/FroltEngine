@@ -31,6 +31,7 @@ public:
     EntityHandle createEntity(const std::string &name);
     void destroyEntity(const Entity &entity);
     EntityHandle getEntity(const std::string &name);
+    bool entityExist(const std::string &name);
     template<typename T>
     bool hasComponent(const Entity &entity);
 

@@ -21,6 +21,7 @@ struct PointLightComponent;
 struct SpotlightComponent;
 struct TerrainComponent;
 struct BSplineComponent;
+struct CollisionComponent;
 
 template<typename T>
 struct ComponentHandle
@@ -54,7 +55,8 @@ namespace ch {
     using PointLight = ComponentHandle<PointLightComponent>;
     using Spotlight = ComponentHandle<SpotlightComponent>;
     using Terrain = ComponentHandle<TerrainComponent>;
-    using Bspline = ComponentHandle<BSplineComponent>;
+    using BSpline = ComponentHandle<BSplineComponent>;
+    using Collision = ComponentHandle<CollisionComponent>;
 }
 
 //--------------------------------------------------------------------------------------

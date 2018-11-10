@@ -10,6 +10,7 @@ struct BSplineComponent : public Component<BSplineComponent>
     BSplineComponent();
     std::vector<am::Vec3> mPoints;
     std::vector<Vertex> mVertices;
+    unsigned int mDegree{2};
 };
 
 #endif // BSPLINE_COMPONENT_H

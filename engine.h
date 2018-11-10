@@ -45,6 +45,8 @@ public:
     // Terrains
     EntityHandle mTerrain1;
     EntityHandle mTestTriangle;
+    // Trophies
+    std::vector<EntityHandle> mTrophies;
 private:
     // Timers
     QElapsedTimer mTimer;

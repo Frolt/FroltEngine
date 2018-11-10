@@ -28,6 +28,13 @@ Entity EntityManager::getEntity(const std::string &name) const
     return mEntities.at(name);
 }
 
+bool EntityManager::entityExist(const std::string &name) const
+{
+    if (mEntities.find(name) != mEntities.end())
+        return true;
+    return false;
+}
+
 size_t EntityManager::numOfEntities() const
 {
     return mEntities.size();

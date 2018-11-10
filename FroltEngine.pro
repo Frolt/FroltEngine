@@ -77,7 +77,10 @@ SOURCES += \
     ECS/Systems/physicssystem.cpp \
     ECS/Components/physics_component.cpp \
     ECS/Components/bspline_component.cpp \
-    ECS/Systems/aisystem.cpp
+    ECS/Systems/aisystem.cpp \
+    ECS/Components/trophy_component.cpp \
+    ECS/Components/collision_component.cpp \
+    ECS/Systems/collisionsystem.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -143,7 +146,10 @@ HEADERS += \
     ECS/Systems/physicssystem.h \
     ECS/Components/physics_component.h \
     ECS/Components/bspline_component.h \
-    ECS/Systems/aisystem.h
+    ECS/Systems/aisystem.h \
+    ECS/Components/trophy_component.h \
+    ECS/Components/collision_component.h \
+    ECS/Systems/collisionsystem.h
 
 FORMS += \
     mainwindow.ui

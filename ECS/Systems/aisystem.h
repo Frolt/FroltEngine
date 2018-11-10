@@ -11,8 +11,16 @@ public:
 
     void beginPlay() override;
     void update(float deltaTime) override;
-    void updateSpline(BSplineComponent &bSpline);
+
+    void moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComponent &transform);
+    void getNewPath(BSplineComponent &bSpline);
+    void updateSplineVertices(BSplineComponent &bSpline);
     void drawSpline(BSplineComponent &bSpline);
+    void addTerrainCollision(TransformComponent &transform);
+
+private:
+    bool mFinished{true};
+    bool mAtStart{true};
 };
 
 #endif // AISYSTEM_H
