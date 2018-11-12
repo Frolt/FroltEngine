@@ -51,6 +51,7 @@ bool CollisionSystem::checkCollision(Entity player, Entity trophy)
     bool collisionZ = (aPos.z + aSize.z >= bPos.z) && (bPos.z + bSize.z >= aPos.z);
 
     if (collisionX && collisionY && collisionZ) {
+//        mEventBus->publish(new CollisionEvent(player, trophy));
         if (trophy.mName == "AISphere") {
             ch::Material material;
             mWorld->unpack(player, transform, material);

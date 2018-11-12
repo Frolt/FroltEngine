@@ -80,7 +80,12 @@ SOURCES += \
     ECS/Systems/aisystem.cpp \
     ECS/Components/trophy_component.cpp \
     ECS/Components/collision_component.cpp \
-    ECS/Systems/collisionsystem.cpp
+    ECS/Systems/collisionsystem.cpp \
+    EventSystem/handlerfunctionbase.cpp \
+    EventSystem/event.cpp \
+    EventSystem/eventbus.cpp \
+    EventSystem/collisionevent.cpp \
+    ECS/Systems/combatsystem.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -149,7 +154,13 @@ HEADERS += \
     ECS/Systems/aisystem.h \
     ECS/Components/trophy_component.h \
     ECS/Components/collision_component.h \
-    ECS/Systems/collisionsystem.h
+    ECS/Systems/collisionsystem.h \
+    EventSystem/handlerfunctionbase.h \
+    EventSystem/event.h \
+    EventSystem/memberfunctionhandler.h \
+    EventSystem/eventbus.h \
+    EventSystem/collisionevent.h \
+    ECS/Systems/combatsystem.h
 
 FORMS += \
     mainwindow.ui

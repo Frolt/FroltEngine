@@ -31,6 +31,8 @@
 #include "ECS/Systems/physicssystem.h"
 #include "ECS/Systems/aisystem.h"
 #include "ECS/Systems/collisionsystem.h"
+#include "ECS/Systems/combatsystem.h"
+#include "engine.h"
 
 World::World(Engine *engine)
     : mEngine{*engine}
@@ -66,10 +68,13 @@ World::World(Engine *engine)
     mSystems.push_back(std::make_unique<PhysicsSystem>());
     mSystems.push_back(std::make_unique<AISystem>());
     mSystems.push_back(std::make_unique<CollisionSystem>());
+    mSystems.push_back(std::make_unique<CombatSystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
-    // Set world pointer for all systems
-    for (auto &sys : mSystems)
+    // Set world and eventbus pointer for all systems
+    for (auto &sys : mSystems) {
         sys->setWorld(this);
+        sys->setEventBus(mEngine.mEventBus.get());
+    }
 }
 
 World::~World()

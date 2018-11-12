@@ -25,6 +25,7 @@
 #include "paths.h"
 #include "shader.h"
 #include "a_math.h"
+#include "EventSystem/eventbus.h"
 
 Engine::Engine(Viewport *viewport, QObject *parent)
     : QObject(parent),
@@ -42,6 +43,8 @@ void Engine::initialize()
 
     // Create shaders
     mPhongShader = Shader{Path::shaders + "VertexShader.vert", Path::shaders + "LightObject.frag"};
+    // Use shader
+    mPhongShader.use();
     // Set  projection matrix
     am::Mat4 perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
     mPhongShader.setMat4("projection", perspective);
@@ -51,8 +54,8 @@ void Engine::initialize()
     mMeshFactory = std::make_unique<MeshFactory>(&mPhongShader);
     mMaterialFactory = std::make_unique<MaterialFactory>();
     mEntityFactory = std::make_unique<EntityFactory>(*mMeshFactory, *mMaterialFactory, *mWorld, *this, mPhongShader);
-    // Use shader
-    mPhongShader.use();
+    // Create EventBus
+    mEventBus = std::make_unique<EventBus>();
 
     // Create entities
     auto player1 = mEntityFactory->createPlayerModel("player", Color::orangeRed, am::Vec(-25.0f, 0.0f, 0.0f));
