@@ -35,6 +35,17 @@ SOURCES += \
     LAS/lasreader.cpp \
     Libraries/Include/stb_image.cpp \
     world.cpp \
+    octahedron.cpp \
+    mesh.cpp \
+    texture.cpp \
+    paths.cpp \
+    colors.cpp \
+    mathterraingenerator.cpp \
+    lazterraingenerator.cpp \
+    Factories/materialfactory.cpp \
+    modelloader.cpp \
+    Factories/meshfactory.cpp \
+    Factories/entityfactory.cpp \
     ECS/system.cpp \
     ECS/Systems/movementsystem.cpp \
     ECS/Managers/entitymanager.cpp \
@@ -44,9 +55,6 @@ SOURCES += \
     ECS/Handles/entityhandle.cpp \
     ECS/component_mask.cpp \
     ECS/Systems/rendersystem.cpp \
-    octahedron.cpp \
-    mesh.cpp \
-    texture.cpp \
     ECS/Components/material_component.cpp \
     ECS/Components/mesh_component.cpp \
     ECS/Components/movement_component.cpp \
@@ -58,20 +66,12 @@ SOURCES += \
     ECS/Systems/directionallightsystem.cpp \
     ECS/Systems/pointlightsystem.cpp \
     ECS/Systems/spotlightsystem.cpp \
-    paths.cpp \
-    colors.cpp \
-    Factories/meshfactory.cpp \
-    Factories/entityfactory.cpp \
     ECS/Systems/playersystem.cpp \
     ECS/Systems/freecamerasystem.cpp \
     ECS/Components/input_component.cpp \
     ECS/Components/camera_component.cpp \
     ECS/Components/free_camera_component.cpp \
-    mathterraingenerator.cpp \
     ECS/Components/terrain_component.cpp \
-    lazterraingenerator.cpp \
-    Factories/materialfactory.cpp \
-    modelloader.cpp \
     ECS/Systems/modelrendersystem.cpp \
     ECS/Components/model_component.cpp \
     ECS/Systems/physicssystem.cpp \
@@ -81,11 +81,11 @@ SOURCES += \
     ECS/Components/trophy_component.cpp \
     ECS/Components/collision_component.cpp \
     ECS/Systems/collisionsystem.cpp \
-    EventSystem/handlerfunctionbase.cpp \
-    EventSystem/event.cpp \
-    EventSystem/eventbus.cpp \
+    ECS/Systems/combatsystem.cpp \
+    EventSystem/basememberfunctionhandler.cpp \
     EventSystem/collisionevent.cpp \
-    ECS/Systems/combatsystem.cpp
+    EventSystem/event.cpp \
+    EventSystem/eventbus.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -155,12 +155,15 @@ HEADERS += \
     ECS/Components/trophy_component.h \
     ECS/Components/collision_component.h \
     ECS/Systems/collisionsystem.h \
-    EventSystem/handlerfunctionbase.h \
     EventSystem/event.h \
-    EventSystem/memberfunctionhandler.h \
     EventSystem/eventbus.h \
     EventSystem/collisionevent.h \
-    ECS/Systems/combatsystem.h
+    ECS/Systems/combatsystem.h \
+    EventSystem/basememberfunctionhandler.h \
+    EventSystem/collisionevent.h \
+    EventSystem/event.h \
+    EventSystem/eventbus.h \
+    EventSystem/memberfunctionhandler.h
 
 FORMS += \
     mainwindow.ui

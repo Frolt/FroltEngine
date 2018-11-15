@@ -26,6 +26,7 @@
 #include "shader.h"
 #include "a_math.h"
 #include "EventSystem/eventbus.h"
+#include "EventSystem/collisionevent.h"
 
 Engine::Engine(Viewport *viewport, QObject *parent)
     : QObject(parent),
@@ -48,14 +49,17 @@ void Engine::initialize()
     // Set  projection matrix
     am::Mat4 perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
     mPhongShader.setMat4("projection", perspective);
+    // Create EventBus
+    mEventBus = std::make_unique<EventBus>();
     // Create worlds
     mWorld = std::make_unique<World>(this);
     // Create factories
     mMeshFactory = std::make_unique<MeshFactory>(&mPhongShader);
     mMaterialFactory = std::make_unique<MaterialFactory>();
     mEntityFactory = std::make_unique<EntityFactory>(*mMeshFactory, *mMaterialFactory, *mWorld, *this, mPhongShader);
-    // Create EventBus
-    mEventBus = std::make_unique<EventBus>();
+
+    // SCENE START
+    // ---------------------------------------------------------------------------------------
 
     // Create entities
     auto player1 = mEntityFactory->createPlayerModel("player", Color::orangeRed, am::Vec(-25.0f, 0.0f, 0.0f));
@@ -105,6 +109,9 @@ void Engine::initialize()
     auto spotlight1 = mEntityFactory->createSpotlight("spotlight1", am::Vec(-30.0f, 40.0f, 50.0f), -am::up(), Color::white);
     auto spotlight2 = mEntityFactory->createSpotlight("spotlight2", am::Vec(80.0f, 30.0f, 20.0f), -am::up());
     auto spotlight3 = mEntityFactory->createSpotlight("spotlight3", am::Vec(-60.0f, 60.0f, -40.0f), -am::up());
+
+    // SCENE END
+    // ---------------------------------------------------------------------------------------
 
     // Begin play
     mWorld->init();

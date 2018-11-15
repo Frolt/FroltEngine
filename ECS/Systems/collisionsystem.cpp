@@ -19,11 +19,6 @@ void CollisionSystem::update(float)
     }
 }
 
-void CollisionSystem::checkTerrainCollision(TransformComponent &transform)
-{
-
-}
-
 bool CollisionSystem::checkCollision(Entity player, Entity trophy)
 {
     ch::Transform transform;

@@ -42,7 +42,7 @@ namespace am
 
         // CALCULATE BASIS FUNCTIONS
         std::vector<float> basis(t.size());
-        for (int j = 0; j <= degree; j++) {
+        for (unsigned int j = 0; j <= degree; j++) {
             for (int i = (my-j); i <= my; i++) {
                 if (j == 0) {
                     basis[i] = 1.0f;

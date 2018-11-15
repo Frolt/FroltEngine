@@ -20,12 +20,12 @@ void PhysicsSystem::update(float)
     ch::Movement movement;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, transform, physics, movement);
-        applyGravity(transform, movement, physics);
+        applyGravity(transform, movement);
 //        checkTerrainCollision(transform);
     }
 }
 
-void PhysicsSystem::applyGravity(TransformComponent &transform, MovementComponent &movement, PhysicsComponent &physics)
+void PhysicsSystem::applyGravity(TransformComponent &transform, MovementComponent &movement)
 {
     ch::Terrain terrain;
     mWorld->unpack(mWorld->mEngine.mTerrain1, terrain);

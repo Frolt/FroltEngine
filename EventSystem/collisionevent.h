@@ -1,7 +1,7 @@
 #ifndef COLLISIONEVENT_H
 #define COLLISIONEVENT_H
 
-#include "EventSystem/event.h"
+#include "event.h"
 #include "ECS/entity.h"
 
 struct CollisionEvent : public Event

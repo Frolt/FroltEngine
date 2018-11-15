@@ -4,7 +4,7 @@
 
 struct Event
 {
-    Event();
+
 };
 
 #endif // EVENT_H

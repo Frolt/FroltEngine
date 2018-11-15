@@ -9,7 +9,6 @@ public:
     CollisionSystem();
     void beginPlay() override;
     void update(float deltaTime) override;
-    void checkTerrainCollision(TransformComponent &transform);
     bool checkCollision(Entity A, Entity B);
 };
 

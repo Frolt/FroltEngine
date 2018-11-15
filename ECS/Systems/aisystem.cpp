@@ -59,7 +59,8 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
     }
 
     // MAKE KNOT VECTOR
-    unsigned int knots = degree + bSpline.mPoints.size() + 1;
+    unsigned int numOfPoints = static_cast<unsigned int>(bSpline.mPoints.size());
+    unsigned int knots = degree + numOfPoints + 1;
     std::vector<float> t(knots);
     float m = knots - (degree+1) * 2.0f + 1.0f;
     float deltaKnots = 1.0f / m;
@@ -146,7 +147,8 @@ void AISystem::updateSplineVertices(BSplineComponent &bSpline)
     unsigned int degree = bSpline.mDegree;
 
     // MAKE KNOT VECTOR
-    unsigned int knots = degree + bSpline.mPoints.size() + 1;
+    unsigned int numOfPoints = static_cast<unsigned int>(bSpline.mPoints.size());
+    unsigned int knots = degree + numOfPoints + 1;
     std::vector<float> t(knots);
     float m = knots - (degree+1) * 2.0f + 1.0f;
     float deltaKnots = 1.0f / m;

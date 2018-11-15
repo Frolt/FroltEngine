@@ -1,60 +1,50 @@
 #ifndef EVENTBUS_H
 #define EVENTBUS_H
 
-#include <list>
 #include <map>
+#include <vector>
 #include <typeindex>
-#include "handlerfunctionbase.h"
+#include "basememberfunctionhandler.h"
 #include "memberfunctionhandler.h"
-
-//typedef std::list<HandlerFunctionBase*> HandlerList;
-using HandlerList = std::list<HandlerFunctionBase*>;
+#include <iostream>
 
 class EventBus
 {
 public:
-    template<typename EventType>
-    void publish(EventType * evnt);
+    template<class EventType>
+    void publish(EventType * event);
 
-    template<class T, class EventType>
-    void subscribe(T * instance, void (T::*memberFunction)(EventType *));
+    template<class ClassInstance, class EventType>
+    void subscribe(ClassInstance *instance, void(ClassInstance::*memberFunction)(EventType *));
 
-private:
-    std::map<std::type_index, HandlerList*> subscribers;
+public:
+    std::map<std::type_index, std::vector<BaseMemberFunctionHandler*>> mSubscribers;
 };
 
 //--------------------------------------------------------------------------------------
 // FUNCTION DEFINITIONS
 //--------------------------------------------------------------------------------------
 
-template<typename EventType>
-void EventBus::publish(EventType *evnt)
+template<class EventType>
+void EventBus::publish(EventType *event)
 {
-    HandlerList * handlers = subscribers[typeid(EventType)];
+    // Get the array of memberFunctions for the specific EventType
+    auto &memberFunctionArray = mSubscribers[typeid(EventType)];
 
-    if (handlers == nullptr) {
-        return;
-    }
-
-    for (auto & handler : *handlers) {
-        if (handler != nullptr) {
-            handler->exec(evnt);
-        }
+    // Calls all the member functions associated with the EventType
+    for (auto &memberFunction : memberFunctionArray) {
+        memberFunction->call(event);
     }
 }
 
-template<class T, class EventType>
-void EventBus::subscribe(T *instance, void (T::*memberFunction)(EventType *))
+template<class ClassInstance, class EventType>
+void EventBus::subscribe(ClassInstance *instance, void(ClassInstance::*memberFunction)(EventType *))
 {
-    HandlerList * handlers = subscribers[typeid(EventType)];
+    // Get the array of memberFunctions for the specific EventType
+    auto &memberFunctionArray = mSubscribers[typeid(EventType)];
 
-    //First time initialization
-    if (handlers == nullptr) {
-        handlers = new HandlerList();
-        subscribers[typeid(EventType)] = handlers;
-    }
-
-    handlers->push_back(new MemberFunctionHandler<T, EventType>(instance, memberFunction));
+    // Add the new member function
+    memberFunctionArray.push_back(new MemberFunctionHandler<ClassInstance, EventType>(instance, memberFunction));
 }
 
 #endif // EVENTBUS_H

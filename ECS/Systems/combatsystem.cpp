@@ -8,10 +8,10 @@ CombatSystem::CombatSystem()
 
 void CombatSystem::beginPlay()
 {
-//    mEventBus->subscribe(this, &CombatSystem::onCollisionEvent);
+    mEventBus->subscribe(this, &CombatSystem::onCollisionEvent);
 }
 
-void CombatSystem::update(float deltaTime)
+void CombatSystem::update(float)
 {
 
 }
@@ -19,6 +19,6 @@ void CombatSystem::update(float deltaTime)
 void CombatSystem::onCollisionEvent(CollisionEvent *event)
 {
     // TODO make gameplay logic when entities collide
-    // WHAT HAPPENS HERE!!?!?=!
     qDebug() << "A collision event happened!!";
+    qDebug() << "WORKING!!!!";
 }
