@@ -18,7 +18,17 @@ void CombatSystem::update(float)
 
 void CombatSystem::onCollisionEvent(CollisionEvent *event)
 {
-    // TODO make gameplay logic when entities collide
-    qDebug() << "A collision event happened!!";
-    qDebug() << "WORKING!!!!";
+    auto player = event->mEntityA;
+    auto trophy = event->mEntityB;
+    ch::Transform transform;
+
+    // If we hit the AI guard
+    if (trophy.mName == "AISphere") {
+        ch::Material material;
+        mWorld->unpack(player, transform, material);
+        material().mDiffuseColor = Color::black;
+        transform().mPosition = am::up() * 1000.0f;
+    } else {
+        mWorld->destroyEntity(trophy);
+    }
 }

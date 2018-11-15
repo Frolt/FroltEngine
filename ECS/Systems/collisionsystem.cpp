@@ -12,9 +12,12 @@ void CollisionSystem::beginPlay()
 
 void CollisionSystem::update(float)
 {
+    auto player = mWorld->getEntity("player");
     for (auto &entity : mRegisteredEntities) {
-        if (entity.mName != "player") {
-            checkCollision(mWorld->getEntity("player"), entity);
+        if (entity.mName != player().mName) {
+            if (checkCollision(player, entity)) {
+                mEventBus->publish(new CollisionEvent(player, entity));
+            }
         }
     }
 }
