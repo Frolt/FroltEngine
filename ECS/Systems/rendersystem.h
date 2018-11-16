@@ -12,7 +12,7 @@ public:
     void update(float) override;
 
     void updateMaterialUniforms(Shader shader, MaterialComponent &material);
-    void updateTransformUniforms(const Shader shader, const TransformComponent &transform) const;
+    void updateTransformUniforms(const Shader shader, const TransformComponent &transform, EntityHandle entity);
     void draw(const MeshComponent &mesh);
 };
 

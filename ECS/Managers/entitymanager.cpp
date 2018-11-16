@@ -9,23 +9,23 @@ EntityManager::EntityManager()
 
 }
 
-Entity EntityManager::createEntity(const std::string &name)
+Entity *EntityManager::createEntity(const std::string &name)
 {
     Entity entity(nextID++, name);
     auto check = mEntities.insert(std::make_pair(entity.mName, entity));
     // Crashes program if key aldready exist
     Q_ASSERT_X(check.second, "ENTITYMANAGER::CREATEENTITY", "KEY ALREADY EXIST");
-    return entity;
+    return &mEntities[entity.mName];
 }
 
-void EntityManager::destroyEntity(const Entity &entity)
+void EntityManager::destroyEntity(Entity *entity)
 {
-    mEntities.erase(entity.mName);
+    mEntities.erase(entity->mName);
 }
 
-Entity EntityManager::getEntity(const std::string &name) const
+Entity *EntityManager::getEntity(const std::string &name)
 {
-    return mEntities.at(name);
+    return &mEntities.at(name);
 }
 
 bool EntityManager::entityExist(const std::string &name) const

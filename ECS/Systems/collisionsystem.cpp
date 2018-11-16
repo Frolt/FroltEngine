@@ -12,17 +12,17 @@ void CollisionSystem::beginPlay()
 
 void CollisionSystem::update(float)
 {
-    auto player = mWorld->getEntity("player");
+    auto *player = mWorld->getEntityPtr("player");
     for (auto &entity : mRegisteredEntities) {
-        if (entity.mName != player().mName) {
-            if (checkCollision(player, entity)) {
-                mEventBus->publish(new CollisionEvent(player, entity));
+        if (entity.mName != player->mName) {
+            if (checkCollision(player, &entity)) {
+                mEventBus->publish(new CollisionEvent(player, &entity));
             }
         }
     }
 }
 
-bool CollisionSystem::checkCollision(Entity player, Entity trophy)
+bool CollisionSystem::checkCollision(Entity *player, Entity *trophy)
 {
     ch::Transform transform;
     ch::Collision collision;
@@ -47,18 +47,6 @@ bool CollisionSystem::checkCollision(Entity player, Entity trophy)
     bool collisionX = (aPos.x + aSize.x >= bPos.x) && (bPos.x + bSize.x >= aPos.x);
     bool collisionY = (aPos.y >= bPos.y - bSize.y) && (bPos.y >= aPos.y - aSize.y);
     bool collisionZ = (aPos.z + aSize.z >= bPos.z) && (bPos.z + bSize.z >= aPos.z);
-
-    if (collisionX && collisionY && collisionZ) {
-//        mEventBus->publish(new CollisionEvent(player, trophy));
-        if (trophy.mName == "AISphere") {
-            ch::Material material;
-            mWorld->unpack(player, transform, material);
-            material().mDiffuseColor = Color::black;
-            transform().mPosition = am::up() * 1000.0f;
-        } else {
-            mWorld->destroyEntity(trophy);
-        }
-    }
 
     return collisionX && collisionY && collisionZ;
 }

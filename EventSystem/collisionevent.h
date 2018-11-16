@@ -6,10 +6,10 @@
 
 struct CollisionEvent : public Event
 {
-    CollisionEvent(Entity a, Entity b);
+    CollisionEvent(Entity *a, Entity *b);
 
-    Entity mEntityA;
-    Entity mEntityB;
+    Entity *mEntityA;
+    Entity *mEntityB;
 };
 
 #endif // COLLISIONEVENT_H

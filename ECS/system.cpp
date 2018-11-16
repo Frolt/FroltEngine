@@ -26,17 +26,17 @@ void System::setEventBus(EventBus *eventBus)
     mEventBus = eventBus;
 }
 
-void System::registerEntity(const Entity &entity)
+void System::registerEntity(Entity *entity)
 {
-    mRegisteredEntities.push_back(entity);
+    mRegisteredEntities.push_back(*entity);
 }
 
-void System::deRegisterEntity(const Entity &entity)
+void System::deRegisterEntity(Entity *entity)
 {
     // TODO use std::vector erase function
     for (auto it = mRegisteredEntities.begin(); it != mRegisteredEntities.end(); ++it) {
         Entity e = *it;
-        if (e == entity) {
+        if (e == *entity) {
             mRegisteredEntities.erase(it);
             return;
         }

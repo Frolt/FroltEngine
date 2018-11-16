@@ -15,8 +15,8 @@ void playerSystem::update(float deltaTime)
 {
     ch::Input input;
     ch::Movement movement;
-    for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, input, movement);
+    for (auto &entity : mRegisteredEntities) {
+        mWorld->unpack(&entity, input, movement);
         processInput(input, movement, deltaTime);
     }
 }

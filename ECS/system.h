@@ -42,8 +42,8 @@ public:
 
     void setWorld(World *world);
     void setEventBus(EventBus *eventBus);
-    void registerEntity(const Entity &entity);
-    void deRegisterEntity(const Entity &entity);
+    void registerEntity(Entity *entity);
+    void deRegisterEntity(Entity *entity);
 
 public:
     ComponentMask mSystemMask;

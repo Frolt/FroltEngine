@@ -10,9 +10,9 @@ class EntityManager
 {
 public:
     EntityManager();
-    Entity createEntity(const std::string &name);
-    void destroyEntity(const Entity &entity);
-    Entity getEntity(const std::string &name) const;
+    Entity *createEntity(const std::string &name);
+    void destroyEntity(Entity *entity);
+    Entity *getEntity(const std::string &name);
     bool entityExist(const std::string &name) const;
     size_t numOfEntities() const;
 

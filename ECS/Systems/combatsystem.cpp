@@ -18,12 +18,12 @@ void CombatSystem::update(float)
 
 void CombatSystem::onCollisionEvent(CollisionEvent *event)
 {
-    auto player = event->mEntityA;
-    auto trophy = event->mEntityB;
+    auto *player = event->mEntityA;
+    auto *trophy = event->mEntityB;
     ch::Transform transform;
 
     // If we hit the AI guard
-    if (trophy.mName == "AISphere") {
+    if (trophy->mName == "AISphere") {
         ch::Material material;
         mWorld->unpack(player, transform, material);
         material().mDiffuseColor = Color::black;

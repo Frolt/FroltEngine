@@ -25,30 +25,31 @@ public:
     ~World();
     void init();
     void update(float deltaTime);
-    void updateSystems(const Entity &entity, ComponentMask oldMask);
+    void updateSystems(Entity *entity, ComponentMask oldMask);
 
     // Create, destroy and get entity
-    EntityHandle createEntity(const std::string &name);
-    void destroyEntity(const Entity &entity);
+    EntityHandle createEntity(const std::string &name, Entity *parent = nullptr);
+    void destroyEntity(Entity *entity);
     EntityHandle getEntity(const std::string &name);
+    Entity *getEntityPtr(const std::string &name);
     bool entityExist(const std::string &name);
     template<typename T>
-    bool hasComponent(const Entity &entity);
+    bool hasComponent(Entity *entity);
 
     // Add and remove component
     template<typename T>
-    void addComponent(const Entity &entity, const T &component);
+    void addComponent(Entity *entity, const T &component);
     template<typename T>
-    void removeComponent(const Entity &entity);
+    void removeComponent(Entity *entity);
     template<typename T>
-    T *getComponent(const Entity &entity);
+    T *getComponent(Entity *entity);
 
     // TODO snakk med ole, støtter ikke user defined klasser, må recompile
     // Unpack function
     template<typename T>
-    void unpack(const Entity &entity, ComponentHandle<T> &handle);
+    void unpack(Entity *entity, ComponentHandle<T> &handle);
     template<typename T, typename ...Args>
-    void unpack(const Entity &entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
+    void unpack(Entity *entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
 
 private:
     std::unique_ptr<EntityManager> mEntityManager;
@@ -72,52 +73,52 @@ public:
 #include "ECS/component_mask.h"
 
 template<typename T>
-bool World::hasComponent(const Entity &entity)
+bool World::hasComponent(Entity *entity)
 {
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     return manager->hasComponent(entity);
 }
 
 template<typename T>
-void World::unpack(const Entity &entity, ComponentHandle<T> &handle)
+void World::unpack(Entity *entity, ComponentHandle<T> &handle)
 {
     handle = ComponentHandle<T>{this, entity};
 }
 
 template<typename T, typename ...Args>
-void World::unpack(const Entity &entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
+void World::unpack(Entity *entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
 {
     handle = ComponentHandle<T>{this, entity};
     unpack<Args...>(entity, args ...);
 }
 
 template<typename T>
-void World::addComponent(const Entity &entity, const T &component)
+void World::addComponent(Entity *entity, const T &component)
 {
     // add component
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     manager->addComponent(entity, component);
 
     // update mask
-    ComponentMask oldMask = mEntityMasks[entity];
-    mEntityMasks[entity].addComponent<T>();
+    ComponentMask oldMask = mEntityMasks[*entity];
+    mEntityMasks[*entity].addComponent<T>();
     updateSystems(entity, oldMask);
 }
 
 template<typename T>
-void World::removeComponent(const Entity &entity)
+void World::removeComponent(Entity *entity)
 {
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     manager->destroyComponent(entity);
 
     // update mask
-    ComponentMask oldMask = mEntityMasks[entity];
-    mEntityMasks[entity].removeCompoent<T>();
+    ComponentMask oldMask = mEntityMasks[*entity];
+    mEntityMasks[*entity].removeCompoent<T>();
     updateSystems(entity, oldMask);
 }
 
 template<typename T>
-T *World::getComponent(const Entity &entity)
+T *World::getComponent(Entity *entity)
 {
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     return manager->getComponent(entity);

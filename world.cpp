@@ -94,9 +94,9 @@ void World::update(float deltaTime)
         sys->update(deltaTime);
 }
 
-void World::updateSystems(const Entity &entity, ComponentMask oldMask)
+void World::updateSystems(Entity *entity, ComponentMask oldMask)
 {
-    ComponentMask newMask = mEntityMasks[entity];
+    ComponentMask newMask = mEntityMasks[*entity];
 
     for (auto &sys : mSystems) {
       if (newMask.isNewMatch(oldMask, sys->mSystemMask)) {
@@ -107,32 +107,49 @@ void World::updateSystems(const Entity &entity, ComponentMask oldMask)
     }
 }
 
-EntityHandle World::createEntity(const std::string &name)
+EntityHandle World::createEntity(const std::string &name, Entity *parent)
 {
-    auto entity = mEntityManager->createEntity(name);
-    mEntityMasks.insert(std::make_pair(entity, ComponentMask()));
+    auto *entity = mEntityManager->createEntity(name);
+    mEntityMasks.insert(std::make_pair(*entity, ComponentMask()));
+    if (parent) {
+        parent->mChild = entity;
+        entity->mParent = parent;
+    }
     return EntityHandle(this, entity);
 }
 
-void World::destroyEntity(const Entity &entity)
+void World::destroyEntity(Entity *entity)
 {
+    // Update the parent/child relationship
+    if (entity->mParent)
+        entity->mParent->mChild = nullptr;
+    if (entity->mChild)
+        destroyEntity(entity->mChild);
+
+    // Destroy all components belonging to entity
     for (auto &manager : mComponentManagers) {
         if (!manager)
             break;
         manager->destroyComponent(entity);
     }
-    // update mask
-    ComponentMask oldMask = mEntityMasks[entity];
-    mEntityMasks[entity].reset();
+    // Update mask
+    ComponentMask oldMask = mEntityMasks[*entity];
+    mEntityMasks[*entity].reset();
     updateSystems(entity, oldMask);
-    mEntityMasks.erase(entity);
+    // Destroy mask and entity
+    mEntityMasks.erase(*entity);
     mEntityManager->destroyEntity(entity);
 }
 
 EntityHandle World::getEntity(const std::string &name)
 {
-    auto e = mEntityManager->getEntity(name);
-    return EntityHandle(this, e);
+    auto *entity = mEntityManager->getEntity(name);
+    return EntityHandle(this, entity);
+}
+
+Entity *World::getEntityPtr(const std::string &name)
+{
+    return mEntityManager->getEntity(name);
 }
 
 bool World::entityExist(const std::string &name)

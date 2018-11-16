@@ -17,8 +17,8 @@ void modelRenderSystem::update(float)
     ch::Model model;
     ch::Transform transform;
     ch::Material material;
-    for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, model, transform, material);
+    for (auto &entity : mRegisteredEntities) {
+        mWorld->unpack(&entity, model, transform, material);
 //        model().mShader.use();
         updateMaterialUniforms(model().mShader, material);
         updateTransformUniforms(model().mShader, transform);

@@ -2,27 +2,53 @@
 #define ENTITYHANDLE_H
 
 #include "ECS/entity.h"
+#include "a_math.h"
+#include "ECS/Handles/componenthandle.h"
 
 // Forward declarations
 class World;
+struct TransformComponent;
 
 struct EntityHandle
 {
     EntityHandle() = default;
-    EntityHandle(World *world, const Entity &entity);
+    EntityHandle(World *world, Entity *entity);
+
     void destroy();
+    EntityHandle addEntityComponent(const std::string &name);
+    EntityHandle addEntityComponent(Entity &entity);
     template<typename T>
     void addComponent(const T &component);
     template<typename T>
     void removeComponent();
     template<typename T>
     bool hasComponent();
-    Entity &operator()();
-    const Entity &operator()() const;
+    Entity *operator()();
+    const Entity *operator()() const;
     operator Entity();
 
+    // Utilities
+    //--------------------------------------------------------------------------------------
+    // Relative transformations
+    void setRelativeLocation(const am::Vec3 &location);
+    am::Vec3 getRelativeLocation();
+    void addRelativeLocation(const am::Vec3 &location);
+    void setRelativeRotation(const am::Vec3 &location);
+    void addRelativeRotation(const am::Vec3 &location);
+    void setRelativeScale(const am::Vec3 &location);
+    // World transformations
+    void setWorldLocation(const am::Vec3 &location);
+    am::Vec3 getWorldLocation();
+    void addWorldLocation(const am::Vec3 &location);
+    void setWorldRotation(const am::Vec3 &location);
+    void addWorldRotation(const am::Vec3 &location);
+    void setWorldScale(const am::Vec3 &location);
+
+private:
+    void addParentLocation(Entity *entity, am::Vec3 location);
+
 public:
-    Entity mEntity;
+    Entity *mEntity;
 private:
     World *mWorld;
 };

@@ -11,18 +11,18 @@ void AISystem::beginPlay()
 {
     ch::Transform transform;
     ch::BSpline bSpline;
-    for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, bSpline);
+    for (auto &entity : mRegisteredEntities) {
+        mWorld->unpack(&entity, bSpline);
         std::vector<am::Vec3> points;
-        mWorld->unpack(mWorld->getEntity("startPos"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("startPos"), transform);
         points.push_back(transform().mPosition);
-        mWorld->unpack(mWorld->getEntity("trophy1"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("trophy1"), transform);
         points.push_back(transform().mPosition);
-        mWorld->unpack(mWorld->getEntity("trophy2"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("trophy2"), transform);
         points.push_back(transform().mPosition);
-        mWorld->unpack(mWorld->getEntity("trophy3"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("trophy3"), transform);
         points.push_back(transform().mPosition);
-        mWorld->unpack(mWorld->getEntity("endPos"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("endPos"), transform);
         points.push_back(transform().mPosition);
         bSpline().mPoints = points;
         updateSplineVertices(bSpline);
@@ -35,8 +35,8 @@ void AISystem::update(float deltaTime)
 {
     ch::Transform transform;
     ch::BSpline bSpline;
-    for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, transform, bSpline);
+    for (auto &entity : mRegisteredEntities) {
+        mWorld->unpack(&entity, transform, bSpline);
         moveNPC(deltaTime, bSpline, transform);
         if (mFinished) {
             getNewPath(bSpline);
@@ -54,7 +54,7 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
 
     int activeTrophies = 0;
     for (auto &entity : mWorld->mEngine.mTrophies) {
-        if (mWorld->entityExist(entity().mName))
+        if (mWorld->entityExist(entity()->mName))
             activeTrophies++;
     }
 
@@ -98,10 +98,10 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     std::vector<am::Vec3> points;
     // insert start point
     if (mAtStart) {
-        mWorld->unpack(mWorld->getEntity("startPos"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("startPos"), transform);
         points.push_back(transform().mPosition);
     } else {
-        mWorld->unpack(mWorld->getEntity("endPos"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("endPos"), transform);
         points.push_back(transform().mPosition);
     }
     // insert trophy points
@@ -110,7 +110,7 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     auto rand3 = (std::rand() % 3) + 1;
     std::string name = "trophy" + std::to_string(rand1);
     if (mWorld->entityExist(name)) {
-        mWorld->unpack(mWorld->getEntity(name), transform);
+        mWorld->unpack(mWorld->getEntityPtr(name), transform);
         points.push_back(transform().mPosition);
     }
     while (rand2 == rand1) {
@@ -118,7 +118,7 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     }
     name = "trophy" + std::to_string(rand2);
     if (mWorld->entityExist(name)) {
-        mWorld->unpack(mWorld->getEntity(name), transform);
+        mWorld->unpack(mWorld->getEntityPtr(name), transform);
         points.push_back(transform().mPosition);
     }
     while (rand3 == rand1 || rand3 == rand2) {
@@ -126,16 +126,16 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     }
     name = "trophy" + std::to_string(rand3);
     if (mWorld->entityExist(name)) {
-        mWorld->unpack(mWorld->getEntity(name), transform);
+        mWorld->unpack(mWorld->getEntityPtr(name), transform);
         points.push_back(transform().mPosition);
     }
 
     // insert end point
     if (mAtStart) {
-        mWorld->unpack(mWorld->getEntity("endPos"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("endPos"), transform);
         points.push_back(transform().mPosition);
     } else {
-        mWorld->unpack(mWorld->getEntity("startPos"), transform);
+        mWorld->unpack(mWorld->getEntityPtr("startPos"), transform);
         points.push_back(transform().mPosition);
     }
     bSpline.mPoints = points;
@@ -197,7 +197,7 @@ void AISystem::drawSpline(BSplineComponent &bSpline)
 void AISystem::addTerrainCollision(TransformComponent &transform)
 {
     ch::Terrain terrain;
-    mWorld->unpack(mWorld->mEngine.mTerrain1, terrain);
+    mWorld->unpack(mWorld->mEngine.mTerrain1(), terrain);
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;

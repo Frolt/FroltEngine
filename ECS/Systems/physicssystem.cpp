@@ -18,8 +18,8 @@ void PhysicsSystem::update(float)
     ch::Transform transform;
     ch::Physics physics;
     ch::Movement movement;
-    for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, transform, physics, movement);
+    for (auto &entity : mRegisteredEntities) {
+        mWorld->unpack(&entity, transform, physics, movement);
         applyGravity(transform, movement);
 //        checkTerrainCollision(transform);
     }
@@ -28,7 +28,7 @@ void PhysicsSystem::update(float)
 void PhysicsSystem::applyGravity(TransformComponent &transform, MovementComponent &movement)
 {
     ch::Terrain terrain;
-    mWorld->unpack(mWorld->mEngine.mTerrain1, terrain);
+    mWorld->unpack(mWorld->mEngine.mTerrain1(), terrain);
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;
@@ -72,7 +72,7 @@ void PhysicsSystem::applyGravity(TransformComponent &transform, MovementComponen
 void PhysicsSystem::checkTerrainCollision(TransformComponent &transform)
 {
     ch::Terrain terrain;
-    mWorld->unpack(mWorld->mEngine.mTerrain1, terrain);
+    mWorld->unpack(mWorld->mEngine.mTerrain1(), terrain);
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;

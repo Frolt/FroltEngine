@@ -14,8 +14,8 @@ void DirectionalLightSystem::beginPlay()
 void DirectionalLightSystem::update(float)
 {
     ch::DirLight dirLight;
-    for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, dirLight);
+    for (auto &entity : mRegisteredEntities) {
+        mWorld->unpack(&entity, dirLight);
         updateUniforms(dirLight);
     }
 }
