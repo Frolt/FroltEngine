@@ -9,7 +9,7 @@ public:
     CollisionSystem();
     void beginPlay() override;
     void update(float deltaTime) override;
-    bool checkCollision(Entity *A, Entity *B);
+    bool checkCollision(EntityID player, EntityID B);
 };
 
 #endif // COLLISIONSYSTEM_H

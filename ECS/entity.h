@@ -4,6 +4,9 @@
 #include <string>
 #include <functional>
 
+/// Type alias for entity ID
+using EntityID = unsigned int;
+
 struct Entity
 {
     Entity();

@@ -18,17 +18,18 @@ void CombatSystem::update(float)
 
 void CombatSystem::onCollisionEvent(CollisionEvent *event)
 {
-    auto *player = event->mEntityA;
-    auto *trophy = event->mEntityB;
+    // TODO derive entity from ID
+    auto player = event->mEntityA;
+    auto trophy = event->mEntityB;
     ch::Transform transform;
 
     // If we hit the AI guard
-    if (trophy->mName == "AISphere") {
+    if (trophy == mWorld->getEntity("AISphere")) {
         ch::Material material;
         mWorld->unpack(player, transform, material);
         material().mDiffuseColor = Color::black;
         transform().mPosition = am::up() * 1000.0f;
     } else {
-        mWorld->destroyEntity(trophy);
+//        mWorld->destroyEntity(trophy);
     }
 }

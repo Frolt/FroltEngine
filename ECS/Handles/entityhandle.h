@@ -16,16 +16,17 @@ struct EntityHandle
 
     void destroy();
     EntityHandle addEntityComponent(const std::string &name);
-    EntityHandle addEntityComponent(Entity &entity);
+    EntityHandle addEntityComponent(Entity *entity);
     template<typename T>
     void addComponent(const T &component);
     template<typename T>
     void removeComponent();
     template<typename T>
     bool hasComponent();
-    Entity *operator()();
-    const Entity *operator()() const;
+    Entity &operator()();
+    const Entity &operator()() const;
     operator Entity();
+    operator EntityID();
 
     // Utilities
     //--------------------------------------------------------------------------------------
@@ -45,12 +46,13 @@ struct EntityHandle
     void setWorldScale(const am::Vec3 &location);
 
 private:
-    void addParentLocation(Entity *entity, am::Vec3 location);
+    void addParentLocation(const Entity &entity, am::Vec3 location);
+    //--------------------------------------------------------------------------------------
 
 public:
-    Entity *mEntity;
+    Entity *mEntity{nullptr};
 private:
-    World *mWorld;
+    World *mWorld{nullptr};
 };
 
 
@@ -63,19 +65,19 @@ private:
 template<typename T>
 void EntityHandle::addComponent(const T &component)
 {
-    mWorld->addComponent(mEntity, component);
+    mWorld->addComponent(mEntity->mID, component);
 }
 
 template<typename T>
 void EntityHandle::removeComponent()
 {
-    mWorld->removeComponent<T>(mEntity);
+    mWorld->removeComponent<T>(mEntity->mID);
 }
 
 template<typename T>
 bool EntityHandle::hasComponent()
 {
-    return mWorld->hasComponent<T>(mEntity);
+    return mWorld->hasComponent<T>(mEntity->mID);
 }
 
 #endif // ENTITYHANDLE_H

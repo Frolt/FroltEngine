@@ -16,7 +16,7 @@ void PointLightSystem::update(float)
     ch::PointLight pointLight;
     ch::Transform transform;
     for (auto &entity : mRegisteredEntities) {
-        mWorld->unpack(&entity, pointLight, transform);
+        mWorld->unpack(entity, pointLight, transform);
         updateUniforms(pointLight, transform);
     }
 }

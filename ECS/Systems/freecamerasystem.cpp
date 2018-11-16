@@ -16,7 +16,7 @@ void FreeCameraSystem::beginPlay()
     ch::Transform transform;
     ch::FreeCamera freeCamera;
     for (auto &entity : mRegisteredEntities) {
-        mWorld->unpack(&entity, transform, freeCamera);
+        mWorld->unpack(entity, transform, freeCamera);
         updateCameraVectors(transform(), freeCamera());
     }
 }
@@ -29,7 +29,7 @@ void FreeCameraSystem::update(float)
     ch::Input input;
     ch::Movement movement;
     for (auto &entity : mRegisteredEntities) {
-        mWorld->unpack(&entity, transform, camera, freeCamera, input, movement);
+        mWorld->unpack(entity, transform, camera, freeCamera, input, movement);
         processKeyboard(input, movement, freeCamera);
         processMouse(input, freeCamera, transform);
         processScroll(freeCamera, input);

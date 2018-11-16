@@ -16,14 +16,14 @@ class ComponentManager : public BaseComponentManager
 {
 public:
     ComponentManager(std::size_t size = 100000);
-    void addComponent(Entity *entity, const T &component);
-    void destroyComponent(Entity *entity) override;
-    T *getComponent(Entity *entity);
-    bool hasComponent(Entity *entity);
+    void addComponent(EntityID entity, const T &component);
+    virtual void destroyComponent(EntityID entity) override;
+    T *getComponent(EntityID entity);
+    bool hasComponent(EntityID entity) const;
     void iterateAll(std::function<void(T component)> lambda);
 
 private:
-    std::unordered_map<Entity, unsigned int> mEntityMap;
+    std::unordered_map<EntityID, unsigned int> mEntityMap;
     unsigned int mSize{0};
     std::vector<T> mComponents;
 };
@@ -39,10 +39,10 @@ ComponentManager<T>::ComponentManager(std::size_t size)
 }
 
 template<typename T>
-void ComponentManager<T>::addComponent(Entity *entity, const T &component)
+void ComponentManager<T>::addComponent(EntityID entity, const T &component)
 {
     unsigned int newIndex{mSize};
-    auto check = mEntityMap.insert(std::make_pair(*entity, newIndex));
+    auto check = mEntityMap.insert(std::make_pair(entity, newIndex));
     // Crashes program if key aldready exist
     Q_ASSERT_X(check.second, "COMPONENTMANAGER::ADDCOMPONENT", "KEY ALREADY EXIST");
     mComponents[newIndex] = component;
@@ -50,13 +50,13 @@ void ComponentManager<T>::addComponent(Entity *entity, const T &component)
 }
 
 template<typename T>
-void ComponentManager<T>::destroyComponent(Entity *entity)
+void ComponentManager<T>::destroyComponent(EntityID entity)
 {
-    if (mEntityMap.find(*entity) != mEntityMap.end()) {
+    if (mEntityMap.find(entity) != mEntityMap.end()) {
         // Moves the last component into the index we want to delete
-        auto index = mEntityMap.at(*entity);
+        auto index = mEntityMap.at(entity);
         mComponents[index] = std::move(mComponents[--mSize]);
-        mEntityMap.erase(*entity);
+        mEntityMap.erase(entity);
 
         // Find the key that pointed to the last component and redirect it to the new index
         for (auto &element : mEntityMap) {
@@ -69,16 +69,16 @@ void ComponentManager<T>::destroyComponent(Entity *entity)
 }
 
 template<typename T>
-T *ComponentManager<T>::getComponent(Entity *entity)
+T *ComponentManager<T>::getComponent(EntityID entity)
 {
-    auto index = mEntityMap.at(*entity);
+    auto index = mEntityMap.at(entity);
     return &mComponents[index];
 }
 
 template<typename T>
-bool ComponentManager<T>::hasComponent(Entity *entity)
+bool ComponentManager<T>::hasComponent(EntityID entity) const
 {
-    if (mEntityMap.find(*entity) != mEntityMap.end())
+    if (mEntityMap.find(entity) != mEntityMap.end())
         return true;
     else
         return false;

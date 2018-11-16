@@ -42,8 +42,8 @@ public:
 
     void setWorld(World *world);
     void setEventBus(EventBus *eventBus);
-    void registerEntity(Entity *entity);
-    void deRegisterEntity(Entity *entity);
+    void registerEntity(EntityID entity);
+    void deRegisterEntity(EntityID entity);
 
 public:
     ComponentMask mSystemMask;
@@ -51,7 +51,7 @@ protected:
     // TODO vector has slow search O(n)
     // bad when ComponentMask uses deRegisterEntity() method
     // but vector is good for iterating
-    std::vector<Entity> mRegisteredEntities;
+    std::vector<EntityID> mRegisteredEntities;
     World *mWorld;
     EventBus *mEventBus;
 };

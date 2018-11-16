@@ -12,17 +12,17 @@ void CollisionSystem::beginPlay()
 
 void CollisionSystem::update(float)
 {
-    auto *player = mWorld->getEntityPtr("player");
+    EntityHandle player = mWorld->getEntity("player");
     for (auto &entity : mRegisteredEntities) {
-        if (entity.mName != player->mName) {
-            if (checkCollision(player, &entity)) {
-                mEventBus->publish(new CollisionEvent(player, &entity));
+        if (entity != player) {
+            if (checkCollision(player, entity)) {
+                mEventBus->publish(new CollisionEvent(player, entity));
             }
         }
     }
 }
 
-bool CollisionSystem::checkCollision(Entity *player, Entity *trophy)
+bool CollisionSystem::checkCollision(EntityID player, EntityID trophy)
 {
     ch::Transform transform;
     ch::Collision collision;

@@ -25,38 +25,38 @@ public:
     ~World();
     void init();
     void update(float deltaTime);
-    void updateSystems(Entity *entity, ComponentMask oldMask);
+    void updateSystems(EntityID entity, ComponentMask oldMask);
 
     // Create, destroy and get entity
     EntityHandle createEntity(const std::string &name, Entity *parent = nullptr);
-    void destroyEntity(Entity *entity);
+    void destroyEntity(const Entity &entity);
     EntityHandle getEntity(const std::string &name);
     Entity *getEntityPtr(const std::string &name);
     bool entityExist(const std::string &name);
     template<typename T>
-    bool hasComponent(Entity *entity);
+    bool hasComponent(EntityID entity);
 
     // Add and remove component
     template<typename T>
-    void addComponent(Entity *entity, const T &component);
+    void addComponent(EntityID entity, const T &component);
     template<typename T>
-    void removeComponent(Entity *entity);
+    void removeComponent(EntityID entity);
     template<typename T>
-    T *getComponent(Entity *entity);
+    T *getComponent(EntityID entity);
 
     // TODO snakk med ole, støtter ikke user defined klasser, må recompile
     // Unpack function
     template<typename T>
-    void unpack(Entity *entity, ComponentHandle<T> &handle);
+    void unpack(EntityID entity, ComponentHandle<T> &handle);
     template<typename T, typename ...Args>
-    void unpack(Entity *entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
+    void unpack(EntityID entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
 
 private:
     std::unique_ptr<EntityManager> mEntityManager;
     std::vector<std::unique_ptr<BaseComponentManager>> mComponentManagers;
     std::vector<std::unique_ptr<System>> mSystems;
     // TODO snakk med Ole, hash tregere enn reblack tree?
-    std::unordered_map<Entity, ComponentMask> mEntityMasks;
+    std::unordered_map<EntityID, ComponentMask> mEntityMasks;
     // TODO snakk med Ole, engine ref i world
 public:
     Engine &mEngine;
@@ -73,52 +73,52 @@ public:
 #include "ECS/component_mask.h"
 
 template<typename T>
-bool World::hasComponent(Entity *entity)
+bool World::hasComponent(EntityID entity)
 {
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     return manager->hasComponent(entity);
 }
 
 template<typename T>
-void World::unpack(Entity *entity, ComponentHandle<T> &handle)
+void World::unpack(EntityID entity, ComponentHandle<T> &handle)
 {
     handle = ComponentHandle<T>{this, entity};
 }
 
 template<typename T, typename ...Args>
-void World::unpack(Entity *entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
+void World::unpack(EntityID entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
 {
     handle = ComponentHandle<T>{this, entity};
     unpack<Args...>(entity, args ...);
 }
 
 template<typename T>
-void World::addComponent(Entity *entity, const T &component)
+void World::addComponent(EntityID entity, const T &component)
 {
     // add component
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     manager->addComponent(entity, component);
 
     // update mask
-    ComponentMask oldMask = mEntityMasks[*entity];
-    mEntityMasks[*entity].addComponent<T>();
+    ComponentMask oldMask = mEntityMasks[entity];
+    mEntityMasks[entity].addComponent<T>();
     updateSystems(entity, oldMask);
 }
 
 template<typename T>
-void World::removeComponent(Entity *entity)
+void World::removeComponent(EntityID entity)
 {
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     manager->destroyComponent(entity);
 
     // update mask
-    ComponentMask oldMask = mEntityMasks[*entity];
-    mEntityMasks[*entity].removeCompoent<T>();
+    ComponentMask oldMask = mEntityMasks[entity];
+    mEntityMasks[entity].removeCompoent<T>();
     updateSystems(entity, oldMask);
 }
 
 template<typename T>
-T *World::getComponent(Entity *entity)
+T *World::getComponent(EntityID entity)
 {
     auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
     return manager->getComponent(entity);

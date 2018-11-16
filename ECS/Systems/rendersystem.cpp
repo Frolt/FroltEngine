@@ -21,10 +21,10 @@ void RenderSystem::update(float)
     ch::Transform transform;
     ch::Material material;
     for (auto &entity : mRegisteredEntities) {
-        mWorld->unpack(&entity, mesh, transform, material);
+        mWorld->unpack(entity, mesh, transform, material);
 //        mesh().mShader.use();
         updateMaterialUniforms(mesh().mShader, material);
-        updateTransformUniforms(mesh().mShader, transform, EntityHandle(mWorld, &entity));
+        updateTransformUniforms(mesh().mShader, transform);
         draw(mesh);
     }
 }
@@ -64,12 +64,12 @@ void RenderSystem::updateMaterialUniforms(Shader shader, MaterialComponent &mate
     shader.setFloat("material.shininess", material.mShininess);
 }
 
-void RenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform, EntityHandle entity)
+void RenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform)
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
     am::Mat4 modelMatrix;
-    modelMatrix.translate(entity.getWorldLocation());
+    modelMatrix.translate(transform.mPosition);
     modelMatrix.rotate(transform.mEulerAngles.yaw(), am::up());
     modelMatrix.rotate(transform.mEulerAngles.pitch(), am::right());
     modelMatrix.rotate(transform.mEulerAngles.roll(), am::forward());

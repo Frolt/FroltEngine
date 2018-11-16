@@ -18,9 +18,9 @@ Entity *EntityManager::createEntity(const std::string &name)
     return &mEntities[entity.mName];
 }
 
-void EntityManager::destroyEntity(Entity *entity)
+void EntityManager::destroyEntity(const std::string &name)
 {
-    mEntities.erase(entity->mName);
+    mEntities.erase(name);
 }
 
 Entity *EntityManager::getEntity(const std::string &name)

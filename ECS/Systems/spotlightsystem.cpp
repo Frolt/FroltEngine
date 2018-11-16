@@ -16,7 +16,7 @@ void SpotlightSystem::update(float)
     ch::Spotlight spotlight;
     ch::Transform transform;
     for (auto &entity : mRegisteredEntities) {
-        mWorld->unpack(&entity, spotlight, transform);
+        mWorld->unpack(entity, spotlight, transform);
         updateUniforms(spotlight, transform);
     }
 }

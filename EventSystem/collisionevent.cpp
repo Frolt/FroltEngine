@@ -1,6 +1,6 @@
 #include "collisionevent.h"
 
-CollisionEvent::CollisionEvent(Entity *a, Entity *b)
+CollisionEvent::CollisionEvent(EntityID a, EntityID b)
  : mEntityA {a}, mEntityB {b}
 {
 

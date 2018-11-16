@@ -94,9 +94,9 @@ void World::update(float deltaTime)
         sys->update(deltaTime);
 }
 
-void World::updateSystems(Entity *entity, ComponentMask oldMask)
+void World::updateSystems(EntityID entity, ComponentMask oldMask)
 {
-    ComponentMask newMask = mEntityMasks[*entity];
+    ComponentMask newMask = mEntityMasks[entity];
 
     for (auto &sys : mSystems) {
       if (newMask.isNewMatch(oldMask, sys->mSystemMask)) {
@@ -109,41 +109,41 @@ void World::updateSystems(Entity *entity, ComponentMask oldMask)
 
 EntityHandle World::createEntity(const std::string &name, Entity *parent)
 {
-    auto *entity = mEntityManager->createEntity(name);
-    mEntityMasks.insert(std::make_pair(*entity, ComponentMask()));
+    Entity *entity = mEntityManager->createEntity(name);
     if (parent) {
         parent->mChild = entity;
         entity->mParent = parent;
     }
+    mEntityMasks.insert(std::make_pair(entity->mID, ComponentMask()));
     return EntityHandle(this, entity);
 }
 
-void World::destroyEntity(Entity *entity)
+void World::destroyEntity(const Entity &entity)
 {
     // Update the parent/child relationship
-    if (entity->mParent)
-        entity->mParent->mChild = nullptr;
-    if (entity->mChild)
-        destroyEntity(entity->mChild);
+    if (entity.mParent)
+        entity.mParent->mChild = nullptr;
+    if (entity.mChild)
+        destroyEntity(*entity.mChild);
 
     // Destroy all components belonging to entity
     for (auto &manager : mComponentManagers) {
         if (!manager)
             break;
-        manager->destroyComponent(entity);
+        manager->destroyComponent(entity.mID);
     }
     // Update mask
-    ComponentMask oldMask = mEntityMasks[*entity];
-    mEntityMasks[*entity].reset();
-    updateSystems(entity, oldMask);
+    ComponentMask oldMask = mEntityMasks[entity.mID];
+    mEntityMasks[entity.mID].reset();
+    updateSystems(entity.mID, oldMask);
     // Destroy mask and entity
-    mEntityMasks.erase(*entity);
-    mEntityManager->destroyEntity(entity);
+    mEntityMasks.erase(entity.mID);
+    mEntityManager->destroyEntity(entity.mName);
 }
 
 EntityHandle World::getEntity(const std::string &name)
 {
-    auto *entity = mEntityManager->getEntity(name);
+    Entity *entity = mEntityManager->getEntity(name);
     return EntityHandle(this, entity);
 }
 

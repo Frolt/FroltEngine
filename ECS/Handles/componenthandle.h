@@ -27,7 +27,7 @@ template<typename T>
 struct ComponentHandle
 {
     ComponentHandle() = default;
-    ComponentHandle(World *world, Entity *entity);
+    ComponentHandle(World *world, EntityID owner);
     void destroy();
     T &operator()();
     const T &operator()() const;
@@ -36,8 +36,8 @@ struct ComponentHandle
 public:
     T *mComponent{nullptr};
 private:
-    World *mWorld;
-    Entity *mOwner;
+    World *mWorld{nullptr};
+    EntityID mOwner;
 };
 
 // Type aliases
@@ -67,10 +67,10 @@ namespace ch {
 #include "world.h"
 
 template<typename T>
-ComponentHandle<T>::ComponentHandle(World *world, Entity *entity)
-    : mWorld{world}, mOwner{entity}
+ComponentHandle<T>::ComponentHandle(World *world, EntityID owner)
+    : mWorld{world}, mOwner{owner}
 {
-    mComponent = mWorld->getComponent<T>(entity);
+    mComponent = mWorld->getComponent<T>(owner);
 }
 
 template<typename T>

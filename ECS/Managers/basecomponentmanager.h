@@ -6,9 +6,7 @@
 class BaseComponentManager
 {
 public:
-    BaseComponentManager() = default;
-
-    virtual void destroyComponent(Entity *entity) = 0;
+    virtual void destroyComponent(EntityID entity) = 0;
 };
 
 #endif // BASECOMPONENTMANAGER_H
