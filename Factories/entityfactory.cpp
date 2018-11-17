@@ -201,7 +201,7 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
     transform.mPosition = pos;
-    transform.mEulerAngles.yaw() = -90.0f;
+    transform.mRotation.yaw() = -90.0f;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
     CameraComponent camera(mDefaultShader);

@@ -42,11 +42,13 @@ template<typename T>
 void ComponentManager<T>::addComponent(EntityID entity, const T &component)
 {
     unsigned int newIndex{mSize};
-    auto check = mEntityMap.insert(std::make_pair(entity, newIndex));
-    // Crashes program if key aldready exist
-    Q_ASSERT_X(check.second, "COMPONENTMANAGER::ADDCOMPONENT", "KEY ALREADY EXIST");
-    mComponents[newIndex] = component;
-    mSize++;
+    if (mEntityMap.find(entity) == mEntityMap.end()) {
+        mEntityMap[entity] = newIndex;
+        mComponents[newIndex] = component;
+        mSize++;
+    } else {
+        qDebug() << "ERROR:: Component already exist";
+    }
 }
 
 template<typename T>

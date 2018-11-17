@@ -29,10 +29,15 @@ public:
 
     // Create, destroy and get entity
     EntityHandle createEntity(const std::string &name, Entity *parent = nullptr);
+    void destroyEntity(EntityID entity);
     void destroyEntity(const Entity &entity);
+    EntityHandle getEntity(EntityID entity);
     EntityHandle getEntity(const std::string &name);
+    Entity *getEntityPtr(EntityID entity);
     Entity *getEntityPtr(const std::string &name);
+    bool entityExist(EntityID entity);
     bool entityExist(const std::string &name);
+    unsigned int getNumberOfEntities();
     template<typename T>
     bool hasComponent(EntityID entity);
 

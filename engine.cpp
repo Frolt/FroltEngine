@@ -65,6 +65,26 @@ void Engine::initialize()
     auto player1 = mEntityFactory->createPlayerModel("player", Color::orangeRed, am::Vec(-25.0f, 0.0f, 0.0f));
     player1.addComponent(PhysicsComponent());
     player1.addComponent(CollisionComponent());
+    auto sphere = mEntityFactory->createSphere("sphere", Color::orangeRed, am::Vec{0.0f, 20.0f, 0.0f});
+    auto cube = mEntityFactory->createCube("lol", Color::aqua, am::Vec{-10.0f, 0.0f, 0.0f});
+    auto cube2 = mEntityFactory->createCube("lol2", Color::blue, am::Vec{20.0f, 0.0f, 0.0f});
+    sphere.addEntityComponent(cube);
+    cube.addEntityComponent(cube2);
+    cube2.setWorldLocation(am::Vec(-10.0f, 10.0f, 10.0f));
+    qDebug() << cube2.getWorldLocation();
+    auto testCube1 = player1.createEntityComponent("testCube1");
+    testCube1.addComponent(TransformComponent(am::up() * 10.0f));
+    testCube1.addComponent(MaterialComponent());
+    testCube1.addComponent(mMeshFactory->createCube());
+    auto testCube2 = player1.createEntityComponent("testCube2");
+    testCube2.addComponent(TransformComponent(am::Vec{-10.0f, 10.0f, 0.0f}));
+    testCube2.addComponent(MaterialComponent(Color::aqua));
+    testCube2.addComponent(mMeshFactory->createCube());
+    auto testCube3 = player1.createEntityComponent("testCube3");
+    testCube3.addComponent(TransformComponent(am::Vec{10.0f, 10.0f, 0.0f}));
+    testCube3.addComponent(MaterialComponent(Color::black, 50));
+    testCube3.addComponent(mMeshFactory->createCube());
+
 
 //    auto model1 = mEntityFactory->createModel("model1", Path::models + "alien/alien.fbx", am::Vec{20.0f, 20.0f, 10.0f});
 //    auto model2 = mEntityFactory->createModel("model2", Path::models + "nanosuit/nanosuit.obj", am::Vec{-10.0f, 0.0f, -10.0f});
@@ -86,7 +106,7 @@ void Engine::initialize()
 
     auto startPos = mEntityFactory->createSphere("startPos", Color::green, am::Vec3{-20.0f, -15.0f, 0.0f});
     auto endPos = mEntityFactory->createSphere("endPos", Color::red, am::Vec3{20.0f, 18.0f, 0.0f});
-    mTrophies.push_back(mEntityFactory->createModel("trophy1", "trophy/treasure_chest.obj", am::Vec{-10.0f, -8.0f, -10.0f}));
+    mTrophies.push_back(mEntityFactory->createModel("trophy1", "trophy/treasure_chest.obj", am::Vec{-10.0f, -28.0f, -10.0f}));
     mTrophies.back().addComponent(CollisionComponent());
     mTrophies.push_back(mEntityFactory->createModel("trophy2", "trophy/treasure_chest.obj", am::Vec{0.0f, 1.0f, 10.0f}));
     mTrophies.back().addComponent(CollisionComponent());
@@ -102,13 +122,13 @@ void Engine::initialize()
 //        cube.addComponent(MovementComponent(am::up() * 1.0f));
 //    }
 
-    auto dirLight = mEntityFactory->createDirectionalLight("dirLight", am::Vec{0.929f, 0.788f, 0.686f});
-    auto pointLight1 = mEntityFactory->createPointLight("pointLight1", am::Vec3{20.0f, 20.0f, -100.0f}, Color::red);
-    auto pointLight2 = mEntityFactory->createPointLight("pointLight2", am::Vec3{-30.0f, 23630000.0f, 0.0f}, Color::yellow);
-    auto pointLight3 = mEntityFactory->createPointLight("pointLight3", am::Vec3{60.0f, 20.0f, 100.0f}, Color::orange);
-    auto spotlight1 = mEntityFactory->createSpotlight("spotlight1", am::Vec(-30.0f, 40.0f, 50.0f), -am::up(), Color::white);
-    auto spotlight2 = mEntityFactory->createSpotlight("spotlight2", am::Vec(80.0f, 30.0f, 20.0f), -am::up());
-    auto spotlight3 = mEntityFactory->createSpotlight("spotlight3", am::Vec(-60.0f, 60.0f, -40.0f), -am::up());
+    auto dirLight = mEntityFactory->createDirectionalLight("dirLight", Color::white);
+//    auto pointLight1 = mEntityFactory->createPointLight("pointLight1", am::Vec3{20.0f, 20.0f, -100.0f}, Color::red);
+//    auto pointLight2 = mEntityFactory->createPointLight("pointLight2", am::Vec3{-30.0f, 10.0f, 0.0f}, Color::white);
+//    auto pointLight3 = mEntityFactory->createPointLight("pointLight3", am::Vec3{60.0f, 20.0f, 100.0f}, Color::orange);
+//    auto spotlight1 = mEntityFactory->createSpotlight("spotlight1", am::Vec(-30.0f, 40.0f, 50.0f), -am::up(), Color::white);
+//    auto spotlight2 = mEntityFactory->createSpotlight("spotlight2", am::Vec(80.0f, 30.0f, 20.0f), -am::up());
+//    auto spotlight3 = mEntityFactory->createSpotlight("spotlight3", am::Vec(-60.0f, 60.0f, -40.0f), -am::up());
 
     // SCENE END
     // ---------------------------------------------------------------------------------------

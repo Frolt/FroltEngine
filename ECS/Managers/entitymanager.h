@@ -11,12 +11,16 @@ class EntityManager
 public:
     EntityManager();
     Entity *createEntity(const std::string &name);
-    void destroyEntity(const std::string &name);
+    void destroyEntity(EntityID entity);
+    void destroyEntity(const Entity &entity);
     Entity *getEntity(const std::string &name);
+    Entity *getEntity(EntityID entity);
     bool entityExist(const std::string &name) const;
+    bool entityExist(EntityID entity) const;
     size_t numOfEntities() const;
 
 private:
+    std::unordered_map<EntityID, std::string> mIDMap;
     std::unordered_map<std::string, Entity> mEntities;
     static unsigned long long int nextID;
 };

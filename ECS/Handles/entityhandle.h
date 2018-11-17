@@ -15,8 +15,9 @@ struct EntityHandle
     EntityHandle(World *world, Entity *entity);
 
     void destroy();
-    EntityHandle addEntityComponent(const std::string &name);
-    EntityHandle addEntityComponent(Entity *entity);
+    EntityHandle createEntityComponent(const std::string &name);
+    void addEntityComponent(Entity *entity);
+    void addEntityComponent(const EntityHandle &entity);
     template<typename T>
     void addComponent(const T &component);
     template<typename T>
@@ -30,23 +31,24 @@ struct EntityHandle
 
     // Utilities
     //--------------------------------------------------------------------------------------
-    // Relative transformations
-    void setRelativeLocation(const am::Vec3 &location);
-    am::Vec3 getRelativeLocation();
-    void addRelativeLocation(const am::Vec3 &location);
-    void setRelativeRotation(const am::Vec3 &location);
-    void addRelativeRotation(const am::Vec3 &location);
-    void setRelativeScale(const am::Vec3 &location);
-    // World transformations
-    void setWorldLocation(const am::Vec3 &location);
-    am::Vec3 getWorldLocation();
-    void addWorldLocation(const am::Vec3 &location);
-    void setWorldRotation(const am::Vec3 &location);
-    void addWorldRotation(const am::Vec3 &location);
+    // Setters
+    void setRelativeLocation(const am::Vec3 &location); // done
+    void setRelativeRotation(const am::Vec3 &rotation); // done
+    void setRelativeScale(const am::Vec3 &scale); // done
+    void setWorldLocation(const am::Vec3 &location); // done
+    void setWorldRotation(const am::Vec3 &rotation);
     void setWorldScale(const am::Vec3 &location);
+    // Adders
+    void addRelativeLocation(const am::Vec3 &location); // done
+    void addRelativeRotation(const am::Vec3 &rotation); // done
+    void addWorldLocation(const am::Vec3 &location); // done
+    void addWorldRotation(const am::Vec3 &location);
+    // Getters
+    am::Vec3 getRelativeLocation(); // done
+    am::Vec3 getWorldLocation(); // done
 
 private:
-    void addParentLocation(const Entity &entity, am::Vec3 location);
+    void addParentLocation(Entity *entity, am::Vec3 &location);
     //--------------------------------------------------------------------------------------
 
 public:

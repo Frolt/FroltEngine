@@ -1,4 +1,5 @@
 #include "collisionsystem.h"
+#include "engine.h"
 
 CollisionSystem::CollisionSystem()
 {
@@ -14,6 +15,9 @@ void CollisionSystem::update(float)
 {
     EntityHandle player = mWorld->getEntity("player");
     for (auto &entity : mRegisteredEntities) {
+        // Check for terrain collision
+        checkTerrainCollision(entity);
+        // Check if player hit something
         if (entity != player) {
             if (checkCollision(player, entity)) {
                 mEventBus->publish(new CollisionEvent(player, entity));
@@ -22,19 +26,19 @@ void CollisionSystem::update(float)
     }
 }
 
-bool CollisionSystem::checkCollision(EntityID player, EntityID trophy)
+bool CollisionSystem::checkCollision(EntityID entity1, EntityID entity2)
 {
     ch::Transform transform;
     ch::Collision collision;
 
-    mWorld->unpack(player, transform, collision);
+    mWorld->unpack(entity1, transform, collision);
     auto aPos = transform().mPosition;
     auto aSize = collision().mSize;
     aPos.x -= aSize.x;
     aPos.y += aSize.y;
     aPos.z -= aSize.z;
 
-    mWorld->unpack(trophy, transform, collision);
+    mWorld->unpack(entity2, transform, collision);
     auto bPos = transform().mPosition;
     auto bSize = collision().mSize;
     bPos.x -= bSize.x;
@@ -49,4 +53,32 @@ bool CollisionSystem::checkCollision(EntityID player, EntityID trophy)
     bool collisionZ = (aPos.z + aSize.z >= bPos.z) && (bPos.z + bSize.z >= aPos.z);
 
     return collisionX && collisionY && collisionZ;
+}
+
+void CollisionSystem::checkTerrainCollision(EntityID entity)
+{
+    ch::Transform transform;
+    mWorld->unpack(entity, transform);
+    ch::Terrain terrain;
+    mWorld->unpack(mWorld->mEngine.mTerrain1().mID, terrain);
+
+    auto &indices = terrain().mIndices;
+    auto &vertices = terrain().mVertices;
+    auto objectPos = am::Vec2{transform().mPosition.x, transform().mPosition.z};
+    am::Vec3 result;
+
+    for (unsigned int i = 0; i < indices.size(); i+=3) {
+        am::Vec2 a = am::Vec2(vertices[indices[i]].mPosition.x, vertices[indices[i]].mPosition.z);
+        am::Vec2 b = am::Vec2(vertices[indices[i+1]].mPosition.x, vertices[indices[i+1]].mPosition.z);
+        am::Vec2 c = am::Vec2(vertices[indices[i+2]].mPosition.x, vertices[indices[i+2]].mPosition.z);
+        result = -objectPos.barycentricCoordinates(a,b,c);
+        if (result.x >= 0 && result.y >= 0 && result.z >= 0) {
+            auto u = vertices[indices[i]].mPosition;
+            auto v = vertices[indices[i+1]].mPosition;
+            auto w = vertices[indices[i+2]].mPosition;
+            float yValue = result.x * u.y + result.y * v.y + result.z * w.y + 0.5f;
+            if (transform().mPosition.y < yValue)
+                transform().mPosition.y = yValue;
+        }
+    }
 }

@@ -20,3 +20,8 @@ bool Entity::operator<(const Entity &rhs) const
 {
     return (mID < rhs.mID);
 }
+
+Entity::operator EntityID()
+{
+    return mID;
+}

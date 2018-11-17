@@ -114,8 +114,32 @@ EntityHandle World::createEntity(const std::string &name, Entity *parent)
         parent->mChild = entity;
         entity->mParent = parent;
     }
-    mEntityMasks.insert(std::make_pair(entity->mID, ComponentMask()));
+    mEntityMasks[entity->mID] = ComponentMask();
     return EntityHandle(this, entity);
+}
+
+void World::destroyEntity(EntityID entity)
+{
+    Entity *entityPtr = mEntityManager->getEntity(entity);
+    // Update the parent/child relationship
+    if (entityPtr->mParent)
+        entityPtr->mParent->mChild = nullptr;
+    if (entityPtr->mChild)
+        destroyEntity(*entityPtr->mChild);
+
+    // Destroy all components belonging to entity
+    for (auto &manager : mComponentManagers) {
+        if (!manager)
+            break;
+        manager->destroyComponent(entityPtr->mID);
+    }
+    // Update mask
+    ComponentMask oldMask = mEntityMasks[entityPtr->mID];
+    mEntityMasks[entityPtr->mID].reset();
+    updateSystems(entityPtr->mID, oldMask);
+    // Destroy mask and entity
+    mEntityMasks.erase(entityPtr->mID);
+    mEntityManager->destroyEntity(entityPtr->mID);
 }
 
 void World::destroyEntity(const Entity &entity)
@@ -138,7 +162,13 @@ void World::destroyEntity(const Entity &entity)
     updateSystems(entity.mID, oldMask);
     // Destroy mask and entity
     mEntityMasks.erase(entity.mID);
-    mEntityManager->destroyEntity(entity.mName);
+    mEntityManager->destroyEntity(entity.mID);
+}
+
+EntityHandle World::getEntity(EntityID entity)
+{
+    Entity *entityPtr = mEntityManager->getEntity(entity);
+    return EntityHandle(this, entityPtr);
 }
 
 EntityHandle World::getEntity(const std::string &name)
@@ -147,12 +177,27 @@ EntityHandle World::getEntity(const std::string &name)
     return EntityHandle(this, entity);
 }
 
+Entity *World::getEntityPtr(EntityID entity)
+{
+    return mEntityManager->getEntity(entity);
+}
+
 Entity *World::getEntityPtr(const std::string &name)
 {
     return mEntityManager->getEntity(name);
 }
 
+bool World::entityExist(EntityID entity)
+{
+    return mEntityManager->entityExist(entity);
+}
+
 bool World::entityExist(const std::string &name)
 {
     return mEntityManager->entityExist(name);
+}
+
+unsigned int World::getNumberOfEntities()
+{
+    return static_cast<unsigned int>(mEntityManager->numOfEntities());
 }

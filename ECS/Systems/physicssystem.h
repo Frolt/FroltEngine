@@ -11,7 +11,6 @@ public:
     void beginPlay() override;
     void update(float deltaTime) override;
     void applyGravity(TransformComponent &transform, MovementComponent &movement);
-    void checkTerrainCollision(TransformComponent &transform);
 };
 
 #endif // PHYSICSSYSTEM_H

@@ -34,7 +34,7 @@ void FreeCameraSystem::update(float)
         processMouse(input, freeCamera, transform);
         processScroll(freeCamera, input);
         updateCameraVectors(transform, freeCamera);
-        updateUniforms(transform, freeCamera, camera);
+        updateUniforms(transform, freeCamera, camera, mWorld->getEntity(entity));
     }
 }
 
@@ -89,10 +89,10 @@ void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCamer
         xOffset *= freeCamera.mMouseSense;
         yOffset *= freeCamera.mMouseSense;
 
-        transform.mEulerAngles.yaw() += xOffset;
-        transform.mEulerAngles.pitch() += yOffset;
-        transform.mEulerAngles.yaw() = am::mod(transform.mEulerAngles.yaw(), 360.0f);
-        transform.mEulerAngles.pitch() = am::clamp(transform.mEulerAngles.pitch(), -89.0f, 89.0f);
+        transform.mRotation.yaw() += xOffset;
+        transform.mRotation.pitch() += yOffset;
+        transform.mRotation.yaw() = am::mod(transform.mRotation.yaw(), 360.0f);
+        transform.mRotation.pitch() = am::clamp(transform.mRotation.pitch(), -89.0f, 89.0f);
     }
 }
 
@@ -120,21 +120,21 @@ void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, const Inpu
 void FreeCameraSystem::updateCameraVectors(const TransformComponent &transform, FreeCameraComponent &freeCamera) const
 {
     am::Vec front;
-    front.x = cos(am::toRadians(transform.mEulerAngles.yaw())) * cos(am::toRadians(transform.mEulerAngles.pitch()));
-    front.y = sin(am::toRadians(transform.mEulerAngles.pitch()));
-    front.z = sin(am::toRadians(transform.mEulerAngles.yaw())) * cos(am::toRadians(transform.mEulerAngles.pitch()));
+    front.x = cos(am::toRadians(transform.mRotation.yaw())) * cos(am::toRadians(transform.mRotation.pitch()));
+    front.y = sin(am::toRadians(transform.mRotation.pitch()));
+    front.z = sin(am::toRadians(transform.mRotation.yaw())) * cos(am::toRadians(transform.mRotation.pitch()));
     freeCamera.mFront = am::normalize(front);
 
     freeCamera.mRight = am::normalize(am::cross(freeCamera.mFront, freeCamera.mWorldUp));
     freeCamera.mUp = -am::normalize(am::cross(freeCamera.mFront, freeCamera.mRight));
 }
 
-void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera) const
+void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera, EntityHandle entity) const
 {
-    auto view = am::Mat4::lookAt(transform.mPosition, transform.mPosition + freeCamera.mFront, freeCamera.mWorldUp);
+    auto view = am::Mat4::lookAt(entity.getWorldLocation(), transform.mPosition + freeCamera.mFront, freeCamera.mWorldUp);
     auto projection = am::Mat4::perspective(am::toRadians(freeCamera.mZoom), mWorld->mEngine.mViewport->mAspect, 0.1f, 1000.0f);
     camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
-    camera.mShader.setVec3("camPos", transform.mPosition);
+    camera.mShader.setVec3("camPos", entity.getWorldLocation());
 
 }

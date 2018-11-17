@@ -14,6 +14,7 @@ struct Entity
 
     bool operator==(const Entity &rhs) const;
     bool operator<(const Entity &rhs) const;
+    operator EntityID();
 
     // Variables
     unsigned int mID{0};

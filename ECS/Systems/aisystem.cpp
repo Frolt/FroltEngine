@@ -54,7 +54,7 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
 
     int activeTrophies = 0;
     for (auto &entity : mWorld->mEngine.mTrophies) {
-        if (mWorld->entityExist(entity().mName))
+        if (mWorld->entityExist(entity))
             activeTrophies++;
     }
 

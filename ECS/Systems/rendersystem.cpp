@@ -24,7 +24,7 @@ void RenderSystem::update(float)
         mWorld->unpack(entity, mesh, transform, material);
 //        mesh().mShader.use();
         updateMaterialUniforms(mesh().mShader, material);
-        updateTransformUniforms(mesh().mShader, transform);
+        updateTransformUniforms(mesh().mShader, transform, EntityHandle(mWorld, mWorld->getEntityPtr(entity)));
         draw(mesh);
     }
 }
@@ -64,15 +64,20 @@ void RenderSystem::updateMaterialUniforms(Shader shader, MaterialComponent &mate
     shader.setFloat("material.shininess", material.mShininess);
 }
 
-void RenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform)
+void RenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform, EntityHandle entity)
 {
+//    auto testEnt = mWorld->getEntity("testCube");
+//    qDebug() << testEnt.getWorldLocation();
+//    ch::Transform tmp;
+//    mWorld->unpack(testEnt, tmp);
+//    qDebug() << tmp().mPosition;
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
     am::Mat4 modelMatrix;
-    modelMatrix.translate(transform.mPosition);
-    modelMatrix.rotate(transform.mEulerAngles.yaw(), am::up());
-    modelMatrix.rotate(transform.mEulerAngles.pitch(), am::right());
-    modelMatrix.rotate(transform.mEulerAngles.roll(), am::forward());
+    modelMatrix.translate(entity.getWorldLocation());
+    modelMatrix.rotate(transform.mRotation.yaw(), am::up());
+    modelMatrix.rotate(transform.mRotation.pitch(), am::right());
+    modelMatrix.rotate(transform.mRotation.roll(), am::forward());
     modelMatrix.scale(transform.mScale);
     //---------------------------------------------------------------------------------
 

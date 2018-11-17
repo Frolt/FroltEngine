@@ -15,7 +15,7 @@ private:
     void processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const;
     void processScroll(FreeCameraComponent &freeCamera, const InputComponent &input) const;
     void updateCameraVectors(const TransformComponent &transform, FreeCameraComponent &freeCamera) const;
-    void updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera) const;
+    void updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera, EntityHandle entity) const;
 };
 
 #endif // FREECAMERASYSTEM_H
