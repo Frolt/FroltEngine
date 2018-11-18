@@ -15,15 +15,15 @@ void AISystem::beginPlay()
         mWorld->unpack(entity, bSpline);
         std::vector<am::Vec3> points;
         mWorld->unpack(mWorld->getEntity("startPos"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
         mWorld->unpack(mWorld->getEntity("trophy1"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
         mWorld->unpack(mWorld->getEntity("trophy2"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
         mWorld->unpack(mWorld->getEntity("trophy3"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
         mWorld->unpack(mWorld->getEntity("endPos"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
         bSpline().mPoints = points;
         updateSplineVertices(bSpline);
         mFinished = false;
@@ -88,7 +88,7 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
             mAtStart = true;
         return;
     }
-    transform.mPosition = am::bSpline(bSpline.mPoints, t, x, degree);
+    transform.mLocation = am::bSpline(bSpline.mPoints, t, x, degree);
 //    transform.mPosition.y = 10.0f;
 }
 
@@ -99,10 +99,10 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     // insert start point
     if (mAtStart) {
         mWorld->unpack(mWorld->getEntity("startPos"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
     } else {
         mWorld->unpack(mWorld->getEntity("endPos"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
     }
     // insert trophy points
     auto rand1 = (std::rand() % 3) + 1;
@@ -111,7 +111,7 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     std::string name = "trophy" + std::to_string(rand1);
     if (mWorld->entityExist(name)) {
         mWorld->unpack(mWorld->getEntity(name), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
     }
     while (rand2 == rand1) {
         rand2 = (std::rand() % 3) + 1;
@@ -119,7 +119,7 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     name = "trophy" + std::to_string(rand2);
     if (mWorld->entityExist(name)) {
         mWorld->unpack(mWorld->getEntity(name), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
     }
     while (rand3 == rand1 || rand3 == rand2) {
         rand3 = (std::rand() % 3) + 1;
@@ -127,16 +127,16 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
     name = "trophy" + std::to_string(rand3);
     if (mWorld->entityExist(name)) {
         mWorld->unpack(mWorld->getEntity(name), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
     }
 
     // insert end point
     if (mAtStart) {
         mWorld->unpack(mWorld->getEntity("endPos"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
     } else {
         mWorld->unpack(mWorld->getEntity("startPos"), transform);
-        points.push_back(transform().mPosition);
+        points.push_back(transform().mLocation);
     }
     bSpline.mPoints = points;
 }
@@ -201,7 +201,7 @@ void AISystem::addTerrainCollision(TransformComponent &transform)
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;
-    auto objectPos = am::Vec2{transform.mPosition.x, transform.mPosition.z};
+    auto objectPos = am::Vec2{transform.mLocation.x, transform.mLocation.z};
     am::Vec3 res;
 
     for (unsigned int i = 0; i < indices.size(); i+=3) {
@@ -213,7 +213,7 @@ void AISystem::addTerrainCollision(TransformComponent &transform)
             auto u = vertices[indices[i]].mPosition;
             auto v = vertices[indices[i+1]].mPosition;
             auto w = vertices[indices[i+2]].mPosition;
-            transform.mPosition.y = res.x * u.y + res.y * v.y + res.z * w.y + 0.5f;
+            transform.mLocation.y = res.x * u.y + res.y * v.y + res.z * w.y + 0.5f;
         }
     }
 }

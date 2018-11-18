@@ -54,7 +54,7 @@ EntityHandle EntityFactory::createPointLight(const std::string &name, const am::
     pointLight.mShader = mDefaultShader;
     pointLight.mDiff = color;
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MeshComponent mesh{mMeshFactory.createSphere()};
     MaterialComponent material;
     material.mIsLight = true;
@@ -74,7 +74,7 @@ EntityHandle EntityFactory::createSpotlight(const std::string &name, const am::V
     SpotlightComponent spotlight(lightInstance++, dir, color);
     spotlight.mShader = mDefaultShader;
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MeshComponent mesh{mMeshFactory.createSphere()};
     MaterialComponent material;
     material.mIsLight = true;
@@ -93,11 +93,11 @@ EntityHandle EntityFactory::createCube(const std::string &name, const am::Vec3 &
     MeshComponent mesh{mMeshFactory.createCube()};
     MaterialComponent material;
     material.mDiffuseColor = color;
-    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("stoneTile"));
+//    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("stoneTile"));
 //    material.mTextures.push_back(mMaterialFactory.getEmissionTexture("innSpec"));
 //    material.mTextures.push_back(mMaterialFactory.getSpecularTexture("innSpec"));
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);
@@ -112,7 +112,7 @@ EntityHandle EntityFactory::createSphere(const std::string &name, const am::Vec3
     MaterialComponent material;
     material.mDiffuseColor = color;
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);
@@ -125,7 +125,7 @@ EntityHandle EntityFactory::createModel(const std::string &name, const std::stri
     auto entity = mWorld.createEntity(name);
     ModelComponent model{mMeshFactory.createModel(Path::models + path)};
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MaterialComponent material;
     material.mHasDiffMap = true;
     material.mHasSpecMap = true;
@@ -144,7 +144,7 @@ EntityHandle EntityFactory::createPlayerCube(const std::string &name, const am::
     material.mDiffuseColor = color;
     material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("kermit"));
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
     entity.addComponent(mesh);
@@ -164,7 +164,7 @@ EntityHandle EntityFactory::createPlayerSphere(const std::string &name, const am
     material.mDiffuseColor = color;
 //    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("container"));
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
     entity.addComponent(mesh);
@@ -180,11 +180,12 @@ EntityHandle EntityFactory::createPlayerModel(const std::string &name, const am:
     // Consists of: Mesh, Material, Transform, Movement, Input
     auto entity = mWorld.createEntity(name);
     ModelComponent mesh{mMeshFactory.createModel(Path::models + "alien/alien.fbx")};
-    MaterialComponent material;
-    material.mDiffuseColor = color;
-//    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("container"));
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
+    MaterialComponent material;
+    material.mHasDiffMap = true;
+    material.mHasSpecMap = true;
+//    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("container"));
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
     entity.addComponent(mesh);
@@ -200,7 +201,7 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
     // Consists of: Transform, Movement, Input, Camera, FreeCamera
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     transform.mRotation.yaw() = -90.0f;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
@@ -221,7 +222,7 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
     MathTerrainGenerator terrainGen{min, max, 0.1f};
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MeshComponent mesh{mMeshFactory.createTerrain(std::to_string(-min * max), terrainGen.mVertices, terrainGen.mIndices)};
     MaterialComponent material;
     material.mDiffuseColor = color;
@@ -244,7 +245,7 @@ EntityHandle EntityFactory::createLasTerrain(const std::string &name, const am::
     LazTerrainGenerator terrainGen("data.las", 1.0f);
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MeshComponent mesh{mMeshFactory.createTerrain(terrainGen.mPath, terrainGen.mVertices, terrainGen.mIndices)};
     MaterialComponent material;
     material.mDiffuseColor = color;
@@ -291,7 +292,7 @@ EntityHandle EntityFactory::createPhysicsBall(const std::string &name, const am:
     material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("grass"));
     material.mDiffuseColor = color;
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     MovementComponent movement;
     PhysicsComponent physics;
     entity.addComponent(mesh);
@@ -310,7 +311,7 @@ EntityHandle EntityFactory::createAISphere(const std::string &name, const am::Ve
     MaterialComponent material;
     material.mDiffuseColor = color;
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     BSplineComponent bSpline;
     entity.addComponent(mesh);
     entity.addComponent(material);
@@ -327,7 +328,7 @@ EntityHandle EntityFactory::createAIModel(const std::string &name, const std::st
     MaterialComponent material;
     material.mDiffuseColor = color;
     TransformComponent transform;
-    transform.mPosition = pos;
+    transform.mLocation = pos;
     transform.mScale = am::Vec3(0.5);
     BSplineComponent bSpline;
     entity.addComponent(mesh);

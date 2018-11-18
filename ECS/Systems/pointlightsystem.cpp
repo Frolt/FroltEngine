@@ -24,7 +24,7 @@ void PointLightSystem::update(float)
 void PointLightSystem::updateUniforms(const PointLightComponent &dirLight, const TransformComponent &transform) const
 {
 //    dirLight.mShader.use();
-    dirLight.mShader.setVec3("pointLights[" + std::to_string(dirLight.mLightInstance) + "].position", transform.mPosition);
+    dirLight.mShader.setVec3("pointLights[" + std::to_string(dirLight.mLightInstance) + "].position", transform.mLocation);
     dirLight.mShader.setVec3("pointLights[" + std::to_string(dirLight.mLightInstance) + "].diffuse", dirLight.mDiff);
     dirLight.mShader.setFloat("pointLights[" + std::to_string(dirLight.mLightInstance) + "].constant", dirLight.mConstant);
     dirLight.mShader.setFloat("pointLights[" + std::to_string(dirLight.mLightInstance) + "].linear", dirLight.mLinear);

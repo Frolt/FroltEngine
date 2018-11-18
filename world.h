@@ -49,18 +49,19 @@ public:
     template<typename T>
     T *getComponent(EntityID entity);
 
-    // TODO snakk med ole, støtter ikke user defined klasser, må recompile
     // Unpack function
     template<typename T>
     void unpack(EntityID entity, ComponentHandle<T> &handle);
     template<typename T, typename ...Args>
     void unpack(EntityID entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
 
+    // Others
+    void activateCamera(EntityID entity);
+
 private:
     std::unique_ptr<EntityManager> mEntityManager;
     std::vector<std::unique_ptr<BaseComponentManager>> mComponentManagers;
     std::vector<std::unique_ptr<System>> mSystems;
-    // TODO snakk med Ole, hash tregere enn reblack tree?
     std::unordered_map<EntityID, ComponentMask> mEntityMasks;
     // TODO snakk med Ole, engine ref i world
 public:

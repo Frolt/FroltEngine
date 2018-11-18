@@ -43,7 +43,7 @@ void modelRenderSystem::updateTransformUniforms(const Shader shader, const Trans
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
     am::Mat4 modelMatrix;
-    modelMatrix.translate(transform.mPosition);
+    modelMatrix.translate(transform.mLocation);
     modelMatrix.rotate(transform.mRotation.yaw(), am::up());
     modelMatrix.rotate(transform.mRotation.pitch(), am::right());
     modelMatrix.rotate(transform.mRotation.roll(), am::forward());

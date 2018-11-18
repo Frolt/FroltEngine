@@ -32,14 +32,14 @@ bool CollisionSystem::checkCollision(EntityID entity1, EntityID entity2)
     ch::Collision collision;
 
     mWorld->unpack(entity1, transform, collision);
-    auto aPos = transform().mPosition;
+    auto aPos = transform().mLocation;
     auto aSize = collision().mSize;
     aPos.x -= aSize.x;
     aPos.y += aSize.y;
     aPos.z -= aSize.z;
 
     mWorld->unpack(entity2, transform, collision);
-    auto bPos = transform().mPosition;
+    auto bPos = transform().mLocation;
     auto bSize = collision().mSize;
     bPos.x -= bSize.x;
     bPos.y += bSize.y;
@@ -64,7 +64,7 @@ void CollisionSystem::checkTerrainCollision(EntityID entity)
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;
-    auto objectPos = am::Vec2{transform().mPosition.x, transform().mPosition.z};
+    auto objectPos = am::Vec2{transform().mLocation.x, transform().mLocation.z};
     am::Vec3 result;
 
     for (unsigned int i = 0; i < indices.size(); i+=3) {
@@ -77,8 +77,8 @@ void CollisionSystem::checkTerrainCollision(EntityID entity)
             auto v = vertices[indices[i+1]].mPosition;
             auto w = vertices[indices[i+2]].mPosition;
             float yValue = result.x * u.y + result.y * v.y + result.z * w.y + 0.5f;
-            if (transform().mPosition.y < yValue)
-                transform().mPosition.y = yValue;
+            if (transform().mLocation.y < yValue)
+                transform().mLocation.y = yValue;
         }
     }
 }

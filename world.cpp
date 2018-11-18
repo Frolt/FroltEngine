@@ -201,3 +201,16 @@ unsigned int World::getNumberOfEntities()
 {
     return static_cast<unsigned int>(mEntityManager->numOfEntities());
 }
+
+void World::activateCamera(EntityID entity)
+{
+    if (hasComponent<CameraComponent>(entity)) {
+        auto *manager = static_cast<ComponentManager<CameraComponent> *>(mComponentManagers[CameraComponent::family()].get());
+        std::function disableCamera = [](CameraComponent &cameraComp) { cameraComp.mActive = false; };
+        manager->iterateAll(disableCamera);
+        auto camera = manager->getComponent(entity);
+        camera->mActive = true;
+    } else {
+        qDebug() << "ERROR:: entity does not have a camera";
+    }
+}

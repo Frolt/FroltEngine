@@ -31,7 +31,7 @@ void PhysicsSystem::applyGravity(TransformComponent &transform, MovementComponen
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;
-    auto objectPos = am::Vec2{transform.mPosition.x, transform.mPosition.z};
+    auto objectPos = am::Vec2{transform.mLocation.x, transform.mLocation.z};
     am::Vec3 P;
     am::Vec3 Q;
     am::Vec3 R;
@@ -58,10 +58,10 @@ void PhysicsSystem::applyGravity(TransformComponent &transform, MovementComponen
         }
     }
     am::Vec3 N;
-    if (transform.mPosition.y >= triangleHeight + 1.0f) {
+    if (transform.mLocation.y >= triangleHeight + 1.0f) {
         N = am::zero();
     } else {
-        transform.mPosition.y = triangleHeight + 1.0f;
+        transform.mLocation.y = triangleHeight + 1.0f;
         N = normal * G.length() * normal.y;
     }
     movement.mVelocity += (1.0f / mass) * (N + G);

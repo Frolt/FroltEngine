@@ -30,11 +30,13 @@ void FreeCameraSystem::update(float)
     ch::Movement movement;
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, transform, camera, freeCamera, input, movement);
-        processKeyboard(input, movement, freeCamera);
-        processMouse(input, freeCamera, transform);
-        processScroll(freeCamera, input);
-        updateCameraVectors(transform, freeCamera);
-        updateUniforms(transform, freeCamera, camera, mWorld->getEntity(entity));
+        if (camera().mActive) {
+            processKeyboard(input, movement, freeCamera);
+            processMouse(input, freeCamera, transform);
+            processScroll(freeCamera, input);
+            updateCameraVectors(transform, freeCamera);
+            updateUniforms(transform, freeCamera, camera, mWorld->getEntity(entity));
+        }
     }
 }
 
@@ -131,7 +133,7 @@ void FreeCameraSystem::updateCameraVectors(const TransformComponent &transform, 
 
 void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera, EntityHandle entity) const
 {
-    auto view = am::Mat4::lookAt(entity.getWorldLocation(), transform.mPosition + freeCamera.mFront, freeCamera.mWorldUp);
+    auto view = am::Mat4::lookAt(entity.getWorldLocation(), transform.mLocation + freeCamera.mFront, freeCamera.mWorldUp);
     auto projection = am::Mat4::perspective(am::toRadians(freeCamera.mZoom), mWorld->mEngine.mViewport->mAspect, 0.1f, 1000.0f);
     camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);

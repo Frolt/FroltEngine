@@ -20,7 +20,7 @@ public:
     virtual void destroyComponent(EntityID entity) override;
     T *getComponent(EntityID entity);
     bool hasComponent(EntityID entity) const;
-    void iterateAll(std::function<void(T component)> lambda);
+    void iterateAll(std::function<void(T &component)> lambda);
 
 private:
     std::unordered_map<EntityID, unsigned int> mEntityMap;
@@ -68,13 +68,21 @@ void ComponentManager<T>::destroyComponent(EntityID entity)
             }
         }
     }
+    else {
+        qDebug() << "ERROR:: Trying to destroy a component the entity does not have";
+    }
 }
 
 template<typename T>
 T *ComponentManager<T>::getComponent(EntityID entity)
 {
-    auto index = mEntityMap.at(entity);
-    return &mComponents[index];
+    auto search = mEntityMap.find(entity);
+    if (search != mEntityMap.end()) {
+        return &mComponents[search->second];
+    } else {
+        qDebug() << "ERROR:: Component not found";
+        return nullptr;
+    }
 }
 
 template<typename T>
@@ -87,10 +95,10 @@ bool ComponentManager<T>::hasComponent(EntityID entity) const
 }
 
 template<typename T>
-void ComponentManager<T>::iterateAll(std::function<void(T component)> lambda)
+void ComponentManager<T>::iterateAll(std::function<void(T &component)> lambda)
 {
-    for(unsigned int i = 0; i < mComponents.size; i++)
-        lambda(mComponents.data[i]);
+    for(unsigned int i = 0; i < mComponents.size(); i++)
+        lambda(mComponents[i]);
 }
 
 #endif // COMPONENTMANAGER_H

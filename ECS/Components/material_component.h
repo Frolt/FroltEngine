@@ -4,6 +4,7 @@
 #include "ECS/component.h"
 #include "a_math.h"
 #include "texture.h"
+#include "colors.h"
 
 // Forward declarations
 struct Texture;
@@ -14,9 +15,9 @@ struct MaterialComponent : public Component<MaterialComponent>
     MaterialComponent(const am::Vec3 &diffColor, const am::Vec3 &specColor = {1}, float shininess = 32.0f);
 
     std::vector<Texture> mTextures;
-    am::Vec3 mDiffuseColor{0.827f, 0.827f, 0.827f};
-    am::Vec3 mSpecularColor{0.5};
-    float mShininess{32.0f};
+    am::Vec3 mDiffuseColor{Color::fuchsia};
+    am::Vec3 mSpecularColor{1.0};
+    float mShininess{2.0f};
     bool mHasDiffMap{false};
     bool mHasSpecMap{false};
     bool mHasEmissionMap{false};

@@ -27,7 +27,7 @@ void CombatSystem::onCollisionEvent(CollisionEvent *event)
         ch::Material material;
         mWorld->unpack(player, transform, material);
         material().mDiffuseColor = Color::black;
-        transform().mPosition = am::up() * 1000.0f;
+        transform().mLocation = am::up() * 1000.0f;
     } else {
         mWorld->destroyEntity(other);
     }

@@ -18,7 +18,7 @@ void MovementSystem::update(float deltaTime)
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, transform, movement);
 
-        transform().mPosition += movement().mVelocity * deltaTime;
+        transform().mLocation += movement().mVelocity * deltaTime;
         movement().mVelocity += movement().mAcceleration * deltaTime;
     }
 }

@@ -25,7 +25,7 @@ void SpotlightSystem::updateUniforms(const SpotlightComponent &spotlight, const 
 {
 //    spotlight.mShader.use();
     spotlight.mShader.setVec3("spotLights[" + std::to_string(spotlight.mLightInstance) + "].direction", spotlight.mDir);
-    spotlight.mShader.setVec3("spotLights[" + std::to_string(spotlight.mLightInstance) + "].position", transform.mPosition);
+    spotlight.mShader.setVec3("spotLights[" + std::to_string(spotlight.mLightInstance) + "].position", transform.mLocation);
     spotlight.mShader.setVec3("spotLights[" + std::to_string(spotlight.mLightInstance) + "].diffuse", spotlight.mDiff);
     spotlight.mShader.setFloat("spotLights[" + std::to_string(spotlight.mLightInstance) + "].innerCone", cos(am::toRadians(spotlight.mInnerCone)));
     spotlight.mShader.setFloat("spotLights[" + std::to_string(spotlight.mLightInstance) + "].outerCone", cos(am::toRadians(spotlight.mOuterCone)));

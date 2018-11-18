@@ -32,23 +32,31 @@ struct EntityHandle
     // Utilities
     //--------------------------------------------------------------------------------------
     // Setters
-    void setRelativeLocation(const am::Vec3 &location); // done
-    void setRelativeRotation(const am::Vec3 &rotation); // done
-    void setRelativeScale(const am::Vec3 &scale); // done
-    void setWorldLocation(const am::Vec3 &location); // done
-    void setWorldRotation(const am::Vec3 &rotation);
-    void setWorldScale(const am::Vec3 &location);
+    void setRelativeLocation(const am::Vec3 &location);
+    void setRelativeRotation(const am::Vec3 &rotation);
+    void setRelativeScale(const am::Vec3 &scale);
+    void setWorldLocation(const am::Vec3 &location);    // TODO
+    void setWorldRotation(const am::Vec3 &rotation);    // TODO
+    void setWorldScale(const am::Vec3 &location);       // TODO
     // Adders
-    void addRelativeLocation(const am::Vec3 &location); // done
-    void addRelativeRotation(const am::Vec3 &rotation); // done
-    void addWorldLocation(const am::Vec3 &location); // done
-    void addWorldRotation(const am::Vec3 &location);
+    void addRelativeLocation(const am::Vec3 &location);
+    void addRelativeRotation(const am::Vec3 &rotation);
+    void addRelativeScale(const am::Vec3 &scale);
+    void addWorldLocation(const am::Vec3 &location);    // TODO
+    void addWorldRotation(const am::Vec3 &location);    // TODO
+    void addWorldScale(const am::Vec3 &scale);          // TODO
     // Getters
-    am::Vec3 getRelativeLocation(); // done
-    am::Vec3 getWorldLocation(); // done
+    am::Vec3 getRelativeLocation();
+    am::Vec3 getRelativeRotation();
+    am::Vec3 getRelativeScale();
+    am::Vec3 getWorldLocation();
+    am::Vec3 getWorldRotation();        // TODO
+    am::Vec3 getWorldScale();
+
+    am::Mat4 getModelMatrix();
 
 private:
-    void addParentLocation(Entity *entity, am::Vec3 &location);
+    am::Mat4 combineAncestorsTransforms(Entity *entity, am::Mat4 &prevModelMat);
     //--------------------------------------------------------------------------------------
 
 public:
