@@ -5,8 +5,6 @@
 
 struct ComponentMask
 {
-public:
-    ComponentMask() = default;
     bool isNewMatch(ComponentMask oldMask, ComponentMask systemMask) const;
     bool noLongerMatched(ComponentMask oldMask, ComponentMask systemMask) const;
     bool matches(ComponentMask other) const;

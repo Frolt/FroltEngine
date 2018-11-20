@@ -10,7 +10,7 @@ struct TransformComponent : public Component<TransformComponent>
 
     am::Vec3 mLocation;
     am::Vec3 mScale;
-    am::Vec3 mRotation;
+    am::Rotator mRotation;
 };
 
 #endif // TRANSFORM_COMPONENT_H

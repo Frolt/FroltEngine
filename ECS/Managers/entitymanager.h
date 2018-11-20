@@ -22,7 +22,7 @@ public:
 private:
     std::unordered_map<EntityID, std::string> mIDMap;
     std::unordered_map<std::string, Entity> mEntities;
-    static unsigned long long int nextID;
+    static size_t nextID;
 };
 
 #endif // ENTITYMANAGER_H

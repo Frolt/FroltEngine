@@ -4,8 +4,8 @@
 #include <utility>
 
 // Counter wrapper
-struct ComponentCounter {
-  static unsigned int counter;
+struct FamilyCounter {
+    static unsigned int ID;
 };
 
 // Interface for components
@@ -14,6 +14,7 @@ struct Component
 {
 protected:
     Component() = default;
+    virtual ~Component() = default;
 public:
     static unsigned int family();
 };
@@ -26,15 +27,8 @@ template<typename T>
 unsigned int Component<T>::family()
 {
     // id will only initialize once
-    static unsigned int id = ComponentCounter::counter++;
-    return id;
-}
-
-// TODO Not using atm
-// Static method for getting component type id
-template <typename T>
-static unsigned int getComponentFamily() {
-  return Component<T>::family();
+    static unsigned int ID = FamilyCounter::ID++;
+    return ID;
 }
 
 #endif // COMPONENT_H

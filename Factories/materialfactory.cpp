@@ -9,32 +9,38 @@ MaterialFactory::MaterialFactory()
 
 Texture MaterialFactory::getDiffuseTexture(const std::string &key)
 {
-    if (mTextures.find(key) == mTextures.end()) {
+    auto search = mTextures.find(key);
+    if (search == mTextures.end()) {
         qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
+        return Texture();
+    } else {
+        search->second.mType = "diffuseMap";
+        return search->second;
     }
-    auto texture = mTextures[key];
-    texture.mType = "diffuseMap";
-    return texture;
 }
 
 Texture MaterialFactory::getSpecularTexture(const std::string &key)
 {
-    if (mTextures.find(key) == mTextures.end()) {
+    auto search = mTextures.find(key);
+    if (search == mTextures.end()) {
         qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
+        return Texture();
+    } else {
+        search->second.mType = "specularMap";
+        return search->second;
     }
-    auto texture = mTextures[key];
-    texture.mType = "specularMap";
-    return texture;
 }
 
 Texture MaterialFactory::getEmissionTexture(const std::string &key)
 {
-    if (mTextures.find(key) == mTextures.end()) {
+    auto search = mTextures.find(key);
+    if (search == mTextures.end()) {
         qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
+        return Texture();
+    } else {
+        search->second.mType = "emissionMap";
+        return search->second;
     }
-    auto texture = mTextures[key];
-    texture.mType = "emissionMap";
-    return texture;
 }
 
 void MaterialFactory::loadTextures()

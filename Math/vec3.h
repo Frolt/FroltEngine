@@ -10,6 +10,12 @@ namespace am
 {
     // Forward declarations
     struct Vec4;
+    struct Vec3;
+
+    // Type alias
+    using Vec = Vec3;
+    using Color = Vec3;
+    using Rotator = Vec3;
 
     struct Vec3
     {
@@ -37,19 +43,25 @@ namespace am
         float length() const;
         void normalize();
         void print();
-        float &yaw();
-        float &pitch();
-        float &roll();
-        float yaw() const;
-        float pitch() const;
-        float roll() const;
-        std::array<float, 3> getArray() const;
+        const float *data() const;
         friend QDebug operator<<(QDebug out, const Vec3 &rhs);
         friend std::ostream &operator<<(std::ostream &out, const Vec3 &rhs);
 
-        float x;
-        float y;
-        float z;
+        union
+        {
+            struct
+            {
+                float x, y, z;
+            };
+            struct
+            {
+                float r, g, b;
+            };
+            struct
+            {
+                float yaw, pitch, roll;
+            };
+        };
     };
 
     Vec3 cross(const Vec3 &a, const Vec3 &b);

@@ -41,22 +41,22 @@ ComponentManager<T>::ComponentManager(std::size_t size)
 template<typename T>
 void ComponentManager<T>::addComponent(EntityID entity, const T &component)
 {
-    unsigned int newIndex{mSize};
-    if (mEntityMap.find(entity) == mEntityMap.end()) {
-        mEntityMap[entity] = newIndex;
-        mComponents[newIndex] = component;
-        mSize++;
+    auto search = mEntityMap.find(entity);
+    if (search == mEntityMap.end()) {
+        mEntityMap[entity] = mSize;
+        mComponents[mSize++] = component;
     } else {
-        qDebug() << "ERROR:: Component already exist";
+        qDebug() << "WARNING:: Component already exist";
     }
 }
 
 template<typename T>
 void ComponentManager<T>::destroyComponent(EntityID entity)
 {
-    if (mEntityMap.find(entity) != mEntityMap.end()) {
+    auto search = mEntityMap.find(entity);
+    if (search != mEntityMap.end()) {
         // Moves the last component into the index we want to delete
-        auto index = mEntityMap.at(entity);
+        auto index = search->second;
         mComponents[index] = std::move(mComponents[--mSize]);
         mEntityMap.erase(entity);
 
@@ -68,9 +68,9 @@ void ComponentManager<T>::destroyComponent(EntityID entity)
             }
         }
     }
-    else {
-        qDebug() << "ERROR:: Trying to destroy a component the entity does not have";
-    }
+//    else {
+//        qDebug() << "WARNING:: Trying to destroy a component the entity does not have";
+//    }
 }
 
 template<typename T>
@@ -80,7 +80,7 @@ T *ComponentManager<T>::getComponent(EntityID entity)
     if (search != mEntityMap.end()) {
         return &mComponents[search->second];
     } else {
-        qDebug() << "ERROR:: Component not found";
+        qDebug() << "WARNING:: Component not found";
         return nullptr;
     }
 }

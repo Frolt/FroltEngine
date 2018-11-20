@@ -52,7 +52,7 @@ void EntityHandle::setRelativeLocation(const am::Vec3 &location)
     transform().mLocation = location;
 }
 
-void EntityHandle::setRelativeRotation(const am::Vec3 &rotation)
+void EntityHandle::setRelativeRotation(const am::Rotator &rotation)
 {
     ch::Transform transform;
     mWorld->unpack(mEntity->mID, transform);
@@ -67,21 +67,6 @@ void EntityHandle::setRelativeScale(const am::Vec3 &scale)
     transform().mScale = scale;
 }
 
-void EntityHandle::setWorldLocation(const am::Vec3 &location)
-{
-    // TODO
-}
-
-void EntityHandle::setWorldRotation(const am::Vec3 &rotation)
-{
-    // TODO
-}
-
-void EntityHandle::setWorldScale(const am::Vec3 &location)
-{
-    // TODO
-}
-
 void EntityHandle::addRelativeLocation(const am::Vec3 &location)
 {
     ch::Transform transform;
@@ -89,7 +74,7 @@ void EntityHandle::addRelativeLocation(const am::Vec3 &location)
     transform().mLocation += location;
 }
 
-void EntityHandle::addRelativeRotation(const am::Vec3 &rotation)
+void EntityHandle::addRelativeRotation(const am::Rotator &rotation)
 {
     ch::Transform transform;
     mWorld->unpack(mEntity->mID, transform);
@@ -102,20 +87,6 @@ void EntityHandle::addRelativeScale(const am::Vec3 &scale)
     mWorld->unpack(mEntity->mID, transform);
     transform().mScale += scale;
 }
-void EntityHandle::addWorldLocation(const am::Vec3 &location)
-{
-    // TODO
-}
-
-void EntityHandle::addWorldRotation(const am::Vec3 &location)
-{
-    // TODO
-}
-
-void EntityHandle::addWorldScale(const am::Vec3 &scale)
-{
-    // TODO
-}
 
 am::Vec3 EntityHandle::getRelativeLocation()
 {
@@ -124,7 +95,7 @@ am::Vec3 EntityHandle::getRelativeLocation()
     return transform().mLocation;
 }
 
-am::Vec3 EntityHandle::getRelativeRotation()
+am::Rotator EntityHandle::getRelativeRotation()
 {
     ch::Transform transform;
     mWorld->unpack(mEntity->mID, transform);
@@ -142,12 +113,6 @@ am::Vec3 EntityHandle::getWorldLocation()
 {
     auto model = getModelMatrix();
     return {model(0, 3), model(1, 3), model(2, 3)};
-}
-
-am::Vec3 EntityHandle::getWorldRotation()
-{
-    // TODO
-    return am::zero();
 }
 
 am::Vec3 EntityHandle::getWorldScale()
@@ -171,9 +136,9 @@ am::Mat4 EntityHandle::combineAncestorsTransforms(Entity *entity, am::Mat4 &prev
     mWorld->unpack(entity->mID, transform);
     am::Mat4 curModelMat;
     curModelMat.translate(transform().mLocation);
-    curModelMat.rotate(transform().mRotation.yaw(), am::up());
-    curModelMat.rotate(transform().mRotation.pitch(), am::right());
-    curModelMat.rotate(transform().mRotation.roll(), am::forward());
+    curModelMat.rotate(transform().mRotation.yaw, am::up());
+    curModelMat.rotate(transform().mRotation.pitch, am::right());
+    curModelMat.rotate(transform().mRotation.roll, am::forward());
     curModelMat.scale(transform().mScale);
 
     auto combined = curModelMat * prevModelMat;

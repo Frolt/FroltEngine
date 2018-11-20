@@ -17,13 +17,13 @@ public:
     void setBool(const std::string &name, bool value) const;
     void setInt(const std::string &name, int value) const;
     void setFloat(const std::string &name, float value) const;
+    void setVec3(const std::string &name, const am::Vec3 &vec) const;
     void setMat3(const std::string &name, const am::Mat3 &mat) const;
     void setMat4(const std::string &name, const am::Mat4 &mat) const;
-    void setVec3(const std::string &name, const am::Vec3 &vec) const;
 
     // Program ID
     unsigned int ID{0};
-    QOpenGLFunctions_4_1_Core *gl = new QOpenGLFunctions_4_1_Core;
+    std::shared_ptr<QOpenGLFunctions_4_1_Core> gl = std::make_shared<QOpenGLFunctions_4_1_Core>();
 };
 
 #endif // SHADER_H

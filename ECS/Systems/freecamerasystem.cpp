@@ -91,10 +91,10 @@ void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCamer
         xOffset *= freeCamera.mMouseSense;
         yOffset *= freeCamera.mMouseSense;
 
-        transform.mRotation.yaw() += xOffset;
-        transform.mRotation.pitch() += yOffset;
-        transform.mRotation.yaw() = am::mod(transform.mRotation.yaw(), 360.0f);
-        transform.mRotation.pitch() = am::clamp(transform.mRotation.pitch(), -89.0f, 89.0f);
+        transform.mRotation.yaw += xOffset;
+        transform.mRotation.pitch += yOffset;
+        transform.mRotation.yaw = am::mod(transform.mRotation.yaw, 360.0f);
+        transform.mRotation.pitch = am::clamp(transform.mRotation.pitch, -89.0f, 89.0f);
     }
 }
 
@@ -122,9 +122,9 @@ void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, const Inpu
 void FreeCameraSystem::updateCameraVectors(const TransformComponent &transform, FreeCameraComponent &freeCamera) const
 {
     am::Vec front;
-    front.x = cos(am::toRadians(transform.mRotation.yaw())) * cos(am::toRadians(transform.mRotation.pitch()));
-    front.y = sin(am::toRadians(transform.mRotation.pitch()));
-    front.z = sin(am::toRadians(transform.mRotation.yaw())) * cos(am::toRadians(transform.mRotation.pitch()));
+    front.x = cos(am::toRadians(transform.mRotation.yaw)) * cos(am::toRadians(transform.mRotation.pitch));
+    front.y = sin(am::toRadians(transform.mRotation.pitch));
+    front.z = sin(am::toRadians(transform.mRotation.yaw)) * cos(am::toRadians(transform.mRotation.pitch));
     freeCamera.mFront = am::normalize(front);
 
     freeCamera.mRight = am::normalize(am::cross(freeCamera.mFront, freeCamera.mWorldUp));

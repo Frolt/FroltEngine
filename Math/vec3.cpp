@@ -112,39 +112,9 @@ namespace am
         std::cout << "(" << x << "," << y << "," << z << ")\n";
     }
 
-    float &Vec3::yaw()
+    const float * Vec3::data() const
     {
-        return x;
-    }
-
-    float &Vec3::pitch()
-    {
-        return y;
-    }
-
-    float &Vec3::roll()
-    {
-        return z;
-    }
-
-    float Vec3::yaw() const
-    {
-        return x;
-    }
-
-    float Vec3::pitch() const
-    {
-        return y;
-    }
-
-    float Vec3::roll() const
-    {
-        return z;
-    }
-
-    std::array<float, 3> Vec3::getArray() const
-    {
-        return {{ x, y, z }};
+        return &x;
     }
 
     QDebug operator<<(QDebug out, const Vec3 &rhs)

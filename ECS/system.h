@@ -35,8 +35,7 @@ class EventBus;
 class System
 {
 public:
-    System() = default;
-    virtual ~System();
+    virtual ~System() = default;
     virtual void beginPlay();
     virtual void update(float deltaTime);
 

@@ -16,6 +16,14 @@
 
 namespace am
 {
+    // Forward declarations
+    template <size_t row, size_t col>
+    struct Matrix;
+
+    // Type alias
+    using Mat3 = Matrix<3, 3>;
+    using Mat4 = Matrix<4, 4>;
+
     template <size_t row, size_t col>
     struct Matrix
     {

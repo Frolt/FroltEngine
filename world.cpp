@@ -131,12 +131,14 @@ void World::destroyEntity(EntityID entity)
     for (auto &manager : mComponentManagers) {
         if (!manager)
             break;
-        manager->destroyComponent(entityPtr->mID);
+        manager->destroyComponent(entity);
     }
+
     // Update mask
     ComponentMask oldMask = mEntityMasks[entityPtr->mID];
     mEntityMasks[entityPtr->mID].reset();
     updateSystems(entityPtr->mID, oldMask);
+
     // Destroy mask and entity
     mEntityMasks.erase(entityPtr->mID);
     mEntityManager->destroyEntity(entityPtr->mID);
@@ -156,10 +158,12 @@ void World::destroyEntity(const Entity &entity)
             break;
         manager->destroyComponent(entity.mID);
     }
+
     // Update mask
     ComponentMask oldMask = mEntityMasks[entity.mID];
     mEntityMasks[entity.mID].reset();
     updateSystems(entity.mID, oldMask);
+
     // Destroy mask and entity
     mEntityMasks.erase(entity.mID);
     mEntityManager->destroyEntity(entity.mID);

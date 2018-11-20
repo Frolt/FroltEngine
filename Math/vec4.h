@@ -19,10 +19,17 @@ namespace am
         friend std::ostream &operator<<(std::ostream &out, const Vec4 &rhs);
         friend QDebug operator<<(QDebug out, const Vec4 &rhs);
 
-        float x;
-        float y;
-        float z;
-        float w;
+        union
+        {
+            struct
+            {
+                float x, y, z, w;
+            };
+            struct
+            {
+                float r, g, b, a;
+            };
+        };
     };
 }
 #endif // VEC4_H

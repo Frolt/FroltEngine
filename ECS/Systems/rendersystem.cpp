@@ -29,7 +29,7 @@ void RenderSystem::update(float)
     }
 }
 
-void RenderSystem::updateMaterialUniforms(Shader shader, MaterialComponent &material)
+void RenderSystem::updateMaterialUniforms(const Shader shader, MaterialComponent &material)
 {
     // Set uniform samplers(textures)
     unsigned int diffuseNr = 1;

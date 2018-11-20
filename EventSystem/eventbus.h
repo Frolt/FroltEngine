@@ -7,18 +7,19 @@
 #include "basememberfunctionhandler.h"
 #include "memberfunctionhandler.h"
 #include <iostream>
+#include <memory>
 
 class EventBus
 {
 public:
     template<class EventType>
-    void publish(EventType * event);
+    void publish(std::unique_ptr<EventType> event);
 
     template<class ClassInstance, class EventType>
     void subscribe(ClassInstance *instance, void(ClassInstance::*memberFunction)(EventType *));
 
 public:
-    std::map<std::type_index, std::vector<BaseMemberFunctionHandler*>> mSubscribers;
+    std::map<std::type_index, std::vector<std::unique_ptr<BaseMemberFunctionHandler>>> mSubscribers;
 };
 
 //--------------------------------------------------------------------------------------
@@ -26,14 +27,14 @@ public:
 //--------------------------------------------------------------------------------------
 
 template<class EventType>
-void EventBus::publish(EventType *event)
+void EventBus::publish(std::unique_ptr<EventType> event)
 {
     // Get the array of memberFunctions for the specific EventType
     auto &memberFunctionArray = mSubscribers[typeid(EventType)];
 
     // Calls all the member functions associated with the EventType
     for (auto &memberFunction : memberFunctionArray) {
-        memberFunction->call(event);
+        memberFunction->call(std::move(event));
     }
 }
 
@@ -44,7 +45,7 @@ void EventBus::subscribe(ClassInstance *instance, void(ClassInstance::*memberFun
     auto &memberFunctionArray = mSubscribers[typeid(EventType)];
 
     // Add the new member function
-    memberFunctionArray.push_back(new MemberFunctionHandler<ClassInstance, EventType>(instance, memberFunction));
+    memberFunctionArray.push_back(std::make_unique<MemberFunctionHandler<ClassInstance, EventType>>(instance, memberFunction));
 }
 
 #endif // EVENTBUS_H

@@ -38,13 +38,24 @@ void EntityManager::destroyEntity(const Entity &entity)
 
 Entity *EntityManager::getEntity(const std::string &name)
 {
-    return &mEntities.at(name);
+    auto search = mEntities.find(name);
+    if (search != mEntities.end()) {
+        return &search->second;
+    } else {
+        qDebug() << "ERROR:: no entity named \"" << name.c_str() << "\" exist";
+        return nullptr;
+    }
 }
 
 Entity *EntityManager::getEntity(EntityID entity)
 {
-    std::string &name = mIDMap[entity];
-    return &mEntities.at(name);
+    auto search = mIDMap.find(entity);
+    if (search != mIDMap.end()) {
+        return &mEntities[search->second];
+    } else {
+        qDebug() << "ERROR:: no entity with ID \"" << entity << "\" exist";
+        return nullptr;
+    }
 }
 
 bool EntityManager::entityExist(const std::string &name) const

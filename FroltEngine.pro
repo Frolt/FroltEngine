@@ -32,6 +32,7 @@ SOURCES += \
     Math/vec2.cpp \
     Math/vec3.cpp \
     Math/vec4.cpp \
+    Math/colors.cpp \
     LAS/lasreader.cpp \
     Libraries/Include/stb_image.cpp \
     world.cpp \
@@ -39,7 +40,6 @@ SOURCES += \
     mesh.cpp \
     texture.cpp \
     paths.cpp \
-    colors.cpp \
     mathterraingenerator.cpp \
     lazterraingenerator.cpp \
     Factories/materialfactory.cpp \
@@ -101,10 +101,10 @@ HEADERS += \
     Math/vec2.h \
     Math/vec3.h \
     Math/vec4.h \
+    Math/colors.h \
     LAS/headerstock.h \
     LAS/lasreader.h \
     Libraries/Include/stb_image.h \
-    enums.h \
     paths.h \
     inputstate.h \
     ECS/entity.h \
@@ -133,7 +133,6 @@ HEADERS += \
     ECS/Systems/directionallightsystem.h \
     ECS/Systems/pointlightsystem.h \
     ECS/Systems/spotlightsystem.h \
-    colors.h \
     Factories/entityfactory.h \
     Factories/meshfactory.h \
     ECS/Systems/playersystem.h \
@@ -189,8 +188,5 @@ DEPENDPATH += $$PWD/Libraries/Include
 # Shader files
 # --------------------------------------------------------------
 DISTFILES += \
-    Shaders/ColorObject.frag \
-    Shaders/LightObject.frag \
-    Shaders/LightSource.frag \
-    Shaders/TextureObject.frag \
-    Shaders/VertexShader.vert
+    Shaders/VertexShader.vert \
+    Shaders/PhongShader.frag

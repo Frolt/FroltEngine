@@ -11,11 +11,6 @@
 
 namespace am
 {
-    // Type alias
-    using Mat3 = Matrix<3, 3>;
-    using Mat4 = Matrix<4, 4>;
-    using Vec = Vec3;
-
     // Functions
     float toDegrees(float rad);
     float toRadians(float deg);

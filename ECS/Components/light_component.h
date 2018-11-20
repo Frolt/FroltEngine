@@ -8,6 +8,7 @@ struct LightComponent
 {
 protected:
     LightComponent() = default;
+    virtual ~LightComponent() = default;
     LightComponent(const am::Vec3 &diff);
 public:
     Shader mShader;

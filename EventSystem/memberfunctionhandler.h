@@ -12,7 +12,7 @@ public:
 
     MemberFunctionHandler(ClassInstance *instance, MemberFunction memberFunction);
 
-    void call(Event *evnt) override;
+    void call(std::unique_ptr<Event> event) override;
 
   private:
     // Pointer to class instance
@@ -32,10 +32,10 @@ MemberFunctionHandler<T, EventType>::MemberFunctionHandler(T *instance, MemberFu
 }
 
 template<class T, class EventType>
-void MemberFunctionHandler<T, EventType>::call(Event *event)
+void MemberFunctionHandler<T, EventType>::call(std::unique_ptr<Event> event)
 {
     // Cast event to the correct EventType, and call the member function pointer from the class instance
-    (mInstance->*mMemberFunction)(static_cast<EventType *>(event));
+    (mInstance->*mMemberFunction)(static_cast<EventType *>(event.get()));
 }
 
 #endif // MEMBERFUNCTIONHANDLER_H

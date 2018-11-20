@@ -183,6 +183,7 @@ EntityHandle EntityFactory::createPlayerModel(const std::string &name, const am:
     TransformComponent transform;
     transform.mLocation = pos;
     MaterialComponent material;
+    material.mDiffuseColor = color;
     material.mHasDiffMap = true;
     material.mHasSpecMap = true;
 //    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("container"));
@@ -202,7 +203,7 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
     transform.mLocation = pos;
-    transform.mRotation.yaw() = -90.0f;
+    transform.mRotation.yaw = -90.0f;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
     CameraComponent camera(mDefaultShader);

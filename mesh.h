@@ -21,7 +21,7 @@ public:
     std::vector<Vertex> mVertices;
     std::vector<unsigned int> mIndices;
     std::vector<Texture> mTextures;
-    QOpenGLFunctions_4_1_Core *gl = new QOpenGLFunctions_4_1_Core;
+    std::shared_ptr<QOpenGLFunctions_4_1_Core> gl = std::make_shared<QOpenGLFunctions_4_1_Core>();
 };
 
 #endif // MESH_H

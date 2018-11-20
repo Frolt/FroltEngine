@@ -43,7 +43,7 @@ void Engine::initialize()
     connect(mGameLoopTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
 
     // Create shaders
-    mPhongShader = Shader{Path::shaders + "VertexShader.vert", Path::shaders + "LightObject.frag"};
+    mPhongShader = Shader{Path::shaders + "VertexShader.vert", Path::shaders + "PhongShader.frag"};
     // Use shader
     mPhongShader.use();
     // Set  projection matrix
@@ -71,10 +71,9 @@ void Engine::initialize()
     sphere.addEntityComponent(cube1);
     cube1.addEntityComponent(cube2);
     sphere.setRelativeScale(am::Vec(2.0f, 2.0f, 2.0f));
-    sphere.setRelativeRotation(am::Vec(45.0f, 0.0f, 0.0f));
+    sphere.setRelativeRotation(am::Vec(0.0f, 0.0f, 0.0f));
     cube2.addRelativeLocation(am::forward() * 10.0f);
     cube2.addRelativeScale(am::Vec(3));
-    qDebug() << cube2.getRelativeLocation();
     auto testCube1 = player1.createEntityComponent("testCube1");
     testCube1.addComponent(TransformComponent(am::up() * 10.0f));
     testCube1.addComponent(MaterialComponent());
@@ -88,6 +87,7 @@ void Engine::initialize()
     testCube3.addComponent(MaterialComponent(Color::black, 50));
     testCube3.addComponent(mMeshFactory->createCube());
 
+    sphere.destroy();
 
 //    auto model1 = mEntityFactory->createModel("model1", "alien/alien.fbx", am::Vec{20.0f, 20.0f, 10.0f});
 //    auto model2 = mEntityFactory->createModel("model2", "nanosuit/nanosuit.obj", am::Vec{-10.0f, 0.0f, -10.0f});

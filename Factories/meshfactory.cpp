@@ -4,7 +4,6 @@
 #include "ECS/Components/model_component.h"
 #include "vertex.h"
 #include "paths.h"
-#include "enums.h"
 #include "octahedron.h"
 #include "modelloader.h"
 

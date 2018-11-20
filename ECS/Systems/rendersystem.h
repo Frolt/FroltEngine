@@ -11,7 +11,7 @@ public:
     void beginPlay() override;
     void update(float) override;
 
-    void updateMaterialUniforms(Shader shader, MaterialComponent &material);
+    void updateMaterialUniforms(const Shader shader, MaterialComponent &material);
     void updateTransformUniforms(const Shader shader, EntityHandle entity);
     void draw(const MeshComponent &mesh);
 };

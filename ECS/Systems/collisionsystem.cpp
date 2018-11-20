@@ -20,7 +20,7 @@ void CollisionSystem::update(float)
         // Check if player hit something
         if (entity != player) {
             if (checkCollision(player, entity)) {
-                mEventBus->publish(new CollisionEvent(player, entity));
+                mEventBus->publish(std::make_unique<CollisionEvent>(player, entity));
             }
         }
     }

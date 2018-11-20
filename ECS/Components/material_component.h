@@ -17,7 +17,7 @@ struct MaterialComponent : public Component<MaterialComponent>
     std::vector<Texture> mTextures;
     am::Vec3 mDiffuseColor{Color::fuchsia};
     am::Vec3 mSpecularColor{1.0};
-    float mShininess{2.0f};
+    float mShininess{32.0f};
     bool mHasDiffMap{false};
     bool mHasSpecMap{false};
     bool mHasEmissionMap{false};

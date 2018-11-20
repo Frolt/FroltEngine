@@ -4,7 +4,7 @@
 
 struct Event
 {
-
+    ~Event() = default;
 };
 
 #endif // EVENT_H

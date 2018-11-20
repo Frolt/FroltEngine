@@ -3,10 +3,11 @@
 #include <QOpenGLFunctions_4_1_Core>
 #include <QDebug>
 #include "stb_image.h"
+#include <memory>
 
 Texture::Texture(const std::string& path)
 {
-    QOpenGLFunctions_4_1_Core *gl = new QOpenGLFunctions_4_1_Core;
+    auto gl = std::make_unique<QOpenGLFunctions_4_1_Core>();
     gl->initializeOpenGLFunctions();
     // Texture settings
     gl->glGenTextures(1, &mID);
