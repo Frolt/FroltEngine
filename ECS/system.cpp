@@ -16,7 +16,7 @@ void System::setWorld(World *world)
     mWorld = world;
 }
 
-void System::setEventBus(EventBus *eventBus)
+void System::setEventBus(EventHandler *eventBus)
 {
     mEventBus = eventBus;
 }

@@ -10,7 +10,7 @@ void ModelLoader::loadModel(const std::string &path)
 {
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(path.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs);
-    if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         qDebug() << "ERROR::ASSIMP::" << importer.GetErrorString();
         return;
     }

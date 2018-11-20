@@ -18,11 +18,11 @@ struct EntityHandle
     EntityHandle createEntityComponent(const std::string &name);
     void addEntityComponent(Entity *entity);
     void addEntityComponent(const EntityHandle &entity);
-    template<typename T>
-    void addComponent(const T &component);
-    template<typename T>
+    template<typename ComponentType>
+    void addComponent(const ComponentType &component);
+    template<typename ComponentType>
     void removeComponent();
-    template<typename T>
+    template<typename ComponentType>
     bool hasComponent();
     Entity &operator()();
     const Entity &operator()() const;
@@ -70,22 +70,22 @@ private:
 
 #include "world.h"
 
-template<typename T>
-void EntityHandle::addComponent(const T &component)
+template<typename ComponentType>
+void EntityHandle::addComponent(const ComponentType &component)
 {
     mWorld->addComponent(mEntity->mID, component);
 }
 
-template<typename T>
+template<typename ComponentType>
 void EntityHandle::removeComponent()
 {
-    mWorld->removeComponent<T>(mEntity->mID);
+    mWorld->removeComponent<ComponentType>(mEntity->mID);
 }
 
-template<typename T>
+template<typename ComponentType>
 bool EntityHandle::hasComponent()
 {
-    return mWorld->hasComponent<T>(mEntity->mID);
+    return mWorld->hasComponent<ComponentType>(mEntity->mID);
 }
 
 #endif // ENTITYHANDLE_H

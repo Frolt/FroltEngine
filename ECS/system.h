@@ -23,14 +23,17 @@
 #include "ECS/Components/physics_component.h"
 #include "ECS/Components/bspline_component.h"
 #include "ECS/Components/collision_component.h"
+#include "ECS/Components/player_component.h"
+#include "ECS/Components/ai_component.h"
+#include "ECS/Components/third_person_camera_component.h"
 #include "world.h"
 #include "EventSystem/event.h"
-#include "EventSystem/eventbus.h"
+#include "EventSystem/eventhandler.h"
 #include "EventSystem/collisionevent.h"
 
 // Forward declarations
 class World;
-class EventBus;
+class EventHandler;
 
 class System
 {
@@ -40,7 +43,7 @@ public:
     virtual void update(float deltaTime);
 
     void setWorld(World *world);
-    void setEventBus(EventBus *eventBus);
+    void setEventBus(EventHandler *eventBus);
     void registerEntity(EntityID entity);
     void deRegisterEntity(EntityID entity);
 
@@ -52,7 +55,7 @@ protected:
     // but vector is good for iterating
     std::vector<EntityID> mRegisteredEntities;
     World *mWorld;
-    EventBus *mEventBus;
+    EventHandler *mEventBus;
 };
 
 #endif // SYSTEM_H

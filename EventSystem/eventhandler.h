@@ -1,7 +1,7 @@
-#ifndef EVENTBUS_H
-#define EVENTBUS_H
+#ifndef EVENTHANDLER_H
+#define EVENTHANDLER_H
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <typeindex>
 #include "basememberfunctionhandler.h"
@@ -9,7 +9,7 @@
 #include <iostream>
 #include <memory>
 
-class EventBus
+class EventHandler
 {
 public:
     template<class EventType>
@@ -19,7 +19,7 @@ public:
     void subscribe(ClassInstance *instance, void(ClassInstance::*memberFunction)(EventType *));
 
 public:
-    std::map<std::type_index, std::vector<std::unique_ptr<BaseMemberFunctionHandler>>> mSubscribers;
+    std::unordered_map<std::type_index, std::vector<std::unique_ptr<BaseMemberFunctionHandler>>> mSubscribers;
 };
 
 //--------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ public:
 //--------------------------------------------------------------------------------------
 
 template<class EventType>
-void EventBus::publish(std::unique_ptr<EventType> event)
+void EventHandler::publish(std::unique_ptr<EventType> event)
 {
     // Get the array of memberFunctions for the specific EventType
     auto &memberFunctionArray = mSubscribers[typeid(EventType)];
@@ -39,7 +39,7 @@ void EventBus::publish(std::unique_ptr<EventType> event)
 }
 
 template<class ClassInstance, class EventType>
-void EventBus::subscribe(ClassInstance *instance, void(ClassInstance::*memberFunction)(EventType *))
+void EventHandler::subscribe(ClassInstance *instance, void(ClassInstance::*memberFunction)(EventType *))
 {
     // Get the array of memberFunctions for the specific EventType
     auto &memberFunctionArray = mSubscribers[typeid(EventType)];
@@ -48,4 +48,4 @@ void EventBus::subscribe(ClassInstance *instance, void(ClassInstance::*memberFun
     memberFunctionArray.push_back(std::make_unique<MemberFunctionHandler<ClassInstance, EventType>>(instance, memberFunction));
 }
 
-#endif // EVENTBUS_H
+#endif // EVENTHANDLER_H

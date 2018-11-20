@@ -14,7 +14,7 @@ struct EntityHandle;
 class System;
 class BaseComponentManager;
 struct ComponentMask;
-template<typename T>
+template<typename ComponentType>
 struct ComponentHandle;
 class Engine;
 
@@ -38,22 +38,22 @@ public:
     bool entityExist(EntityID entity);
     bool entityExist(const std::string &name);
     unsigned int getNumberOfEntities();
-    template<typename T>
+    template<typename ComponentType>
     bool hasComponent(EntityID entity);
 
     // Add and remove component
-    template<typename T>
-    void addComponent(EntityID entity, const T &component);
-    template<typename T>
+    template<typename ComponentType>
+    void addComponent(EntityID entity, const ComponentType &component);
+    template<typename ComponentType>
     void removeComponent(EntityID entity);
-    template<typename T>
-    T *getComponent(EntityID entity);
+    template<typename ComponentType>
+    ComponentType *getComponent(EntityID entity);
 
     // Unpack function
-    template<typename T>
-    void unpack(EntityID entity, ComponentHandle<T> &handle);
-    template<typename T, typename ...Args>
-    void unpack(EntityID entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args);
+    template<typename ComponentType>
+    void unpack(EntityID entity, ComponentHandle<ComponentType> &handle);
+    template<typename ComponentType, typename ...Args>
+    void unpack(EntityID entity, ComponentHandle<ComponentType> &handle, ComponentHandle<Args> &...args);
 
     // Others
     void activateCamera(EntityID entity);
@@ -78,55 +78,55 @@ public:
 #include "ECS/component.h"
 #include "ECS/component_mask.h"
 
-template<typename T>
+template<typename ComponentType>
 bool World::hasComponent(EntityID entity)
 {
-    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
     return manager->hasComponent(entity);
 }
 
-template<typename T>
-void World::unpack(EntityID entity, ComponentHandle<T> &handle)
+template<typename ComponentType>
+void World::unpack(EntityID entity, ComponentHandle<ComponentType> &handle)
 {
-    handle = ComponentHandle<T>{this, entity};
+    handle = ComponentHandle<ComponentType>{this, entity};
 }
 
-template<typename T, typename ...Args>
-void World::unpack(EntityID entity, ComponentHandle<T> &handle, ComponentHandle<Args> &...args)
+template<typename ComponentType, typename ...Args>
+void World::unpack(EntityID entity, ComponentHandle<ComponentType> &handle, ComponentHandle<Args> &...args)
 {
-    handle = ComponentHandle<T>{this, entity};
+    handle = ComponentHandle<ComponentType>{this, entity};
     unpack<Args...>(entity, args ...);
 }
 
-template<typename T>
-void World::addComponent(EntityID entity, const T &component)
+template<typename ComponentType>
+void World::addComponent(EntityID entity, const ComponentType &component)
 {
     // add component
-    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
     manager->addComponent(entity, component);
 
     // update mask
     ComponentMask oldMask = mEntityMasks[entity];
-    mEntityMasks[entity].addComponent<T>();
+    mEntityMasks[entity].addComponent<ComponentType>();
     updateSystems(entity, oldMask);
 }
 
-template<typename T>
+template<typename ComponentType>
 void World::removeComponent(EntityID entity)
 {
-    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
     manager->destroyComponent(entity);
 
     // update mask
     ComponentMask oldMask = mEntityMasks[entity];
-    mEntityMasks[entity].removeCompoent<T>();
+    mEntityMasks[entity].removeCompoent<ComponentType>();
     updateSystems(entity, oldMask);
 }
 
-template<typename T>
-T *World::getComponent(EntityID entity)
+template<typename ComponentType>
+ComponentType *World::getComponent(EntityID entity)
 {
-    auto *manager = static_cast<ComponentManager<T> *>(mComponentManagers[T::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
     return manager->getComponent(entity);
 }
 

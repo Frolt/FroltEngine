@@ -1,5 +1,5 @@
-#ifndef COLORS_H
-#define COLORS_H
+#ifndef COLOR_H
+#define COLOR_H
 
 #include "vec3.h"
 
@@ -26,4 +26,4 @@ namespace Color
     const am::Color orangeRed{1.0f, 0.270f, 0.0f};
 };
 
-#endif // COLORS_H
+#endif // COLOR_H

@@ -12,7 +12,6 @@
 #include "ECS/Components/pointlight_component.h"
 #include "ECS/Components/spotlight_component.h"
 #include "ECS/Components/input_component.h"
-#include "ECS/Components/camera_component.h"
 #include "ECS/Components/free_camera_component.h"
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/model_component.h"
@@ -20,6 +19,9 @@
 #include "ECS/Components/bspline_component.h"
 #include "ECS/Components/trophy_component.h"
 #include "ECS/Components/collision_component.h"
+#include "ECS/Components/player_component.h"
+#include "ECS/Components/ai_component.h"
+#include "ECS/Components/third_person_camera_component.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
 #include "ECS/Systems/directionallightsystem.h"
@@ -32,6 +34,7 @@
 #include "ECS/Systems/aisystem.h"
 #include "ECS/Systems/collisionsystem.h"
 #include "ECS/Systems/combatsystem.h"
+#include "ECS/Systems/thirdpersoncamerasystem.h"
 #include "engine.h"
 
 World::World(Engine *engine)
@@ -41,6 +44,7 @@ World::World(Engine *engine)
     // Create entity manager
     mEntityManager = std::make_unique<EntityManager>();
     // Create component managers
+    mComponentManagers.reserve(20);
     mComponentManagers[TransformComponent::family()] = std::make_unique<ComponentManager<TransformComponent>>(100000);
     mComponentManagers[MovementComponent::family()] = std::make_unique<ComponentManager<MovementComponent>>(100000);
     mComponentManagers[MeshComponent::family()] = std::make_unique<ComponentManager<MeshComponent>>(100000);
@@ -49,15 +53,18 @@ World::World(Engine *engine)
     mComponentManagers[PointLightComponent::family()] = std::make_unique<ComponentManager<PointLightComponent>>(100);
     mComponentManagers[SpotlightComponent::family()] = std::make_unique<ComponentManager<SpotlightComponent>>(100);
     mComponentManagers[InputComponent::family()] = std::make_unique<ComponentManager<InputComponent>>(100000);
-    mComponentManagers[CameraComponent::family()] = std::make_unique<ComponentManager<CameraComponent>>(10);
     mComponentManagers[FreeCameraComponent::family()] = std::make_unique<ComponentManager<FreeCameraComponent>>(10);
+    mComponentManagers[ThirdPersonCameraComponent::family()] = std::make_unique<ComponentManager<ThirdPersonCameraComponent>>(10);
     mComponentManagers[TerrainComponent::family()] = std::make_unique<ComponentManager<TerrainComponent>>(100);
     mComponentManagers[ModelComponent::family()] = std::make_unique<ComponentManager<ModelComponent>>(100000);
     mComponentManagers[PhysicsComponent::family()] = std::make_unique<ComponentManager<PhysicsComponent>>(100000);
     mComponentManagers[BSplineComponent::family()] = std::make_unique<ComponentManager<BSplineComponent>>(100000);
     mComponentManagers[TrophyComponent::family()] = std::make_unique<ComponentManager<TrophyComponent>>(100000);
     mComponentManagers[CollisionComponent::family()] = std::make_unique<ComponentManager<CollisionComponent>>(100000);
+    mComponentManagers[PlayerComponent::family()] = std::make_unique<ComponentManager<PlayerComponent>>(5);
+    mComponentManagers[AIComponent::family()] = std::make_unique<ComponentManager<AIComponent>>(1000);
     // Create systems
+    mSystems.reserve(20);
     mSystems.push_back(std::make_unique<MovementSystem>());
     mSystems.push_back(std::make_unique<DirectionalLightSystem>());
     mSystems.push_back(std::make_unique<PointLightSystem>());
@@ -69,6 +76,7 @@ World::World(Engine *engine)
     mSystems.push_back(std::make_unique<AISystem>());
     mSystems.push_back(std::make_unique<CollisionSystem>());
     mSystems.push_back(std::make_unique<CombatSystem>());
+    mSystems.push_back(std::make_unique<ThirdPersonCameraSystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
     // Set world and eventbus pointer for all systems
     for (auto &sys : mSystems) {
@@ -208,11 +216,17 @@ unsigned int World::getNumberOfEntities()
 
 void World::activateCamera(EntityID entity)
 {
-    if (hasComponent<CameraComponent>(entity)) {
-        auto *manager = static_cast<ComponentManager<CameraComponent> *>(mComponentManagers[CameraComponent::family()].get());
-        std::function disableCamera = [](CameraComponent &cameraComp) { cameraComp.mActive = false; };
-        manager->iterateAll(disableCamera);
-        auto camera = manager->getComponent(entity);
+    auto *freeCamManager = static_cast<ComponentManager<FreeCameraComponent> *>(mComponentManagers[FreeCameraComponent::family()].get());
+    auto *thirdCamManager = static_cast<ComponentManager<ThirdPersonCameraComponent> *>(mComponentManagers[ThirdPersonCameraComponent::family()].get());
+    std::function disableFreeCamera = [](FreeCameraComponent &cameraComp) { cameraComp.mActive = false; };
+    std::function disableThirdCamera = [](ThirdPersonCameraComponent &cameraComp) { cameraComp.mActive = false; };
+    freeCamManager->iterateAll(disableFreeCamera);
+    thirdCamManager->iterateAll(disableThirdCamera);
+    if (hasComponent<FreeCameraComponent>(entity)) {
+        auto camera = freeCamManager->getComponent(entity);
+        camera->mActive = true;
+    } else if (hasComponent<ThirdPersonCameraComponent>(entity)) {
+        auto camera = thirdCamManager->getComponent(entity);
         camera->mActive = true;
     } else {
         qDebug() << "ERROR:: entity does not have a camera";

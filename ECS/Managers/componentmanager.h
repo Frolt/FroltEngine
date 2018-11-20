@@ -11,35 +11,35 @@
 #include "ECS/Managers/basecomponentmanager.h"
 
 // Generic component manager
-template <typename T>
+template <typename ComponentType>
 class ComponentManager : public BaseComponentManager
 {
 public:
-    ComponentManager(std::size_t size = 100000);
-    void addComponent(EntityID entity, const T &component);
+    ComponentManager(std::size_t size = 1e5);
+    void addComponent(EntityID entity, const ComponentType &component);
     virtual void destroyComponent(EntityID entity) override;
-    T *getComponent(EntityID entity);
+    ComponentType *getComponent(EntityID entity);
     bool hasComponent(EntityID entity) const;
-    void iterateAll(std::function<void(T &component)> lambda);
+    void iterateAll(std::function<void(ComponentType &component)> lambda);
 
 private:
     std::unordered_map<EntityID, unsigned int> mEntityMap;
     unsigned int mSize{0};
-    std::vector<T> mComponents;
+    std::vector<ComponentType> mComponents;
 };
 
 //--------------------------------------------------------------------------------------
 // FUNCTION DEFINITIONS
 //--------------------------------------------------------------------------------------
 
-template<typename T>
-ComponentManager<T>::ComponentManager(std::size_t size)
+template<typename ComponentType>
+ComponentManager<ComponentType>::ComponentManager(std::size_t size)
 {
     mComponents.resize(size);
 }
 
-template<typename T>
-void ComponentManager<T>::addComponent(EntityID entity, const T &component)
+template<typename ComponentType>
+void ComponentManager<ComponentType>::addComponent(EntityID entity, const ComponentType &component)
 {
     auto search = mEntityMap.find(entity);
     if (search == mEntityMap.end()) {
@@ -50,8 +50,8 @@ void ComponentManager<T>::addComponent(EntityID entity, const T &component)
     }
 }
 
-template<typename T>
-void ComponentManager<T>::destroyComponent(EntityID entity)
+template<typename ComponentType>
+void ComponentManager<ComponentType>::destroyComponent(EntityID entity)
 {
     auto search = mEntityMap.find(entity);
     if (search != mEntityMap.end()) {
@@ -73,8 +73,8 @@ void ComponentManager<T>::destroyComponent(EntityID entity)
 //    }
 }
 
-template<typename T>
-T *ComponentManager<T>::getComponent(EntityID entity)
+template<typename ComponentType>
+ComponentType *ComponentManager<ComponentType>::getComponent(EntityID entity)
 {
     auto search = mEntityMap.find(entity);
     if (search != mEntityMap.end()) {
@@ -85,8 +85,8 @@ T *ComponentManager<T>::getComponent(EntityID entity)
     }
 }
 
-template<typename T>
-bool ComponentManager<T>::hasComponent(EntityID entity) const
+template<typename ComponentType>
+bool ComponentManager<ComponentType>::hasComponent(EntityID entity) const
 {
     if (mEntityMap.find(entity) != mEntityMap.end())
         return true;
@@ -94,10 +94,10 @@ bool ComponentManager<T>::hasComponent(EntityID entity) const
         return false;
 }
 
-template<typename T>
-void ComponentManager<T>::iterateAll(std::function<void(T &component)> lambda)
+template<typename ComponentType>
+void ComponentManager<ComponentType>::iterateAll(std::function<void(ComponentType &component)> lambda)
 {
-    for(unsigned int i = 0; i < mComponents.size(); i++)
+    for (unsigned int i = 0; i < mComponents.size(); i++)
         lambda(mComponents[i]);
 }
 

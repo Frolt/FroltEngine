@@ -4,14 +4,14 @@
 #include "ECS/entity.h"
 
 // Forward declarations
-template<typename T>
+template<typename ComponentType>
 class ComponentManager;
 class World;
 struct TransformComponent;
-struct CameraComponent;
 struct PhysicsComponent;
 struct DirectionalLightComponent;
 struct FreeCameraComponent;
+struct ThirdPersonCameraComponent;
 struct InputComponent;
 struct MaterialComponent;
 struct MeshComponent;
@@ -23,18 +23,18 @@ struct TerrainComponent;
 struct BSplineComponent;
 struct CollisionComponent;
 
-template<typename T>
+template<typename ComponentType>
 struct ComponentHandle
 {
     ComponentHandle() = default;
     ComponentHandle(World *world, EntityID owner);
     void destroy();
-    T &operator()();
-    const T &operator()() const;
-    operator T &();
+    ComponentType &operator()();
+    const ComponentType &operator()() const;
+    operator ComponentType &();
 
 public:
-    T *mComponent{nullptr};
+    ComponentType *mComponent{nullptr};
 private:
     World *mWorld{nullptr};
     EntityID mOwner;
@@ -43,9 +43,9 @@ private:
 // Type aliases
 namespace ch {
     using Transform = ComponentHandle<TransformComponent>;
-    using Camera = ComponentHandle<CameraComponent>;
     using Physics = ComponentHandle<PhysicsComponent>;
     using DirLight = ComponentHandle<DirectionalLightComponent>;
+    using ThirdPersonCamera = ComponentHandle<ThirdPersonCameraComponent>;
     using FreeCamera = ComponentHandle<FreeCameraComponent>;
     using Input = ComponentHandle<InputComponent>;
     using Material = ComponentHandle<MaterialComponent>;
@@ -66,33 +66,33 @@ namespace ch {
 #include "ECS/Managers/componentmanager.h"
 #include "world.h"
 
-template<typename T>
-ComponentHandle<T>::ComponentHandle(World *world, EntityID owner)
+template<typename ComponentType>
+ComponentHandle<ComponentType>::ComponentHandle(World *world, EntityID owner)
     : mWorld{world}, mOwner{owner}
 {
-    mComponent = mWorld->getComponent<T>(owner);
+    mComponent = mWorld->getComponent<ComponentType>(owner);
 }
 
-template<typename T>
-void ComponentHandle<T>::destroy()
+template<typename ComponentType>
+void ComponentHandle<ComponentType>::destroy()
 {
-    mWorld->removeComponent<T>(mOwner);
+    mWorld->removeComponent<ComponentType>(mOwner);
 }
 
-template<typename T>
-T &ComponentHandle<T>::operator()()
-{
-    return *mComponent;
-}
-
-template<typename T>
-const T &ComponentHandle<T>::operator()() const
+template<typename ComponentType>
+ComponentType &ComponentHandle<ComponentType>::operator()()
 {
     return *mComponent;
 }
 
-template<typename T>
-ComponentHandle<T>::operator T &()
+template<typename ComponentType>
+const ComponentType &ComponentHandle<ComponentType>::operator()() const
+{
+    return *mComponent;
+}
+
+template<typename ComponentType>
+ComponentHandle<ComponentType>::operator ComponentType &()
 {
     return *mComponent;
 }

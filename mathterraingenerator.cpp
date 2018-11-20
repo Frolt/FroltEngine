@@ -43,6 +43,7 @@ void MathTerrainGenerator::FindNeighborTriangles()
     // TODO cleanup
     // Create triangle array
 
+    mTriangles.reserve(mIndices.size()/3);
     for (unsigned int i = 0; i < mIndices.size(); i += 3) {
         mTriangles.push_back({{static_cast<int>(mIndices[i]),
                                static_cast<int>(mIndices[i+1]),

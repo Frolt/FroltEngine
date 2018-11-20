@@ -5,7 +5,6 @@
 FreeCameraSystem::FreeCameraSystem()
 {
     mSystemMask.addComponent<TransformComponent>();
-    mSystemMask.addComponent<CameraComponent>();
     mSystemMask.addComponent<FreeCameraComponent>();
     mSystemMask.addComponent<InputComponent>();
     mSystemMask.addComponent<MovementComponent>();
@@ -13,29 +12,42 @@ FreeCameraSystem::FreeCameraSystem()
 
 void FreeCameraSystem::beginPlay()
 {
-    ch::Transform transform;
-    ch::FreeCamera freeCamera;
-    for (auto &entity : mRegisteredEntities) {
-        mWorld->unpack(entity, transform, freeCamera);
-        updateCameraVectors(transform(), freeCamera());
-    }
+
 }
 
 void FreeCameraSystem::update(float)
 {
+
     ch::Transform transform;
-    ch::Camera camera;
-    ch::FreeCamera freeCamera;
+    ch::FreeCamera camera;
     ch::Input input;
     ch::Movement movement;
     for (auto &entity : mRegisteredEntities) {
-        mWorld->unpack(entity, transform, camera, freeCamera, input, movement);
+        mWorld->unpack(entity, transform, camera, input, movement);
+        // Eject/possess pawn
+        // -----------------------------------------------------------
+        static bool canPossess{true};
+        static bool isPossessingPlayer{true};
+        if (input().keyPressed(Qt::Key_F8) && canPossess) {
+            if (isPossessingPlayer) {
+                mWorld->activateCamera(mWorld->getEntity("camera"));
+                isPossessingPlayer = false;
+                canPossess = false;
+            } else {
+                mWorld->activateCamera(mWorld->getEntity("player"));
+                isPossessingPlayer = true;
+                canPossess = false;
+            }
+        } else if (!input().keyPressed(Qt::Key_F8)){
+            canPossess = true;
+        }
+        // -----------------------------------------------------------
         if (camera().mActive) {
-            processKeyboard(input, movement, freeCamera);
-            processMouse(input, freeCamera, transform);
-            processScroll(freeCamera, input);
-            updateCameraVectors(transform, freeCamera);
-            updateUniforms(transform, freeCamera, camera, mWorld->getEntity(entity));
+            processKeyboard(input, movement, camera);
+            processMouse(input, camera, transform);
+            processScroll(camera, input);
+            updateCameraVectors(transform, camera);
+            updateUniforms(transform, camera, mWorld->getEntity(entity));
         }
     }
 }
@@ -131,12 +143,11 @@ void FreeCameraSystem::updateCameraVectors(const TransformComponent &transform, 
     freeCamera.mUp = -am::normalize(am::cross(freeCamera.mFront, freeCamera.mRight));
 }
 
-void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &freeCamera, const CameraComponent &camera, EntityHandle entity) const
+void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &camera, EntityHandle entity) const
 {
-    auto view = am::Mat4::lookAt(entity.getWorldLocation(), transform.mLocation + freeCamera.mFront, freeCamera.mWorldUp);
-    auto projection = am::Mat4::perspective(am::toRadians(freeCamera.mZoom), mWorld->mEngine.mViewport->mAspect, 0.1f, 1000.0f);
+    auto view = am::Mat4::lookAt(entity.getWorldLocation(), entity.getWorldLocation() + camera.mFront, camera.mWorldUp);
+    auto projection = am::Mat4::perspective(am::toRadians(camera.mZoom), mWorld->mEngine.mViewport->mAspect, 0.1f, 1000.0f);
     camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", entity.getWorldLocation());
-
 }

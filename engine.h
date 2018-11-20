@@ -16,7 +16,7 @@ class World;
 class MeshFactory;
 class EntityFactory;
 class MaterialFactory;
-class EventBus;
+class EventHandler;
 
 class Engine : public QObject, protected QOpenGLFunctions_4_1_Core
 {
@@ -42,7 +42,7 @@ public:
     std::unique_ptr<MaterialFactory> mMaterialFactory;
     std::unique_ptr<EntityFactory> mEntityFactory;
     // EventBus
-    std::unique_ptr<EventBus> mEventBus;
+    std::unique_ptr<EventHandler> mEventBus;
     // Shaders
     Shader mPhongShader;
     // Terrains

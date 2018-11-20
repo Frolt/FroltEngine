@@ -4,6 +4,7 @@ playerSystem::playerSystem()
 {
     mSystemMask.addComponent<InputComponent>();
     mSystemMask.addComponent<MovementComponent>();
+    mSystemMask.addComponent<PlayerComponent>();
 }
 
 void playerSystem::beginPlay()
@@ -16,7 +17,6 @@ void playerSystem::update(float deltaTime)
     ch::Input input;
     ch::Movement movement;
     ch::Transform transform;
-    ch::Camera camera;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, input, movement, transform/*, camera*/);
         movePlayer(input, movement, deltaTime);

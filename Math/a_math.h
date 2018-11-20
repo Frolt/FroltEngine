@@ -7,7 +7,7 @@
 #include "vec4.h"
 #include "matrix.h"
 #include "math_constants.h"
-#include "colors.h"
+#include "color.h"
 
 namespace am
 {

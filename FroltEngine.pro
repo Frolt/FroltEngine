@@ -32,14 +32,12 @@ SOURCES += \
     Math/vec2.cpp \
     Math/vec3.cpp \
     Math/vec4.cpp \
-    Math/colors.cpp \
     LAS/lasreader.cpp \
     Libraries/Include/stb_image.cpp \
     world.cpp \
     octahedron.cpp \
     mesh.cpp \
     texture.cpp \
-    paths.cpp \
     mathterraingenerator.cpp \
     lazterraingenerator.cpp \
     Factories/materialfactory.cpp \
@@ -85,7 +83,11 @@ SOURCES += \
     EventSystem/basememberfunctionhandler.cpp \
     EventSystem/collisionevent.cpp \
     EventSystem/event.cpp \
-    EventSystem/eventbus.cpp
+    EventSystem/eventhandler.cpp \
+    ECS/Components/player_component.cpp \
+    ECS/Components/ai_component.cpp \
+    ECS/Systems/thirdpersoncamerasystem.cpp \
+    ECS/Components/third_person_camera_component.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -101,7 +103,6 @@ HEADERS += \
     Math/vec2.h \
     Math/vec3.h \
     Math/vec4.h \
-    Math/colors.h \
     LAS/headerstock.h \
     LAS/lasreader.h \
     Libraries/Include/stb_image.h \
@@ -155,14 +156,18 @@ HEADERS += \
     ECS/Components/collision_component.h \
     ECS/Systems/collisionsystem.h \
     EventSystem/event.h \
-    EventSystem/eventbus.h \
     EventSystem/collisionevent.h \
     ECS/Systems/combatsystem.h \
     EventSystem/basememberfunctionhandler.h \
     EventSystem/collisionevent.h \
     EventSystem/event.h \
-    EventSystem/eventbus.h \
-    EventSystem/memberfunctionhandler.h
+    EventSystem/memberfunctionhandler.h \
+    EventSystem/eventhandler.h \
+    Math/color.h \
+    ECS/Components/player_component.h \
+    ECS/Components/ai_component.h \
+    ECS/Systems/thirdpersoncamerasystem.h \
+    ECS/Components/third_person_camera_component.h
 
 FORMS += \
     mainwindow.ui

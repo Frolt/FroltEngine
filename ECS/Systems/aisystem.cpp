@@ -5,6 +5,7 @@ AISystem::AISystem()
 {
     mSystemMask.addComponent<BSplineComponent>();
     mSystemMask.addComponent<TransformComponent>();
+    mSystemMask.addComponent<AIComponent>();
 }
 
 void AISystem::beginPlay()
@@ -14,6 +15,7 @@ void AISystem::beginPlay()
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, bSpline);
         std::vector<am::Vec3> points;
+        points.reserve(5);
         mWorld->unpack(mWorld->getEntity("startPos"), transform);
         points.push_back(transform().mLocation);
         mWorld->unpack(mWorld->getEntity("trophy1"), transform);
@@ -96,6 +98,7 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
 {
     ch::Transform transform;
     std::vector<am::Vec3> points;
+    points.reserve(5);
     // insert start point
     if (mAtStart) {
         mWorld->unpack(mWorld->getEntity("startPos"), transform);
@@ -166,7 +169,7 @@ void AISystem::updateSplineVertices(BSplineComponent &bSpline)
     float delta = 1.0f / res;
 
     for (float x = 0.0f; x <= 1.0f; x+=delta) {
-        bSpline.mVertices.push_back(Vertex{am::bSpline(bSpline.mPoints, t, x, degree)});
+        bSpline.mVertices.emplace_back(am::bSpline(bSpline.mPoints, t, x, degree));
 //        bSpline.mVertices.back().mPosition.y = 0.0f;
     }
 }

@@ -58,7 +58,7 @@ void LASReader::readPointData(std::istream &stream)
     mPointData.reserve(mHeaderStock->Number_of_point_records);
 
     // Reads all points
-    for(unsigned int i = 0; i < mHeaderStock->Number_of_point_records; ++i)
+    for (unsigned int i = 0; i < mHeaderStock->Number_of_point_records; ++i)
     {
         stream.seekg(mHeaderStock->Offset_to_point_data + mHeaderStock->Point_Data_Record_Length * i);
         binaryRead(stream, x);
@@ -67,7 +67,7 @@ void LASReader::readPointData(std::istream &stream)
         pos.x = (static_cast<float>(x) / decimals) - (static_cast<float>(mHeaderStock->Min_X));
         pos.z = (static_cast<float>(y) / decimals) - (static_cast<float>(mHeaderStock->Min_Y));
         pos.y = (static_cast<float>(z) / decimals) - (static_cast<float>(mHeaderStock->Min_Z));
-        mPointData.push_back(Vertex{pos});
+        mPointData.emplace_back(pos);
     }
 }
 

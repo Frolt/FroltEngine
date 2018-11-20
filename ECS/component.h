@@ -9,7 +9,7 @@ struct FamilyCounter {
 };
 
 // Interface for components
-template<typename T>
+template<typename ComponentType>
 struct Component
 {
 protected:
@@ -23,8 +23,8 @@ public:
 // FUNCTION DEFINITIONS
 //--------------------------------------------------------------------------------------
 
-template<typename T>
-unsigned int Component<T>::family()
+template<typename ComponentType>
+unsigned int Component<ComponentType>::family()
 {
     // id will only initialize once
     static unsigned int ID = FamilyCounter::ID++;

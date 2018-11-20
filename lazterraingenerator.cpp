@@ -36,6 +36,7 @@ LazTerrainGenerator::LazTerrainGenerator(const std::string &path, float res)
 void LazTerrainGenerator::makeIndices()
 {
     std::vector<unsigned int> indices;
+    indices.reserve((mZRange-1)*(mXRange-1));
 
     for (unsigned int z = 0; z < (mZRange - 1); z++) {
         for (unsigned int x = 0; x < (mXRange - 1); x++) {

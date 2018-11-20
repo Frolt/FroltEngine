@@ -186,7 +186,7 @@ vec3 calcSpotLight(SpotLight light, vec3 normal, vec3 camDir)
 
 vec3 calcEmission()
 {
-    if(material.hasEmissionMap)
+    if (material.hasEmissionMap)
         return texture(material.emissionMap, UV).rgb;
     else
         return vec3(0);

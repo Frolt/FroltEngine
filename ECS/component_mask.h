@@ -11,9 +11,9 @@ struct ComponentMask
     const std::bitset<64> &getMask() const;
     void reset();
 
-    template<typename T>
+    template<typename ComponentType>
     void addComponent();
-    template<typename T>
+    template<typename ComponentType>
     void removeCompoent();
 
 private:
@@ -26,16 +26,16 @@ private:
 
 #include "ECS/component.h"
 
-template<typename T>
+template<typename ComponentType>
 void ComponentMask::addComponent()
 {
-    mMask.set(T::family());
+    mMask.set(ComponentType::family());
 }
 
-template<typename T>
+template<typename ComponentType>
 void ComponentMask::removeCompoent()
 {
-    mMask.reset(T::family());
+    mMask.reset(ComponentType::family());
 }
 
 

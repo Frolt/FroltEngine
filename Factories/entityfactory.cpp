@@ -16,6 +16,9 @@
 #include "ECS/Components/model_component.h"
 #include "ECS/Components/physics_component.h"
 #include "ECS/Components/bspline_component.h"
+#include "ECS/Components/player_component.h"
+#include "ECS/Components/ai_component.h"
+#include "ECS/Components/third_person_camera_component.h"
 #include "meshfactory.h"
 #include "materialfactory.h"
 #include "world.h"
@@ -147,6 +150,10 @@ EntityHandle EntityFactory::createPlayerCube(const std::string &name, const am::
     transform.mLocation = pos;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
+    PlayerComponent player;
+    ThirdPersonCameraComponent camera(mDefaultShader);
+    entity.addComponent(camera);
+    entity.addComponent(player);
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);
@@ -167,6 +174,10 @@ EntityHandle EntityFactory::createPlayerSphere(const std::string &name, const am
     transform.mLocation = pos;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
+    PlayerComponent player;
+    ThirdPersonCameraComponent camera(mDefaultShader);
+    entity.addComponent(camera);
+    entity.addComponent(player);
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);
@@ -189,6 +200,10 @@ EntityHandle EntityFactory::createPlayerModel(const std::string &name, const am:
 //    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("container"));
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
+    PlayerComponent player;
+    ThirdPersonCameraComponent camera(mDefaultShader);
+    entity.addComponent(camera);
+    entity.addComponent(player);
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);
@@ -206,12 +221,10 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
     transform.mRotation.yaw = -90.0f;
     MovementComponent movement;
     InputComponent input(&mEngine.mViewport->mInputState);
-    CameraComponent camera(mDefaultShader);
-    FreeCameraComponent freeCamera;
+    FreeCameraComponent freeCamera(mDefaultShader);
     entity.addComponent(transform);
     entity.addComponent(movement);
     entity.addComponent(input);
-    entity.addComponent(camera);
     entity.addComponent(freeCamera);
     return entity;
 }
@@ -227,9 +240,9 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
     MeshComponent mesh{mMeshFactory.createTerrain(std::to_string(-min * max), terrainGen.mVertices, terrainGen.mIndices)};
     MaterialComponent material;
     material.mDiffuseColor = color;
-    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("desert"));
-    material.mShininess = 1;
-    material.mSpecularColor = am::Vec{0.1};
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("grass"));
+    material.mShininess = 5.0f;
+    material.mSpecularColor = am::Vec(0.1);
     TerrainComponent terrain;
     terrain.mVertices = terrainGen.mVertices;
     terrain.mIndices = terrainGen.mIndices;
@@ -314,6 +327,8 @@ EntityHandle EntityFactory::createAISphere(const std::string &name, const am::Ve
     TransformComponent transform;
     transform.mLocation = pos;
     BSplineComponent bSpline;
+    AIComponent ai;
+    entity.addComponent(ai);
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);
@@ -332,6 +347,8 @@ EntityHandle EntityFactory::createAIModel(const std::string &name, const std::st
     transform.mLocation = pos;
     transform.mScale = am::Vec3(0.5);
     BSplineComponent bSpline;
+    AIComponent ai;
+    entity.addComponent(ai);
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);

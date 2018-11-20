@@ -4,7 +4,7 @@
 #include "ECS/component.h"
 #include "a_math.h"
 #include "texture.h"
-#include "colors.h"
+#include "color.h"
 
 // Forward declarations
 struct Texture;
