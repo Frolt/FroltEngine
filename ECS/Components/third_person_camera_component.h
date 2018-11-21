@@ -12,6 +12,7 @@ struct ThirdPersonCameraComponent : public Component<ThirdPersonCameraComponent>
 
     am::Vec3 mCameraRelativeLocation{-5.0f, 5.0f, 0.0f};
     float mEyeHeight{5.0f};
+    am::Rotator mRotation{0};
 };
 
 #endif // THIRD_PERSON_CAMERA_COMPONENT_H

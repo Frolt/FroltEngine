@@ -10,6 +10,7 @@ public:
 
     void beginPlay() override;
     void update(float deltaTime) override;
+    void processMouse(const InputComponent &input, TransformComponent &transform, ThirdPersonCameraComponent &camera);
     void updateViewMatrixUniform(const ThirdPersonCameraComponent &camera, const TransformComponent &transform, EntityHandle entity);
 };
 

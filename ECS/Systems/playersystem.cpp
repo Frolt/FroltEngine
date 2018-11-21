@@ -20,8 +20,6 @@ void playerSystem::update(float deltaTime)
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, input, movement, transform/*, camera*/);
         movePlayer(input, movement, deltaTime);
-//        moveCamera(input, transform, deltaTime);
-//        makeViewMatrix(camera, am::zero(), transform().mLocation);
     }
 }
 
@@ -41,14 +39,4 @@ void playerSystem::movePlayer(const InputComponent &input, MovementComponent &mo
 
     // Friction
     movement.mVelocity *= 0.995f;
-}
-
-void playerSystem::moveCamera(const InputComponent &input, TransformComponent &transform, float deltaTime)
-{
-
-}
-
-void playerSystem::makeViewMatrix(CameraComponent &camera, const am::Vec &location, const am::Vec &target)
-{
-    auto view = am::Mat4::lookAt(location, target, am::up());
 }
