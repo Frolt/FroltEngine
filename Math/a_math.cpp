@@ -17,7 +17,6 @@ namespace am
 
     float mod(float x, float y)
     {
-        // same as (x % y)
         int timesY = static_cast<int>(x / y);
         return x - (timesY * y);
     }

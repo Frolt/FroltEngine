@@ -12,6 +12,11 @@ struct MeshComponent;
 struct ModelComponent;
 class Shader;
 
+/**
+   @brief The MeshFactory class is used to make meshes.
+    It will only create the mesh the first time it is used by an entity,
+    after that it will reuse the meshes
+ */
 class MeshFactory : protected QOpenGLFunctions_4_1_Core
 {
 public:

@@ -62,22 +62,3 @@ void LazTerrainGenerator::calcNormals()
         mVertices[mIndices[i+2]].mNormal = normal;
     }
 }
-
-// TODO not belonging to generator
-float LazTerrainGenerator::collision(am::Vec2 playerPos)
-{
-    am::Vec3 res;
-    for (unsigned int i = 0; i < mIndices.size(); i+=3) {
-        am::Vec2 a = am::Vec2(mVertices[mIndices[i]].mPosition.x, mVertices[mIndices[i]].mPosition.z);
-        am::Vec2 b = am::Vec2(mVertices[mIndices[i+1]].mPosition.x, mVertices[mIndices[i+1]].mPosition.z);
-        am::Vec2 c = am::Vec2(mVertices[mIndices[i+2]].mPosition.x, mVertices[mIndices[i+2]].mPosition.z);
-        res = -playerPos.barycentricCoordinates(a,b,c);
-        if (res.x >= 0 && res.y >= 0 && res.z >= 0) {
-            auto aa = mVertices[mIndices[i]].mPosition;
-            auto bb = mVertices[mIndices[i+1]].mPosition;
-            auto cc = mVertices[mIndices[i+2]].mPosition;
-            return res.x * aa.y + res.y * bb.y + res.z * cc.y;
-        }
-    }
-    return 0.0f;
-}

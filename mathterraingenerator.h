@@ -5,6 +5,13 @@
 #include <array>
 #include "vertex.h"
 
+/**
+   @brief The MathTerrainGenerator class is used to build a terrain mesh derived from a mathematical multivariable function
+
+    It makes the mesh with indices istead of duplicate verticecs.
+    It also has a topological search algorithm to optimize barycentric coordinate searching,
+    and calculate it's normals from the multivariable function
+ */
 class MathTerrainGenerator
 {
 public:

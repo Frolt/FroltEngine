@@ -4,6 +4,9 @@
 #include "ECS/system.h"
 #include <QOpenGLFunctions_4_1_Core>
 
+/**
+   @brief The RenderSystem class renders all entities with a mesh component to the viewport
+ */
 class RenderSystem : public System, protected QOpenGLFunctions_4_1_Core
 {
 public:

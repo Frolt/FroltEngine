@@ -6,6 +6,10 @@
 // Forward declarations
 struct Event;
 
+/**
+   @brief The BaseMemberFunctionHandler class is a simple interface for the MemberFunctionHandler class.
+   it has a purte virtual call function that takes an Event that will MemberFunctionHandler will cast to the appropriate Event
+ */
 class BaseMemberFunctionHandler
 {
 public:

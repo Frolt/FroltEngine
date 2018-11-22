@@ -35,6 +35,10 @@
 class World;
 class EventHandler;
 
+/**
+   @brief The System class is an interface class for all systems.
+    It stores a World and EventHandler reference aswell as a list of entity IDs that the system care about
+ */
 class System
 {
 public:
@@ -43,16 +47,17 @@ public:
     virtual void update(float deltaTime);
 
     void setWorld(World *world);
-    void setEventBus(EventHandler *eventBus);
+    void setEventHandler(EventHandler *eventHandler);
+    /// add an entity the system should pay attention to
     void registerEntity(EntityID entity);
+    /// remove an entity the system should no longer pay attention to
     void deRegisterEntity(EntityID entity);
 
 public:
+    /// Represents the components that an entity should have for the system to pay attention to it
     ComponentMask mSystemMask;
 protected:
-    // TODO vector has slow search O(n)
-    // bad when ComponentMask uses deRegisterEntity() method
-    // but vector is good for iterating
+    /// Reference to all entities that match the systemMask
     std::vector<EntityID> mRegisteredEntities;
     World *mWorld;
     EventHandler *mEventHandler;

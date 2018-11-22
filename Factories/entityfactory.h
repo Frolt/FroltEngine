@@ -12,6 +12,9 @@ class World;
 class Shader;
 class Engine;
 
+/**
+   @brief The EntityFactory class is used to create predefined entities
+ */
 class EntityFactory
 {
 public:

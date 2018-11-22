@@ -3,6 +3,9 @@
 
 #include "ECS/system.h"
 
+/**
+   @brief The PointLightSystem class simply updates the shader uniforms for all point lights
+ */
 class PointLightSystem : public System
 {
 public:

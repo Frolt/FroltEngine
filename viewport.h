@@ -11,6 +11,11 @@ class QOpenGLContext;
 class QOpenGLDebugLogger;
 class MainWindow;
 
+/**
+   @brief Shows the main viewport where the game is rendered
+
+   Also handles input events and store them in a InputState struct
+ */
 class Viewport : public QWindow, protected QOpenGLFunctions_4_1_Core
 {
     Q_OBJECT

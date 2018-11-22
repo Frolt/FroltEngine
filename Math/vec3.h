@@ -17,6 +17,9 @@ namespace am
     using Color = Vec3;
     using Rotator = Vec3;
 
+    /**
+       @brief Can be used as a Rotator, Color or 3DVector.
+     */
     struct Vec3
     {
         // Constructor

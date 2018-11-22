@@ -7,6 +7,11 @@
 /// Type alias for entity ID
 using EntityID = unsigned int;
 
+/**
+   @brief The Entity struct keeps an unsigned int ID, a name, and a parent/child pointer.
+   An entity is referenced by the ID only throughout the system.
+    The only place the full Entity class is stored is inside the EntityManager
+ */
 struct Entity
 {
     Entity();
@@ -26,14 +31,12 @@ struct Entity
 // Define hash function for Entity
 namespace std {
     template <>
+    /// Define hash function for Entity
     struct hash<Entity>
     {
         std::size_t operator()(const Entity &key) const
         {
             return std::hash<unsigned int>{}(key.mID);
-//            auto h1 = std::hash<std::string>{}(key.mName);
-//            auto h2 = std::hash<unsigned int>{}(key.mID);
-//            return h1 ^ h2 << 1;
         }
     };
 }

@@ -3,12 +3,15 @@
 
 #include <utility>
 
-// Counter wrapper
+/// Simple counter to provide unique family ID
 struct FamilyCounter {
     static unsigned int ID;
 };
 
-// Interface for components
+/**
+   @brief The Component struct is an interface for all components.
+   It also provide each new componentType with an unique family ID
+ */
 template<typename ComponentType>
 struct Component
 {

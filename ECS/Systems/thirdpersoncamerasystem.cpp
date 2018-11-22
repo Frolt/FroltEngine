@@ -52,12 +52,7 @@ void ThirdPersonCameraSystem::processMouse(const InputComponent &input, Transfor
     camera.mRotation.yaw = am::mod(camera.mRotation.yaw, 360.0f);
     camera.mRotation.pitch = am::clamp(camera.mRotation.pitch, -89.0f, 89.0f);
 }
-/**
 
-   @param camera
-   @param transform
-   @param entity
- */
 void ThirdPersonCameraSystem::updateViewMatrixUniform(const ThirdPersonCameraComponent &camera, const TransformComponent &transform, EntityHandle entity)
 {
     am::Mat4 cameraTransform;

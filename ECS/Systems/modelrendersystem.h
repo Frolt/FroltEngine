@@ -4,6 +4,9 @@
 #include <QOpenGLFunctions_4_1_Core>
 #include "ECS/system.h"
 
+/**
+   @brief The modelRenderSystem class renders all entities with a model component to the viewport
+ */
 class modelRenderSystem : public System, protected QOpenGLFunctions_4_1_Core
 {
 public:

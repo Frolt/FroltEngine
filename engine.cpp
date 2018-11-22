@@ -49,8 +49,8 @@ void Engine::initialize()
     // Set  projection matrix
     am::Mat4 perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
     mPhongShader.setMat4("projection", perspective);
-    // Create EventBus
-    mEventBus = std::make_unique<EventHandler>();
+    // Create EventHandler
+    mEventHandler = std::make_unique<EventHandler>();
     // Create worlds
     mWorld = std::make_unique<World>(this);
     // Create factories
@@ -152,7 +152,7 @@ void Engine::initialize()
     // ---------------------------------------------------------------------------------------
 
     // Begin play
-    mWorld->init();
+    mWorld->beginPlay();
 }
 
 void Engine::startGameLoop()
@@ -160,15 +160,6 @@ void Engine::startGameLoop()
     mTimer.start();
     mTickTimer.start();
     mGameLoopTimer->start(1);
-}
-
-void Engine::render()
-{
-    mViewport->preRender();
-    //-------------------------------------------------------------------
-    // TODO free rendering from update() function
-    //-------------------------------------------------------------------
-    mViewport->postRender();
 }
 
 float Engine::getTime()
@@ -182,10 +173,6 @@ void Engine::gameLoop()
 {
     mViewport->preRender();
     //-------------------------------------------------------------------
-    // Set  projection matrix
-    am::Mat4 perspective = am::Mat4::perspective(am::toRadians(45.0f), mViewport->mAspect, 0.1f, 1000.0f);
-    mPhongShader.setMat4("projection", perspective);
-
     mDeltaTime = mTickTimer.restart() / 1000.0f;
     mWorld->update(mDeltaTime);
     emit mViewport->FPS();

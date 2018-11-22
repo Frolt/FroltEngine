@@ -3,6 +3,7 @@
 
 #include <string>
 
+/// Contains relative paths to subdirectories inside the project directory
 namespace Path
 {
     const std::string root = "../";

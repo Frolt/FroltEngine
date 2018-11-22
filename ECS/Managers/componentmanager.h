@@ -10,7 +10,10 @@
 #include "ECS/entity.h"
 #include "ECS/Managers/basecomponentmanager.h"
 
-// Generic component manager
+/**
+   @brief The ComponentManager class stores and handles all components of a specific type.
+   Each component type must have a unique templated componentManager instance to store and handle the components
+ */
 template <typename ComponentType>
 class ComponentManager : public BaseComponentManager
 {
@@ -20,11 +23,18 @@ public:
     virtual void destroyComponent(EntityID entity) override;
     ComponentType *getComponent(EntityID entity);
     bool hasComponent(EntityID entity) const;
+    /**
+       @brief Iterates through all the components this manager holds with a custom made function.
+       @param lambda    Take a custom lamda function that will do something to all the components
+     */
     void iterateAll(std::function<void(ComponentType &component)> lambda);
 
 private:
+    /// Maps an entityID to an index that is used to get the component belonging to the entity from the component vector
     std::unordered_map<EntityID, unsigned int> mEntityMap;
+    /// Vector::size() will not give correct value since we have preallocated the vector to a given size.
     unsigned int mSize{0};
+    /// Stores the components
     std::vector<ComponentType> mComponents;
 };
 

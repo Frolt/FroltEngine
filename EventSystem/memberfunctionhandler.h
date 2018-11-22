@@ -7,17 +7,19 @@ template<class ClassInstance, class EventType>
 class MemberFunctionHandler : public BaseMemberFunctionHandler
 {
 public:
-    // Function pointer type alias
+    /// Function pointer type alias
     using MemberFunction = void(ClassInstance::*)(EventType *);
 
+    /// Need to store the class instance and the desired memberFunction
     MemberFunctionHandler(ClassInstance *instance, MemberFunction memberFunction);
 
+    /// Overrides the call function and cast it to the appropriate derived Event
     void call(std::unique_ptr<Event> event) override;
 
   private:
-    // Pointer to class instance
+    /// Pointer to class instance
     ClassInstance *mInstance;
-    // Pointer to member function
+    /// Pointer to member function
     MemberFunction mMemberFunction;
 };
 

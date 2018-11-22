@@ -8,6 +8,9 @@
 #include "texture.h"
 #include "shader.h"
 
+/**
+   @brief The Mesh class is used by the ModelLoader class to store each mesh the model contains
+ */
 class Mesh
 {
 public:
@@ -21,6 +24,8 @@ public:
     std::vector<Vertex> mVertices;
     std::vector<unsigned int> mIndices;
     std::vector<Texture> mTextures;
+
+private:
     std::shared_ptr<QOpenGLFunctions_4_1_Core> gl = std::make_shared<QOpenGLFunctions_4_1_Core>();
 };
 

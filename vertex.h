@@ -3,6 +3,9 @@
 
 #include "a_math.h"
 
+/**
+   @brief Basic struct to store Position, Normal and UV(Texture) coordinate
+ */
 struct Vertex
 {
     Vertex(am::Vec3 position = {0}, am::Vec3 normal = {0}, am::Vec2 UV = {0});

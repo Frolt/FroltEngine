@@ -3,6 +3,9 @@
 
 #include "ECS/system.h"
 
+/**
+   @brief The MovementSystem class adds the entities velocity and acceleration to it's transform
+ */
 class MovementSystem : public System
 {
 public:

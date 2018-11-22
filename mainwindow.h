@@ -12,6 +12,10 @@ namespace Ui {
 class MainWindow;
 }
 
+/**
+   @brief The MainWindow class is at the top of the hierarchy in the engine.
+    It is the owner of the viewport and engine class
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

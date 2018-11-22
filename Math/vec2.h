@@ -11,7 +11,6 @@ namespace am
 // Forward declarations
 struct Vec3;
 struct Vec4;
-
     struct Vec2
     {
         // Constructor

@@ -3,7 +3,7 @@
 
 #include "vec3.h"
 
-// TODO snakk med Ole, namespace isteden?
+/// Contains a set of predefined colors
 namespace Color
 {
     const am::Color white{1.0f, 1.0f, 1.0f};

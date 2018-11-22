@@ -6,6 +6,10 @@
 #include <string>
 #include "ECS/entity.h"
 
+/**
+   @brief The EntityManager class manages all Entities in the gameworld.
+   It has two maps for fast lookup by name or ID
+ */
 class EntityManager
 {
 public:
@@ -20,8 +24,11 @@ public:
     size_t numOfEntities() const;
 
 private:
+    /// maps EntityID to the entity name
     std::unordered_map<EntityID, std::string> mIDMap;
+    /// maps Entity name to entity instance
     std::unordered_map<std::string, Entity> mEntities;
+    /// makes sure each entity gets an unique ID
     static size_t nextID;
 };
 

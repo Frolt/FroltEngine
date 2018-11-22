@@ -5,13 +5,17 @@
 #include <string>
 #include "a_math.h"
 
+/**
+   @brief The Shader class store a reference to the openGL shader,
+   and provides setter functions for shader uniforms
+ */
 class Shader
 {
 public:
     // Read and build vertex and fragment shader from file
     Shader() = default;
     Shader(const std::string &vertexPath, const std::string &fragmentPath);
-    // Activates shader
+    /// Activates shader
     void use() const;
     // Sets uniform variables
     void setBool(const std::string &name, bool value) const;

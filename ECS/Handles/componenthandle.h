@@ -24,13 +24,19 @@ struct BSplineComponent;
 struct CollisionComponent;
 
 template<typename ComponentType>
+/**
+   @brief The ComponentHandle struct
+ */
 struct ComponentHandle
 {
     ComponentHandle() = default;
     ComponentHandle(World *world, EntityID owner);
     void destroy();
+    /// Overloads the parentheses to return the component reference
     ComponentType &operator()();
+    /// Overloads the parentheses to return the const component reference
     const ComponentType &operator()() const;
+    /// Provides implicit casting to a component type
     operator ComponentType &();
 
 public:
@@ -40,7 +46,7 @@ private:
     EntityID mOwner;
 };
 
-// Type aliases
+/// This namespace provides handy type-shortcuts for all the different ComponentHandles<T>
 namespace ch {
     using Transform = ComponentHandle<TransformComponent>;
     using Physics = ComponentHandle<PhysicsComponent>;

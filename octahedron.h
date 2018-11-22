@@ -4,6 +4,9 @@
 #include "a_math.h"
 #include "vertex.h"
 
+/**
+   @brief The Octahedron class is used to create spheres
+ */
 class Octahedron
 {
 public:

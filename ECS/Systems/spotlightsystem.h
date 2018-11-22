@@ -3,6 +3,9 @@
 
 #include "ECS/system.h"
 
+/**
+   @brief The SpotlightSystem class simply updates the shader uniforms for all spotlights
+ */
 class SpotlightSystem : public System
 {
 public:

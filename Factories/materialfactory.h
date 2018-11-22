@@ -5,6 +5,10 @@
 #include <map>
 #include "texture.h"
 
+/**
+   @brief The MaterialFactory class is used to get preloaded textures
+    as a diffuse, specular or emission map for a material
+ */
 class MaterialFactory
 {
 public:

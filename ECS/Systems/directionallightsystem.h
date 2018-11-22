@@ -3,6 +3,9 @@
 
 #include "ECS/system.h"
 
+/**
+   @brief The DirectionalLightSystem class simply updates the directional light shader uniforms
+ */
 class DirectionalLightSystem : public System
 {
 public:

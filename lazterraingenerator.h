@@ -5,6 +5,12 @@
 #include <vector>
 #include "vertex.h"
 
+/**
+   @brief The LazTerrainGenerator class is used to build a terrain mesh from a las file (lidar point cloud data)
+
+    It makes the mesh with indices istead of duplicate verticecs.
+    It can also specify the resolution of the terrain
+ */
 class LazTerrainGenerator
 {
 public:
@@ -13,7 +19,6 @@ public:
 private:
     void makeIndices();
     void calcNormals();
-    float collision(am::Vec2 playerPos);
 
 public:
     std::string mPath;

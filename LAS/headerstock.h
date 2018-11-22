@@ -1,6 +1,9 @@
 #ifndef HEADERSTOCK_H
 #define HEADERSTOCK_H
 
+/**
+   @brief The HeaderStock struct is used to store the public header stock information in a LAS file
+ */
 struct HeaderStock
 {
     char File_Signature[4];

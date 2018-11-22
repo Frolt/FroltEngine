@@ -18,13 +18,26 @@ template<typename ComponentType>
 struct ComponentHandle;
 class Engine;
 
+/**
+   @brief The World class is used to provide connection
+    between the ECS systems, managers and entity/component handlers.
+
+    If for example an entityHandle instance calls its destroy function, the function will call world
+    from its world reference and call the destroyEntity method in the world class.
+    This function will then call the destroyEntity function in the EntityManager class instance.
+    This is an example on how the world class serve as a crossroad for the ECS system in the engine.
+ */
 class World
 {
 public:
+    /// Constructor that creates all the component managers, entity manager, and systems
     World(Engine *engine);
     ~World();
-    void init();
+    /// Calls beginPlay on all the systems
+    void beginPlay();
+    /// Calls update on all the systems
     void update(float deltaTime);
+    /// Updates the entity list the system cares about after an entity has changed it's component composition
     void updateSystems(EntityID entity, ComponentMask oldMask);
 
     // Create, destroy and get entity
@@ -49,22 +62,37 @@ public:
     template<typename ComponentType>
     ComponentType *getComponent(EntityID entity);
 
-    // Unpack function
+    // Unpack functions
+    /**
+       @brief Unpacks all the desired components to an entity. This function uses variadic templates.
+       @param entity    The entity you want to unpack
+       @param handle    OUT parameter for the component
+     */
     template<typename ComponentType>
     void unpack(EntityID entity, ComponentHandle<ComponentType> &handle);
+    // Unpack functions
+    /**
+       @brief Unpacks all the desired components to an entity. This function uses variadic templates.
+       @param entity    The entity you want to unpack
+       @param handle    OUT parameter for the component
+     */
     template<typename ComponentType, typename ...Args>
     void unpack(EntityID entity, ComponentHandle<ComponentType> &handle, ComponentHandle<Args> &...args);
 
-    // Others
+    /// Activate the camera attached to the entity, disables all other cameras since only one camera can be active at a time
     void activateCamera(EntityID entity);
 
 private:
+    /// The entity manager stores all entities
     std::unique_ptr<EntityManager> mEntityManager;
+    /// A vector of BaseComponentManagers that can be static casted to the desired manager based on the familiy ID tag
     std::vector<std::unique_ptr<BaseComponentManager>> mComponentManagers;
+    /// A vector that stores all systems
     std::vector<std::unique_ptr<System>> mSystems;
+    /// Maps an Entity ID to the belonging ComponentMask
     std::unordered_map<EntityID, ComponentMask> mEntityMasks;
-    // TODO snakk med Ole, engine ref i world
 public:
+    /// shameful engine reference
     Engine &mEngine;
 };
 

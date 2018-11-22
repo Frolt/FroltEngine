@@ -9,6 +9,9 @@
 // Forward declarations
 struct Vertex;
 
+/**
+   @brief The LASReader class reads cloud point data from a binary LAS file
+ */
 class LASReader
 {
 public:

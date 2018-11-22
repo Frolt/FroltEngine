@@ -9,18 +9,22 @@
 class World;
 struct TransformComponent;
 
+/**
+   @brief The EntityHandle struct works as a wrapper around an entity.
+   It makes it possible to call usefull and common methods from the entityHandle itself.
+   Making it more OOP friendly.
+ */
 struct EntityHandle
 {
     EntityHandle() = default;
     EntityHandle(World *world, Entity *entity);
 
-    /**
-       @brief destroy this entity.
-       More detailed description here
-     */
     void destroy();
+    /// Creates a new entity that is the child of this entity
     EntityHandle createEntityComponent(const std::string &name);
+    /// Makes another entity the child of this entity
     void addEntityComponent(Entity *entity);
+    /// Makes another entity the child of this entity
     void addEntityComponent(const EntityHandle &entity);
     template<typename ComponentType>
     void addComponent(const ComponentType &component);
@@ -28,9 +32,13 @@ struct EntityHandle
     void removeComponent();
     template<typename ComponentType>
     bool hasComponent();
+    /// Overloads the parentheses to return the entity reference
     Entity &operator()();
+    /// Overloads the parentheses to return the const entity reference
     const Entity &operator()() const;
+    /// Provides implicit casting to an Entity
     operator Entity();
+    /// Provides implicit casting to an EntityID
     operator EntityID();
 
     // Utilities
@@ -56,9 +64,11 @@ struct EntityHandle
     am::Vec3 getWorldLocation();
     am::Rotator getWorldRotation();                         // TODO
     am::Vec3 getWorldScale();
+    /// returns a ModelMatrix that is built from the entity's transform
     am::Mat4 getModelMatrix();
 
 private:
+    /// recursive function that travels up the hierarchy and combines all the model matrices to get world position
     am::Mat4 combineAncestorsTransforms(Entity *entity, am::Mat4 &prevModelMat);
 
 public:

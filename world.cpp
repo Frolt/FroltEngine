@@ -79,10 +79,10 @@ World::World(Engine *engine)
     mSystems.push_back(std::make_unique<CombatSystem>());
     mSystems.push_back(std::make_unique<ThirdPersonCameraSystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
-    // Set world and eventbus pointer for all systems
+    // Set world and eventHandler pointer for all systems
     for (auto &sys : mSystems) {
         sys->setWorld(this);
-        sys->setEventBus(mEngine.mEventBus.get());
+        sys->setEventHandler(mEngine.mEventHandler.get());
     }
 }
 
@@ -91,7 +91,7 @@ World::~World()
 
 }
 
-void World::init()
+void World::beginPlay()
 {
     for (auto &sys : mSystems)
         sys->beginPlay();

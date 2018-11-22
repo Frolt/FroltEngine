@@ -6,6 +6,10 @@
 // Forward declarations
 struct CollisionEvent;
 
+/**
+   @brief The CombatSystem class implements combat logic.
+   It does not pay attention to entities, but rather CollisionEvents.
+ */
 class CombatSystem : public System
 {
 public:
