@@ -59,7 +59,7 @@ namespace am
             };
             struct
             {
-                float yaw, pitch, roll;
+                float pitch, yaw, roll;
             };
         };
     };

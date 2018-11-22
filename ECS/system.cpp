@@ -18,7 +18,7 @@ void System::setWorld(World *world)
 
 void System::setEventBus(EventHandler *eventBus)
 {
-    mEventBus = eventBus;
+    mEventHandler = eventBus;
 }
 
 void System::registerEntity(EntityID entity)

@@ -8,7 +8,7 @@ CombatSystem::CombatSystem()
 
 void CombatSystem::beginPlay()
 {
-    mEventBus->subscribe(this, &CombatSystem::onCollisionEvent);
+    mEventHandler->subscribe(this, &CombatSystem::onCollisionEvent);
 }
 
 void CombatSystem::update(float)

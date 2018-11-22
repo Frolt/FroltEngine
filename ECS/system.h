@@ -55,7 +55,7 @@ protected:
     // but vector is good for iterating
     std::vector<EntityID> mRegisteredEntities;
     World *mWorld;
-    EventHandler *mEventBus;
+    EventHandler *mEventHandler;
 };
 
 #endif // SYSTEM_H

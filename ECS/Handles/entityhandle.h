@@ -14,6 +14,10 @@ struct EntityHandle
     EntityHandle() = default;
     EntityHandle(World *world, Entity *entity);
 
+    /**
+       @brief destroy this entity.
+       More detailed description here
+     */
     void destroy();
     EntityHandle createEntityComponent(const std::string &name);
     void addEntityComponent(Entity *entity);

@@ -44,20 +44,26 @@ void ThirdPersonCameraSystem::processMouse(const InputComponent &input, Transfor
     xOffset *= 0.2f;
     yOffset *= 0.2f;
 
+    // Set player rotation
+
     // Set camera rotation
     camera.mRotation.yaw += xOffset;
     camera.mRotation.pitch += yOffset;
-    camera.mRotation.yaw = am::mod(transform.mRotation.yaw, 360.0f);
-    camera.mRotation.pitch = am::clamp(transform.mRotation.pitch, -89.0f, 89.0f);
-    transform.mRotation.yaw += xOffset;
-    qDebug() << camera.mRotation;
+    camera.mRotation.yaw = am::mod(camera.mRotation.yaw, 360.0f);
+    camera.mRotation.pitch = am::clamp(camera.mRotation.pitch, -89.0f, 89.0f);
 }
+/**
 
+   @param camera
+   @param transform
+   @param entity
+ */
 void ThirdPersonCameraSystem::updateViewMatrixUniform(const ThirdPersonCameraComponent &camera, const TransformComponent &transform, EntityHandle entity)
 {
     am::Mat4 cameraTransform;
-    cameraTransform *= entity.getModelMatrix();
-    cameraTransform.rotate(camera.mRotation.pitch, am::right());
+    cameraTransform.translate(entity.getWorldLocation());
+    cameraTransform.rotate(-camera.mRotation.yaw, am::up());
+    cameraTransform.rotate(camera.mRotation.pitch, am::forward());
     cameraTransform.translate(camera.mCameraRelativeLocation);
     am::Vec3 cameraLocation(cameraTransform(0,3), cameraTransform(1,3), cameraTransform(2,3));
 

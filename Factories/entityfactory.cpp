@@ -240,7 +240,7 @@ EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am:
     MeshComponent mesh{mMeshFactory.createTerrain(std::to_string(-min * max), terrainGen.mVertices, terrainGen.mIndices)};
     MaterialComponent material;
     material.mDiffuseColor = color;
-    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("grass"));
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("desert"));
     material.mShininess = 5.0f;
     material.mSpecularColor = am::Vec(0.1);
     TerrainComponent terrain;

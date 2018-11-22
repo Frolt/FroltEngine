@@ -87,7 +87,19 @@ void Engine::initialize()
     testCube3.addComponent(MaterialComponent(Color::black, 50));
     testCube3.addComponent(mMeshFactory->createCube());
 
+    sphere.setRelativeRotation(am::Rotator(45.0f, 0.0f, 0.0f));
 //    sphere.destroy();
+
+
+    am::Vec3 rot;
+    rot.yaw = 1.0f;
+    rot.x = 1.0f;
+
+    am::Vec3 col;
+    col.r = 1.0f;
+
+
+
 
 //    auto model1 = mEntityFactory->createModel("model1", "alien/alien.fbx", am::Vec{20.0f, 20.0f, 10.0f});
 //    auto model2 = mEntityFactory->createModel("model2", "nanosuit/nanosuit.obj", am::Vec{-10.0f, 0.0f, -10.0f});
@@ -108,7 +120,7 @@ void Engine::initialize()
     AISphere.addComponent(PhysicsComponent());
 
     mWorld->activateCamera(player);
-//    mWorld->activateCamera(camera);
+    mWorld->activateCamera(camera);
 
     auto startPos = mEntityFactory->createSphere("startPos", Color::green, am::Vec3{-20.0f, -15.0f, 0.0f});
     auto endPos = mEntityFactory->createSphere("endPos", Color::red, am::Vec3{20.0f, 18.0f, 0.0f});

@@ -43,7 +43,7 @@ void MainWindow::init()
 
     // Settings
     setWindowTitle(QString("Frolt Engine"));
-    showFullScreen();
+//    showFullScreen();
 }
 
 void MainWindow::connectSignalsSlots()

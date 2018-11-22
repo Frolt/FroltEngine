@@ -36,6 +36,7 @@
 #include "ECS/Systems/combatsystem.h"
 #include "ECS/Systems/thirdpersoncamerasystem.h"
 #include "engine.h"
+#include <functional>
 
 World::World(Engine *engine)
     : mEngine{*engine}
@@ -218,10 +219,8 @@ void World::activateCamera(EntityID entity)
 {
     auto *freeCamManager = static_cast<ComponentManager<FreeCameraComponent> *>(mComponentManagers[FreeCameraComponent::family()].get());
     auto *thirdCamManager = static_cast<ComponentManager<ThirdPersonCameraComponent> *>(mComponentManagers[ThirdPersonCameraComponent::family()].get());
-    std::function disableFreeCamera = [](FreeCameraComponent &cameraComp) { cameraComp.mActive = false; };
-    std::function disableThirdCamera = [](ThirdPersonCameraComponent &cameraComp) { cameraComp.mActive = false; };
-    freeCamManager->iterateAll(disableFreeCamera);
-    thirdCamManager->iterateAll(disableThirdCamera);
+    freeCamManager->iterateAll([](FreeCameraComponent &cameraComp) { cameraComp.mActive = false; });
+    thirdCamManager->iterateAll([](ThirdPersonCameraComponent &cameraComp) { cameraComp.mActive = false; });
     if (hasComponent<FreeCameraComponent>(entity)) {
         auto camera = freeCamManager->getComponent(entity);
         camera->mActive = true;
