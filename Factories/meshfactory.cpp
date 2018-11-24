@@ -3,7 +3,7 @@
 #include "ECS/Components/mesh_component.h"
 #include "ECS/Components/model_component.h"
 #include "vertex.h"
-#include "paths.h"
+#include "path.h"
 #include "octahedron.h"
 #include "modelloader.h"
 

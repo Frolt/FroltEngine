@@ -22,7 +22,6 @@ void RenderSystem::update(float)
     ch::Material material;
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, mesh, transform, material);
-//        mesh().mShader.use();
         updateMaterialUniforms(mesh().mShader, material);
         updateTransformUniforms(mesh().mShader, mWorld->getEntity(entity));
         draw(mesh);

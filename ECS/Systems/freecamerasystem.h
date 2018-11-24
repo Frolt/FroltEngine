@@ -20,10 +20,10 @@ public:
 
 private:
     /// Sets
-    void processKeyboard(const InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera) const;
+    void switchCamera(const InputComponent &input) const;
+    void processKeyboard(const InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera, EntityHandle entity) const;
     void processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const;
     void processScroll(FreeCameraComponent &freeCamera, const InputComponent &input) const;
-    void updateCameraVectors(const TransformComponent &transform, FreeCameraComponent &freeCamera) const;
     void updateUniforms(const TransformComponent &transform, const FreeCameraComponent &camera, EntityHandle entity) const;
 };
 

@@ -11,10 +11,9 @@ struct FreeCameraComponent : public Component<FreeCameraComponent>, public Camer
     FreeCameraComponent(Shader shader);
 
     // TODO use velocity in movementComponent?
-    am::Vec mFront = -am::forward();
+    am::Vec mFront = am::forward();
     am::Vec mUp;
     am::Vec mRight;
-    am::Vec mWorldUp = am::up();
 
     float mZoomStr{5.0f};
     float mZoom{45.0f};

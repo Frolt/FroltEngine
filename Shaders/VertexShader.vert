@@ -9,6 +9,7 @@ out vec3 Pos;
 out vec3 Normal;
 out vec2 UV;
 out vec3 FragPos;
+out vec3 TextureDir;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -23,4 +24,5 @@ void main()
     Normal = normalize(normalMat * aNormal);
     UV = aUV;
     FragPos = vec3(model * vec4(aPos, 1.0));
+    TextureDir = aPos;
 }

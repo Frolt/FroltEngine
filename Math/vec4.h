@@ -8,6 +8,11 @@ namespace am
     // Forward declarations
     struct Vec3;
 
+    /**
+       @brief A 4D homogeneous vector composed of components (X, Y, Z, W)
+
+       can be printed with qDebug()
+     */
     struct Vec4
     {
         Vec4(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f);

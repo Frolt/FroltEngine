@@ -7,14 +7,14 @@
    @brief The playerSystem class implements player movement throught W,A,S,D input,
     and adds friction and max speed
  */
-class playerSystem : public System
+class PlayerSystem : public System
 {
 public:
-    playerSystem();
+    PlayerSystem();
 
     void beginPlay() override;
     void update(float deltaTime) override;
-    void movePlayer(const InputComponent &input, MovementComponent &movement, float deltaTime) const;
+    void movePlayer(const InputComponent &input, MovementComponent &movement, float deltaTime, EntityHandle entity) const;
 };
 
 #endif // PLAYERSYSTEM_H

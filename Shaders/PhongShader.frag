@@ -47,6 +47,7 @@ struct SpotLight {
 const int numOfPointLights = 5;
 const int numOfspotlights = 5;
 const int numOfMaps = 3;
+
 // Uniforms
 uniform Material material;
 uniform DirLight dirLight;
@@ -71,10 +72,15 @@ vec3 calcEmission();
 
 void main()
 {
+    // The final fragment color
     vec3 fragColor = vec3(0.0);
+
+    // Lights are displayed with a single color
     if (material.isLight) {
         fragColor = material.diffuseColor;
-    } else {
+    }
+    // Combine all lights
+    else {
         vec3 normal = normalize(Normal);
         vec3 camDir = normalize(camPos - FragPos);
         fragColor += calcDirLight(dirLight, normal, camDir);
@@ -87,11 +93,6 @@ void main()
 
     // Final fragment color
     FragColor = vec4(fragColor, 1.0);
-//    float near = 0.1f;
-//    float far = 1000.0f;
-//    float depth = gl_FragCoord.z * 2.0 - 1.0;
-//    float linearDepth =
-//    FragColor = vec4(vec3(gl_FragCoord.z), 1.0);
 }
 
 //---------------------------------------------------------------------------------

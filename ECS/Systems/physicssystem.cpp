@@ -27,7 +27,7 @@ void PhysicsSystem::update(float)
 void PhysicsSystem::applyGravity(TransformComponent &transform, MovementComponent &movement)
 {
     ch::Terrain terrain;
-    mWorld->unpack(mWorld->mEngine.mTerrain1().mID, terrain);
+    mWorld->unpack(mWorld->getEntity("mathTerrain"), terrain);
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;

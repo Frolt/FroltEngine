@@ -52,6 +52,13 @@ void EntityHandle::setRelativeLocation(const am::Vec3 &location)
     transform().mLocation = location;
 }
 
+void EntityHandle::setRelativeLocation(float x, float y, float z)
+{
+    ch::Transform transform;
+    mWorld->unpack(mEntity->mID, transform);
+    transform().mLocation = am::Vec3(x,y,z);
+}
+
 void EntityHandle::setRelativeRotation(const am::Rotator &rotation)
 {
     ch::Transform transform;
@@ -59,12 +66,29 @@ void EntityHandle::setRelativeRotation(const am::Rotator &rotation)
     transform().mRotation = rotation;
 }
 
-void EntityHandle::setRelativeScale(const am::Vec3 &scale)
+void EntityHandle::setRelativeRotation(float yaw, float pitch, float roll)
+{
+    am::Rotator rotation;
+    rotation.yaw = yaw;
+    rotation.pitch = pitch;
+    rotation.roll = roll;
+    ch::Transform transform;
+    mWorld->unpack(mEntity->mID, transform);
+    transform().mRotation = rotation;
+}
 
+void EntityHandle::setRelativeScale(const am::Vec3 &scale)
 {
     ch::Transform transform;
     mWorld->unpack(mEntity->mID, transform);
     transform().mScale = scale;
+}
+
+void EntityHandle::setRelativeScale(float x, float y, float z)
+{
+    ch::Transform transform;
+    mWorld->unpack(mEntity->mID, transform);
+    transform().mScale = am::Vec3(x,y,z);
 }
 
 void EntityHandle::addRelativeLocation(const am::Vec3 &location)
@@ -74,8 +98,26 @@ void EntityHandle::addRelativeLocation(const am::Vec3 &location)
     transform().mLocation += location;
 }
 
+void EntityHandle::addRelativeLocation(float x, float y, float z)
+{
+    ch::Transform transform;
+    mWorld->unpack(mEntity->mID, transform);
+    transform().mLocation += am::Vec3(x,y,z);
+}
+
 void EntityHandle::addRelativeRotation(const am::Rotator &rotation)
 {
+    ch::Transform transform;
+    mWorld->unpack(mEntity->mID, transform);
+    transform().mRotation += rotation;
+}
+
+void EntityHandle::addRelativeRotation(float yaw, float pitch, float roll)
+{
+    am::Rotator rotation;
+    rotation.yaw = yaw;
+    rotation.pitch = pitch;
+    rotation.roll = roll;
     ch::Transform transform;
     mWorld->unpack(mEntity->mID, transform);
     transform().mRotation += rotation;
@@ -86,6 +128,13 @@ void EntityHandle::addRelativeScale(const am::Vec3 &scale)
     ch::Transform transform;
     mWorld->unpack(mEntity->mID, transform);
     transform().mScale += scale;
+}
+
+void EntityHandle::addRelativeScale(float x, float y, float z)
+{
+    ch::Transform transform;
+    mWorld->unpack(mEntity->mID, transform);
+    transform().mScale += am::Vec3(x,y,z);
 }
 
 am::Vec3 EntityHandle::getRelativeLocation()
@@ -126,11 +175,43 @@ am::Vec3 EntityHandle::getWorldScale()
 
 am::Mat4 EntityHandle::getModelMatrix()
 {
-    am::Mat4 modelMatrix;
-    return combineAncestorsTransforms(mEntity, modelMatrix);
+    return combineAncestorsTransforms(mEntity);
 }
 
-am::Mat4 EntityHandle::combineAncestorsTransforms(Entity *entity, am::Mat4 &prevModelMat)
+am::Vec3 EntityHandle::getForwardVector()
+{
+    am::Vec3 worldRotation = combineAncestorsRotation(mEntity);
+    am::Vec front;
+    front.x = cos(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.y = sin(am::toRadians(worldRotation.pitch));
+    front.z = sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    return am::normalize(front);
+}
+
+am::Vec3 EntityHandle::getRightVector()
+{
+    am::Vec3 worldRotation = combineAncestorsRotation(mEntity);
+    am::Vec front;
+    front.x = cos(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.y = sin(am::toRadians(worldRotation.pitch));
+    front.z = sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.normalize();
+    return am::normalize(am::cross(front, am::up()));
+}
+
+am::Vec3 EntityHandle::getUpVector()
+{
+    am::Vec3 worldRotation = combineAncestorsRotation(mEntity);
+    am::Vec front;
+    front.x = cos(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.y = sin(am::toRadians(worldRotation.pitch));
+    front.z = sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.normalize();
+    am::Vec right = am::normalize(am::cross(front, am::up()));
+    return -am::normalize(am::cross(front, right));
+}
+
+am::Mat4 EntityHandle::combineAncestorsTransforms(Entity *entity, const am::Mat4 &prevModelMat)
 {
     ch::Transform transform;
     mWorld->unpack(entity->mID, transform);
@@ -145,6 +226,18 @@ am::Mat4 EntityHandle::combineAncestorsTransforms(Entity *entity, am::Mat4 &prev
 
     if (entity->mParent)
         return combineAncestorsTransforms(entity->mParent, combined);
+    else
+        return combined;
+}
+
+am::Vec3 EntityHandle::combineAncestorsRotation(Entity *entity, const am::Rotator &prevRotation)
+{
+    ch::Transform transform;
+    mWorld->unpack(entity->mID, transform);
+    auto combined = prevRotation + transform().mRotation;
+
+    if (entity->mParent)
+        return combineAncestorsRotation(entity->mParent, combined);
     else
         return combined;
 }

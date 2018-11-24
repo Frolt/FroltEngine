@@ -1,5 +1,5 @@
 #include "lasreader.h"
-#include "paths.h"
+#include "path.h"
 #include "a_math.h"
 #include "vertex.h"
 #include <iostream>

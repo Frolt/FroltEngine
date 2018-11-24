@@ -154,5 +154,18 @@ namespace am
         auto denominator = a.length();
         return (numerator / std::powf(denominator, 2.0f)) * a;
     }
+
+    Vec3 clampLength(const Vec3 &vec, float min, float max)
+    {
+        auto length = vec.length();
+        auto unitVector = normalize(vec);
+        if (length > max) {
+            return unitVector * max;
+        }
+        if (length < min) {
+            return unitVector * min;
+        }
+        return unitVector;
+    }
 }
 

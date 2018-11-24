@@ -78,7 +78,7 @@ namespace am
 
     Vec3 forward()
     {
-        return Vec3(0.0f, 0.0f, 1.0f);
+        return Vec3(0.0f, 0.0f, -1.0f);
     }
 
     Vec3 one()
@@ -91,7 +91,7 @@ namespace am
         return Vec3(0.0f, 0.0f, 0.0f);
     }
 
-    float clamp(float x, float min, float max)
+    float clampLength(float x, float min, float max)
     {
         if (x < min)
             x = min;

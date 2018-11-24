@@ -87,7 +87,10 @@ SOURCES += \
     ECS/Components/player_component.cpp \
     ECS/Components/ai_component.cpp \
     ECS/Systems/thirdpersoncamerasystem.cpp \
-    ECS/Components/third_person_camera_component.cpp
+    ECS/Components/third_person_camera_component.cpp \
+    ECS/Components/skybox_component.cpp \
+    ECS/Systems/skyboxsystem.cpp \
+    cubemap.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -106,7 +109,6 @@ HEADERS += \
     LAS/headerstock.h \
     LAS/lasreader.h \
     Libraries/Include/stb_image.h \
-    paths.h \
     inputstate.h \
     ECS/entity.h \
     ECS/Managers/componentmanager.h \
@@ -167,7 +169,11 @@ HEADERS += \
     ECS/Components/player_component.h \
     ECS/Components/ai_component.h \
     ECS/Systems/thirdpersoncamerasystem.h \
-    ECS/Components/third_person_camera_component.h
+    ECS/Components/third_person_camera_component.h \
+    ECS/Components/skybox_component.h \
+    ECS/Systems/skyboxsystem.h \
+    cubemap.h \
+    path.h
 
 FORMS += \
     mainwindow.ui
@@ -194,4 +200,9 @@ DEPENDPATH += $$PWD/Libraries/Include
 # --------------------------------------------------------------
 DISTFILES += \
     Shaders/VertexShader.vert \
-    Shaders/PhongShader.frag
+    Shaders/PhongShader.frag \
+    Shaders/Skybox.frag \
+    Shaders/Skybox.vert
+
+# App icon
+RC_FILE = myapp.rc

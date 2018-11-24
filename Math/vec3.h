@@ -18,7 +18,9 @@ namespace am
     using Rotator = Vec3;
 
     /**
-       @brief Can be used as a Rotator, Color or 3DVector.
+       @brief A vector in 3D space composed of components (X, Y, Z) with floating point precision. Can be used as a Rotator, Color or 3DVector.
+
+       can be printed with qDebug()
      */
     struct Vec3
     {
@@ -70,7 +72,12 @@ namespace am
     Vec3 cross(const Vec3 &a, const Vec3 &b);
     float dot(const Vec3 &v1, const Vec3 &b);
     Vec3 normalize(const Vec3 &v);
+    /// Not used
     Vec3 projection(const Vec3 &a, const Vec3 &b);
+    /**
+       @brief Clamp the vector if it's length is greater than max or less than min.
+     */
+    Vec3 clampLength(const Vec3 &vec, float min, float max);
 }
 
 #endif // VEC3_H

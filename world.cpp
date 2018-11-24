@@ -22,6 +22,7 @@
 #include "ECS/Components/player_component.h"
 #include "ECS/Components/ai_component.h"
 #include "ECS/Components/third_person_camera_component.h"
+#include "ECS/Components/skybox_component.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
 #include "ECS/Systems/directionallightsystem.h"
@@ -35,6 +36,8 @@
 #include "ECS/Systems/collisionsystem.h"
 #include "ECS/Systems/combatsystem.h"
 #include "ECS/Systems/thirdpersoncamerasystem.h"
+#include "ECS/Systems/skyboxsystem.h"
+#include "entityfactory.h"
 #include "engine.h"
 #include <functional>
 
@@ -64,21 +67,25 @@ World::World(Engine *engine)
     mComponentManagers[CollisionComponent::family()] = std::make_unique<ComponentManager<CollisionComponent>>(100000);
     mComponentManagers[PlayerComponent::family()] = std::make_unique<ComponentManager<PlayerComponent>>(5);
     mComponentManagers[AIComponent::family()] = std::make_unique<ComponentManager<AIComponent>>(1000);
+    mComponentManagers[SkyboxComponent::family()] = std::make_unique<ComponentManager<SkyboxComponent>>(1);
     // Create systems
     mSystems.reserve(20);
     mSystems.push_back(std::make_unique<MovementSystem>());
     mSystems.push_back(std::make_unique<DirectionalLightSystem>());
     mSystems.push_back(std::make_unique<PointLightSystem>());
     mSystems.push_back(std::make_unique<SpotlightSystem>());
-    mSystems.push_back(std::make_unique<playerSystem>());
+    mSystems.push_back(std::make_unique<PlayerSystem>());
     mSystems.push_back(std::make_unique<FreeCameraSystem>());
-    mSystems.push_back(std::make_unique<modelRenderSystem>());
     mSystems.push_back(std::make_unique<PhysicsSystem>());
     mSystems.push_back(std::make_unique<AISystem>());
     mSystems.push_back(std::make_unique<CollisionSystem>());
     mSystems.push_back(std::make_unique<CombatSystem>());
     mSystems.push_back(std::make_unique<ThirdPersonCameraSystem>());
+
+    // Order is important
+    mSystems.push_back(std::make_unique<SkyboxSystem>());
     mSystems.push_back(std::make_unique<RenderSystem>());
+    mSystems.push_back(std::make_unique<ModelRenderSystem>());
     // Set world and eventHandler pointer for all systems
     for (auto &sys : mSystems) {
         sys->setWorld(this);
@@ -88,6 +95,61 @@ World::World(Engine *engine)
 
 World::~World()
 {
+
+}
+
+void World::makeScene(EntityFactory &ef)
+{
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    // SCENE START
+    // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+    // Player
+    auto player = ef.createPlayerModel("player", Color::orangeRed, am::Vec(-25.0f, 0.0f, 0.0f));
+
+    // Terrain
+    ef.createMathTerrain("mathTerrain");
+
+    // Enviroment
+    ef.createSphere("zeroMarker");
+    auto cube0 = ef.createCube("cube0", Color::red, am::Vec{0.0f, 20.0f, 00.0f});
+    auto cube1 = ef.createCube("cube1", Color::blue, am::Vec{-15.0f, 0.0f, 0.0f});
+    auto cube2 = ef.createCube("cube2", Color::aqua, am::Vec{-5.0f, 0.0f, 0.0f});
+    cube0.addEntityComponent(cube1);
+    cube1.addEntityComponent(cube2);
+
+//    // AI
+//    auto guard = ef.createAIModel("guard", "nanosuit/nanosuit.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+
+    // Camera
+    auto camera = ef.createFreeCamera("camera", am::Vec{0.0f, 20.0f, 40.0f});
+    activateCamera(player);
+    activateCamera(camera);
+
+    // Lights
+    ef.createDirectionalLight("dirLight", Color::white);
+    ef.createPointLight("pointLight1", am::Vec3{20.0f, 20.0f, -100.0f}, Color::red);
+    ef.createPointLight("pointLight2", am::Vec3{-30.0f, 10.0f, 0.0f}, Color::white);
+    ef.createPointLight("pointLight3", am::Vec3{60.0f, 20.0f, 100.0f}, Color::orange);
+    ef.createSpotlight("spotlight1", am::Vec(-30.0f, 40.0f, 50.0f), -am::up(), Color::white);
+    ef.createSpotlight("spotlight2", am::Vec(80.0f, 30.0f, 20.0f), -am::up());
+    ef.createSpotlight("spotlight3", am::Vec(-60.0f, 60.0f, -40.0f), -am::up());
+
+    // Skybox
+    ef.createSkybox("skybox", "lake");
+
+    // Test rendering performance (creates N cubes)
+    for (unsigned int i = 0; i < 1e2; i++) {
+        float randValueX = static_cast<float>(std::rand() % 100 - 50);
+        float randValueY = static_cast<float>(std::rand() % 100 - 50);
+        float randValueZ = static_cast<float>(std::rand() % 100 - 50);
+        auto cube = ef.createCube("floatingCube" + std::to_string(i), Color::aqua, am::Vec3{randValueX, randValueY, randValueZ});
+        cube.addComponent(MovementComponent(am::up() * 1.0f));
+    }
+
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    // SCENE END
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }
 
@@ -219,6 +281,7 @@ void World::activateCamera(EntityID entity)
 {
     auto *freeCamManager = static_cast<ComponentManager<FreeCameraComponent> *>(mComponentManagers[FreeCameraComponent::family()].get());
     auto *thirdCamManager = static_cast<ComponentManager<ThirdPersonCameraComponent> *>(mComponentManagers[ThirdPersonCameraComponent::family()].get());
+
     freeCamManager->iterateAll([](FreeCameraComponent &cameraComp) { cameraComp.mActive = false; });
     thirdCamManager->iterateAll([](ThirdPersonCameraComponent &cameraComp) { cameraComp.mActive = false; });
     if (hasComponent<FreeCameraComponent>(entity)) {

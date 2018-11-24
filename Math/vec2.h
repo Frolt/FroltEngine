@@ -11,6 +11,11 @@ namespace am
 // Forward declarations
 struct Vec3;
 struct Vec4;
+    /**
+       @brief A vector in 2D space composed of components (X, Y) with floating point precision.
+
+       can be printed with qDebug()
+     */
     struct Vec2
     {
         // Constructor

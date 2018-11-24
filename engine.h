@@ -61,9 +61,7 @@ public:
     std::unique_ptr<EventHandler> mEventHandler;
     /// This is the main/only shader the engine use
     Shader mPhongShader;
-    // Terrains
-    EntityHandle mTerrain1;
-    EntityHandle mTestTriangle;
+    Shader mSkyboxShader;
     // Trophies
     std::vector<EntityHandle> mTrophies;
 private:

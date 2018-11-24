@@ -1,5 +1,5 @@
-#ifndef PATHS_H
-#define PATHS_H
+#ifndef PATH_H
+#define PATH_H
 
 #include <string>
 
@@ -7,12 +7,14 @@
 namespace Path
 {
     const std::string root = "../";
+    const std::string assets = "../Assets/";
     const std::string textures = "../Assets/Textures/";
-    const std::string shaders = "../Shaders/";
+    const std::string skyboxes = "../Assets/Skyboxes/";
     const std::string primitives = "../Assets/Primitives/";
-    const std::string mapdata = "../LAS/MapData/";
     const std::string models = "../Assets/Models/";
+    const std::string shaders = "../Shaders/";
+    const std::string mapdata = "../LAS/MapData/";
 };
 
 
-#endif // PATHS_H
+#endif // PATH_H

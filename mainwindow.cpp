@@ -32,12 +32,14 @@ void MainWindow::init()
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setRenderableType(QSurfaceFormat::OpenGL);
     format.setSamples(4);
-    format.setDepthBufferSize(24);
+//    format.setDepthBufferSize(24);
     format.setOption(QSurfaceFormat::DebugContext);
 //    format.setSwapInterval(0); // Distable Vsync
 
     mViewport = new Viewport(format, this);
     mViewportWidget = QWidget::createWindowContainer(mViewport);
+    QIcon appIcon("FroltEngineIcon.icon");
+    mViewportWidget->setWindowIcon(appIcon);
     ui->viewport->addWidget(mViewportWidget);
     mViewportWidget->setFocus();
 

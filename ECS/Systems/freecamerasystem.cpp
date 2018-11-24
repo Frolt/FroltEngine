@@ -16,6 +16,7 @@ void FreeCameraSystem::beginPlay()
 }
 
 void FreeCameraSystem::update(float)
+
 {
 
     ch::Transform transform;
@@ -24,51 +25,56 @@ void FreeCameraSystem::update(float)
     ch::Movement movement;
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, transform, camera, input, movement);
-        // Eject/possess pawn
-        // -----------------------------------------------------------
-        static bool canPossess{true};
-        static bool isPossessingPlayer{true};
-        if (input().keyPressed(Qt::Key_F8) && canPossess) {
-            if (isPossessingPlayer) {
-                mWorld->activateCamera(mWorld->getEntity("camera"));
-                isPossessingPlayer = false;
-                canPossess = false;
-            } else {
-                mWorld->activateCamera(mWorld->getEntity("player"));
-                isPossessingPlayer = true;
-                canPossess = false;
-            }
-        } else if (!input().keyPressed(Qt::Key_F8)){
-            canPossess = true;
-        }
-        // -----------------------------------------------------------
+        switchCamera(input);
         if (camera().mActive) {
-            processKeyboard(input, movement, camera);
+            processKeyboard(input, movement, camera, mWorld->getEntity(entity));
             processMouse(input, camera, transform);
             processScroll(camera, input);
-            updateCameraVectors(transform, camera);
             updateUniforms(transform, camera, mWorld->getEntity(entity));
+
+//            qDebug() << "FORWARD\t = " << am::normalize(mWorld->getEntity(entity).getForwardVector());
+//            qDebug() << "RIGHT\t = " << am::normalize(mWorld->getEntity(entity).getRightVector());
+//            qDebug() << "UP\t = " << am::normalize(mWorld->getEntity(entity).getUpVector());
         }
     }
 }
 
-void FreeCameraSystem::processKeyboard(const InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera) const
+void FreeCameraSystem::switchCamera(const InputComponent &input) const
+{
+    static bool canPossess{true};
+    static bool isPossessingPlayer{true};
+    if (input.keyPressed(Qt::Key_F8) && canPossess) {
+        if (isPossessingPlayer) {
+            mWorld->activateCamera(mWorld->getEntity("camera"));
+            isPossessingPlayer = false;
+            canPossess = false;
+        } else {
+            mWorld->activateCamera(mWorld->getEntity("player"));
+            isPossessingPlayer = true;
+            canPossess = false;
+        }
+    } else if (!input.keyPressed(Qt::Key_F8)){
+        canPossess = true;
+    }
+}
+
+void FreeCameraSystem::processKeyboard(const InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera, EntityHandle entity) const
 {
     am::Vec vel;
 
     // Camera movement
     if (input.keyPressed(Qt::Key_W))
-        vel += freeCamera.mFront * freeCamera.mMoveSpeed;
+        vel += entity.getForwardVector() * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_A))
-        vel -= freeCamera.mRight * freeCamera.mMoveSpeed;
+        vel -= entity.getRightVector() * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_S))
-        vel -= freeCamera.mFront * freeCamera.mMoveSpeed;
+        vel -= entity.getForwardVector() * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_D))
-        vel += freeCamera.mRight * freeCamera.mMoveSpeed;
+        vel += entity.getRightVector() * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_Space))
-        vel += freeCamera.mWorldUp * freeCamera.mMoveSpeed;
+        vel += am::up() * freeCamera.mMoveSpeed;
     if (input.keyPressed(Qt::Key_Control))
-        vel -= freeCamera.mWorldUp * freeCamera.mMoveSpeed;
+        vel -= am::up() * freeCamera.mMoveSpeed;
     movement.mVelocity = vel;
 
     // Zoom
@@ -82,7 +88,7 @@ void FreeCameraSystem::processKeyboard(const InputComponent &input, MovementComp
     } else if (!input.keyPressed(Qt::Key_Plus) && !input.keyPressed(Qt::Key_Minus)) {
         canZoom = true;
     }
-    freeCamera.mZoom = am::clamp(freeCamera.mZoom, 10.0f, 45.0f);
+    freeCamera.mZoom = am::clampLength(freeCamera.mZoom, 10.0f, 45.0f);
 }
 
 void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const
@@ -106,7 +112,7 @@ void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCamer
         transform.mRotation.yaw += xOffset;
         transform.mRotation.pitch += yOffset;
         transform.mRotation.yaw = am::mod(transform.mRotation.yaw, 360.0f);
-        transform.mRotation.pitch = am::clamp(transform.mRotation.pitch, -89.0f, 89.0f);
+        transform.mRotation.pitch = am::clampLength(transform.mRotation.pitch, -89.0f, 89.0f);
     }
 }
 
@@ -120,34 +126,29 @@ void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, const Inpu
         // Zoom
         auto str = scrollDelta / 120.0f * freeCamera.mZoomStr;
         freeCamera.mZoom -= str;
-        freeCamera.mZoom = am::clamp(freeCamera.mZoom, 10.0f, 45.0f);
+        freeCamera.mZoom = am::clampLength(freeCamera.mZoom, 10.0f, 45.0f);
     } else {
         // Camera speed
         freeCamera.mMoveSpeed += (scrollDelta / 120.0f) * freeCamera.mMoveStr;
-        freeCamera.mMoveSpeed = am::clamp(freeCamera.mMoveSpeed, 10.0f, 1000.0f);
+        freeCamera.mMoveSpeed = am::clampLength(freeCamera.mMoveSpeed, 10.0f, 1000.0f);
     }
-
 
     lastWheelPos = currentWheelPos;
 }
 
-void FreeCameraSystem::updateCameraVectors(const TransformComponent &transform, FreeCameraComponent &freeCamera) const
-{
-    am::Vec front;
-    front.x = cos(am::toRadians(transform.mRotation.yaw)) * cos(am::toRadians(transform.mRotation.pitch));
-    front.y = sin(am::toRadians(transform.mRotation.pitch));
-    front.z = sin(am::toRadians(transform.mRotation.yaw)) * cos(am::toRadians(transform.mRotation.pitch));
-    freeCamera.mFront = am::normalize(front);
-
-    freeCamera.mRight = am::normalize(am::cross(freeCamera.mFront, freeCamera.mWorldUp));
-    freeCamera.mUp = -am::normalize(am::cross(freeCamera.mFront, freeCamera.mRight));
-}
-
 void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &camera, EntityHandle entity) const
 {
-    auto view = am::Mat4::lookAt(entity.getWorldLocation(), entity.getWorldLocation() + camera.mFront, camera.mWorldUp);
+    auto view = am::Mat4::lookAt(entity.getWorldLocation(), entity.getWorldLocation() + entity.getForwardVector(), am::up());
     auto projection = am::Mat4::perspective(am::toRadians(camera.mZoom), mWorld->mEngine.mViewport->mAspect, 0.1f, 1000.0f);
     camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", entity.getWorldLocation());
+
+    auto skybox = mWorld->getEntity("skybox");
+    ch::Skybox skyboxComp;
+    mWorld->unpack(skybox, skyboxComp);
+    skyboxComp().mSkyboxShader.use();
+    skyboxComp().mSkyboxShader.setMat4("projection", projection);
+    skyboxComp().mSkyboxShader.setMat4("view", view);
+    skyboxComp().mDefaultShader.use();
 }

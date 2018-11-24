@@ -4,6 +4,9 @@
 #include "basememberfunctionhandler.h"
 
 template<class ClassInstance, class EventType>
+/**
+   @brief The MemberFunctionHandler class stores a reference to a member function and its class instance.
+ */
 class MemberFunctionHandler : public BaseMemberFunctionHandler
 {
 public:

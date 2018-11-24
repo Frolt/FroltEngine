@@ -20,7 +20,7 @@ namespace am
     /// same as (x % y)
     float mod(float x, float y);
     /// x can't supersede the min or max value
-    float clamp(float x, float min, float max);
+    float clampLength(float x, float min, float max);
 
     // Curves
     /**

@@ -4,7 +4,7 @@
 #include <string>
 
 /**
-   @brief The Texture struct stores an openGL texture address,
+   @brief The Texture struct stores an openGL texture ID,
     aswell as the texture type(diffuse, specular etc) and a path to the image file
  */
 struct Texture

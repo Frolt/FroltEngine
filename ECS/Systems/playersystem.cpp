@@ -1,41 +1,47 @@
 #include "playersystem.h"
 
-playerSystem::playerSystem()
+PlayerSystem::PlayerSystem()
 {
     mSystemMask.addComponent<InputComponent>();
     mSystemMask.addComponent<MovementComponent>();
     mSystemMask.addComponent<PlayerComponent>();
 }
 
-void playerSystem::beginPlay()
+void PlayerSystem::beginPlay()
 {
 
 }
 
-void playerSystem::update(float deltaTime)
+void PlayerSystem::update(float deltaTime)
 {
     ch::Input input;
     ch::Movement movement;
     ch::Transform transform;
+    ch::ThirdPersonCamera camera;
     for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, input, movement, transform/*, camera*/);
-        movePlayer(input, movement, deltaTime);
+        mWorld->unpack(entity, input, movement, transform, camera);
+        if (camera().mActive) {
+            movePlayer(input, movement, deltaTime, mWorld->getEntity(entity));
+        }
     }
 }
 
-void playerSystem::movePlayer(const InputComponent &input, MovementComponent &movement, float deltaTime) const
+void PlayerSystem::movePlayer(const InputComponent &input, MovementComponent &movement, float deltaTime, EntityHandle entity) const
 {
     float speed = 50.0f * deltaTime;
     float maxSpeed = 20.0f;
 
-    if (input.keyPressed(Qt::Key_Up))
-        movement.mVelocity.z = am::clamp(movement.mVelocity.z - speed, -maxSpeed, maxSpeed);
-    if (input.keyPressed(Qt::Key_Left))
-        movement.mVelocity.x = am::clamp(movement.mVelocity.x - speed, -maxSpeed, maxSpeed);
-    if (input.keyPressed(Qt::Key_Down))
-        movement.mVelocity.z = am::clamp(movement.mVelocity.z + speed, -maxSpeed, maxSpeed);
-    if (input.keyPressed(Qt::Key_Right))
-        movement.mVelocity.x = am::clamp(movement.mVelocity.x + speed, -maxSpeed, maxSpeed);
+    if (input.keyPressed(Qt::Key_W))
+        movement.mVelocity += entity.getForwardVector() * speed;
+    if (input.keyPressed(Qt::Key_A))
+        movement.mVelocity -= entity.getRightVector() * speed;
+    if (input.keyPressed(Qt::Key_S))
+        movement.mVelocity -= entity.getForwardVector() * speed;
+    if (input.keyPressed(Qt::Key_D))
+        movement.mVelocity += entity.getRightVector() * speed;
+    if (input.keyPressed(Qt::Key_Space))
+        movement.mVelocity += am::up() * 5.0f;
+//    movement.mVelocity = am::clampLength(movement.mVelocity, -maxSpeed, maxSpeed);
 
     // Friction
     movement.mVelocity *= 0.995f;

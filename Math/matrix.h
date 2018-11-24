@@ -24,6 +24,12 @@ namespace am
     using Mat3 = Matrix<3, 3>;
     using Mat4 = Matrix<4, 4>;
 
+    /**
+       @brief The Matrix struct is a templated mathematical matrix.
+       Matrix multiplication happens in reverse order. A * B means A applies its transformation to B
+
+       can be printed with qDebug()
+     */
     template <size_t row, size_t col>
     struct Matrix
     {

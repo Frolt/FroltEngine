@@ -26,6 +26,7 @@
 #include "ECS/Components/player_component.h"
 #include "ECS/Components/ai_component.h"
 #include "ECS/Components/third_person_camera_component.h"
+#include "ECS/Components/skybox_component.h"
 #include "world.h"
 #include "EventSystem/event.h"
 #include "EventSystem/eventhandler.h"

@@ -17,6 +17,7 @@ struct ComponentMask;
 template<typename ComponentType>
 struct ComponentHandle;
 class Engine;
+class EntityFactory;
 
 /**
    @brief The World class is used to provide connection
@@ -33,6 +34,8 @@ public:
     /// Constructor that creates all the component managers, entity manager, and systems
     World(Engine *engine);
     ~World();
+    /// Creates a scene with all the entities that the game should start with
+    void makeScene(EntityFactory &ef);
     /// Calls beginPlay on all the systems
     void beginPlay();
     /// Calls update on all the systems

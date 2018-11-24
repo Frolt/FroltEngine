@@ -22,6 +22,7 @@ struct SpotlightComponent;
 struct TerrainComponent;
 struct BSplineComponent;
 struct CollisionComponent;
+struct SkyboxComponent;
 
 template<typename ComponentType>
 /**
@@ -46,7 +47,7 @@ private:
     EntityID mOwner;
 };
 
-/// This namespace provides handy type-shortcuts for all the different ComponentHandles<T>
+/// Provides handy type-shortcuts for all the different ComponentHandles<T>
 namespace ch {
     using Transform = ComponentHandle<TransformComponent>;
     using Physics = ComponentHandle<PhysicsComponent>;
@@ -63,6 +64,7 @@ namespace ch {
     using Terrain = ComponentHandle<TerrainComponent>;
     using BSpline = ComponentHandle<BSplineComponent>;
     using Collision = ComponentHandle<CollisionComponent>;
+    using Skybox = ComponentHandle<SkyboxComponent>;
 }
 
 //--------------------------------------------------------------------------------------

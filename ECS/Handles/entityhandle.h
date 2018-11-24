@@ -45,15 +45,21 @@ struct EntityHandle
     //--------------------------------------------------------------------------------------
     // Setters
     void setRelativeLocation(const am::Vec3 &location);
+    void setRelativeLocation(float x, float y, float z);
     void setRelativeRotation(const am::Rotator &rotation);
+    void setRelativeRotation(float yaw, float pitch, float roll);
     void setRelativeScale(const am::Vec3 &scale);
+    void setRelativeScale(float x, float y, float z);
     void setWorldLocation(const am::Vec3 &location);        // TODO
     void setWorldRotation(const am::Rotator &rotation);     // TODO
     void setWorldScale(const am::Vec3 &location);           // TODO
     // Adders
     void addRelativeLocation(const am::Vec3 &location);
+    void addRelativeLocation(float x, float y, float z);
     void addRelativeRotation(const am::Rotator &rotation);
+    void addRelativeRotation(float yaw, float pitch, float roll);
     void addRelativeScale(const am::Vec3 &scale);
+    void addRelativeScale(float x, float y, float z);
     void addWorldLocation(const am::Vec3 &location);        // TODO
     void addWorldRotation(const am::Rotator &location);     // TODO
     void addWorldScale(const am::Vec3 &scale);              // TODO
@@ -66,10 +72,14 @@ struct EntityHandle
     am::Vec3 getWorldScale();
     /// returns a ModelMatrix that is built from the entity's transform
     am::Mat4 getModelMatrix();
+    am::Vec3 getForwardVector();
+    am::Vec3 getRightVector();
+    am::Vec3 getUpVector();
 
 private:
     /// recursive function that travels up the hierarchy and combines all the model matrices to get world position
-    am::Mat4 combineAncestorsTransforms(Entity *entity, am::Mat4 &prevModelMat);
+    am::Mat4 combineAncestorsTransforms(Entity *entity, const am::Mat4 &prevModelMat = am::Mat4(1));
+    am::Vec3 combineAncestorsRotation(Entity *entity, const am::Rotator &prevRotation = am::zero());
 
 public:
     Entity *mEntity{nullptr};

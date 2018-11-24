@@ -200,7 +200,7 @@ void AISystem::drawSpline(BSplineComponent &bSpline)
 void AISystem::addTerrainCollision(TransformComponent &transform)
 {
     ch::Terrain terrain;
-    mWorld->unpack(mWorld->mEngine.mTerrain1, terrain);
+    mWorld->unpack(mWorld->getEntity("mathTerrain"), terrain);
 
     auto &indices = terrain().mIndices;
     auto &vertices = terrain().mVertices;

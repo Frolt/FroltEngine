@@ -1,18 +1,18 @@
 #include "modelrendersystem.h"
 
-modelRenderSystem::modelRenderSystem()
+ModelRenderSystem::ModelRenderSystem()
 {
     mSystemMask.addComponent<ModelComponent>();
     mSystemMask.addComponent<TransformComponent>();
     mSystemMask.addComponent<MaterialComponent>();
 }
 
-void modelRenderSystem::beginPlay()
+void ModelRenderSystem::beginPlay()
 {
 
 }
 
-void modelRenderSystem::update(float)
+void ModelRenderSystem::update(float)
 {
     ch::Model model;
     ch::Transform transform;
@@ -26,7 +26,7 @@ void modelRenderSystem::update(float)
     }
 }
 
-void modelRenderSystem::updateMaterialUniforms(const Shader shader, const MaterialComponent &material) const
+void ModelRenderSystem::updateMaterialUniforms(const Shader shader, const MaterialComponent &material) const
 {
     // Set rest of uniforms
     shader.setBool("material.isLight", material.mIsLight);
@@ -38,7 +38,7 @@ void modelRenderSystem::updateMaterialUniforms(const Shader shader, const Materi
     shader.setFloat("material.shininess", material.mShininess);
 }
 
-void modelRenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform) const
+void ModelRenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform) const
 {
     // Matrix transformation happens in reverse order
     //---------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ void modelRenderSystem::updateTransformUniforms(const Shader shader, const Trans
     shader.setMat3("normalMat", normalMatrix);
 }
 
-void modelRenderSystem::draw(ModelComponent &model)
+void ModelRenderSystem::draw(ModelComponent &model)
 {
     for (auto &mesh : model.mMeshes) {
         mesh.draw(model.mShader);
