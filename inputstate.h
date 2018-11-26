@@ -12,9 +12,10 @@ struct InputState
 {
     QSet<int> mPressedKeys;
     QSet<int> mPressedMouseButtons;
-    am::Vec2 mMousePos;
+    QPoint mMousePos;
     QPoint mWheelAngleDelta;
     QPoint mWheelPixelDelta;
+    QPoint mMiddleOfScreen;
 };
 
 #endif // INPUTSTATE_H

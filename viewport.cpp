@@ -36,6 +36,22 @@ void Viewport::initialize()
     emit ready();
 }
 
+void Viewport::lockMouseCursor()
+{
+    QPoint middleOfScreen = QPoint(width() / 2, height() / 2);
+    mInputState.mMiddleOfScreen = middleOfScreen;
+    QCursor c = cursor();
+    c.setPos(mapToGlobal(middleOfScreen));
+    c.setShape(Qt::BlankCursor);
+    setCursor(c);
+    qDebug() << "HEI!";
+}
+
+void Viewport::releaseMouseCursor()
+{
+    setCursor(Qt::ArrowCursor);
+}
+
 void Viewport::preRender()
 {
     mContext->makeCurrent(this);
@@ -69,8 +85,7 @@ void Viewport::keyReleaseEvent(QKeyEvent *event)
 
 void Viewport::mouseMoveEvent(QMouseEvent *event)
 {
-    mInputState.mMousePos.x = event->pos().x();
-    mInputState.mMousePos.y = event->pos().y();
+    mInputState.mMousePos = event->pos();
 }
 
 void Viewport::mousePressEvent(QMouseEvent *event)

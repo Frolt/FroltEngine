@@ -76,7 +76,7 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
     }
 
     // Calculate x value
-    float vel = 0.5f * deltaTime;
+    float vel = 0.2f * deltaTime;
     static float x = 0.0f;
     x+= vel;
     if (activeTrophies == 0)
@@ -214,7 +214,7 @@ void AISystem::addTerrainCollision(TransformComponent &transform)
             auto u = vertices[indices[i]].mPosition;
             auto v = vertices[indices[i+1]].mPosition;
             auto w = vertices[indices[i+2]].mPosition;
-            transform.mLocation.y = res.x * u.y + res.y * v.y + res.z * w.y + 0.5f;
+//            transform.mLocation.y = res.x * u.y + res.y * v.y + res.z * w.y + 0.5f;
         }
     }
 }

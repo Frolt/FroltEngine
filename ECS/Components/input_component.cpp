@@ -21,7 +21,7 @@ bool InputComponent::mousePressed(Qt::MouseButton button) const
     return false;
 }
 
-am::Vec2 InputComponent::mousePos() const
+QPoint InputComponent::mousePos() const
 {
     return mInputState->mMousePos;
 }

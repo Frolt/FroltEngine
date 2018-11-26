@@ -20,7 +20,6 @@ public:
 
 private:
     /// Sets
-    void switchCamera(const InputComponent &input) const;
     void processKeyboard(const InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera, EntityHandle entity) const;
     void processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const;
     void processScroll(FreeCameraComponent &freeCamera, const InputComponent &input) const;

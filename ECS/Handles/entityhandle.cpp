@@ -184,7 +184,7 @@ am::Vec3 EntityHandle::getForwardVector()
     am::Vec front;
     front.x = cos(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
     front.y = sin(am::toRadians(worldRotation.pitch));
-    front.z = sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.z = -sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
     return am::normalize(front);
 }
 
@@ -194,7 +194,7 @@ am::Vec3 EntityHandle::getRightVector()
     am::Vec front;
     front.x = cos(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
     front.y = sin(am::toRadians(worldRotation.pitch));
-    front.z = sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.z = -sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
     front.normalize();
     return am::normalize(am::cross(front, am::up()));
 }
@@ -205,7 +205,7 @@ am::Vec3 EntityHandle::getUpVector()
     am::Vec front;
     front.x = cos(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
     front.y = sin(am::toRadians(worldRotation.pitch));
-    front.z = sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
+    front.z = -sin(am::toRadians(worldRotation.yaw)) * cos(am::toRadians(worldRotation.pitch));
     front.normalize();
     am::Vec right = am::normalize(am::cross(front, am::up()));
     return -am::normalize(am::cross(front, right));

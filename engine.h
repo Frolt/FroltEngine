@@ -17,6 +17,7 @@ class MeshFactory;
 class EntityFactory;
 class MaterialFactory;
 class EventHandler;
+struct InputComponent;
 
 /**
    @brief The Engine class is the owner of the World class instance,
@@ -40,6 +41,8 @@ public:
     void startGameLoop();
     /// gives the elapsed gametime in seconds
     float getTime();
+    /// Switch between vieport camera and player camera (press F8)
+    void switchCamera();
 
 private slots:
     /**
@@ -62,6 +65,8 @@ public:
     /// This is the main/only shader the engine use
     Shader mPhongShader;
     Shader mSkyboxShader;
+    /// Input component for general engine key bindings
+    std::unique_ptr<InputComponent> mInput;
     // Trophies
     std::vector<EntityHandle> mTrophies;
 private:

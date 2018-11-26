@@ -16,7 +16,7 @@ struct InputComponent : public Component<InputComponent>
     // Helper functions
     bool keyPressed(Qt::Key key) const;
     bool mousePressed(Qt::MouseButton button) const;
-    am::Vec2 mousePos() const;
+    QPoint mousePos() const;
     QPoint wheelAngleDelta() const;
     QPoint wheelPixelDelta() const;
 

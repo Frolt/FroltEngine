@@ -23,6 +23,8 @@ public:
     Viewport(const QSurfaceFormat &format, MainWindow *mainWindow);
     ~Viewport() override;
     void initialize();
+    void lockMouseCursor();
+    void releaseMouseCursor();
     void preRender();
     void postRender();
 

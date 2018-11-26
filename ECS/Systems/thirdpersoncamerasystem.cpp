@@ -31,14 +31,14 @@ void ThirdPersonCameraSystem::update(float deltaTime)
 void ThirdPersonCameraSystem::processMouse(const InputComponent &input, TransformComponent &transform, ThirdPersonCameraComponent &camera)
 {
     // Find camera rotation
-    static float mLastX{0.0f};
-    static float mLastY{0.0f};
-    auto xPos = static_cast<float>(input.mousePos().x);
-    auto yPos = static_cast<float>(input.mousePos().y);
-    float xOffset = xPos - mLastX;
-    float yOffset = mLastY - yPos;
-    mLastX = xPos;
-    mLastY = yPos;
+//    static float mLastX{0.0f};
+//    static float mLastY{0.0f};
+    auto xPos = static_cast<float>(input.mousePos().x());
+    auto yPos = static_cast<float>(input.mousePos().y());
+    float xOffset = xPos - input.mInputState->mMiddleOfScreen.x();
+    float yOffset = input.mInputState->mMiddleOfScreen.y() - yPos;
+//    mLastX = xPos;
+//    mLastY = yPos;
 
     // Mouse sense
     xOffset *= 0.2f;
@@ -52,6 +52,9 @@ void ThirdPersonCameraSystem::processMouse(const InputComponent &input, Transfor
     camera.mRotation.yaw = am::mod(camera.mRotation.yaw, 360.0f);
     // TODO fix pitch clamp
     camera.mRotation.pitch = am::clampLength(camera.mRotation.pitch, -50.0f, 89.0f);
+
+    // Rotate player
+    transform.mRotation.yaw = -camera.mRotation.yaw;
 }
 
 void ThirdPersonCameraSystem::updateViewMatrixUniform(const ThirdPersonCameraComponent &camera, const TransformComponent &transform, EntityHandle entity)
@@ -68,4 +71,13 @@ void ThirdPersonCameraSystem::updateViewMatrixUniform(const ThirdPersonCameraCom
     camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", cameraLocation);
+
+    // TODO set skybox shader uniforms elsewhere
+    auto skybox = mWorld->getEntity("skybox");
+    ch::Skybox skyboxComp;
+    mWorld->unpack(skybox, skyboxComp);
+    skyboxComp().mSkyboxShader.use();
+    skyboxComp().mSkyboxShader.setMat4("projection", projection);
+    skyboxComp().mSkyboxShader.setMat4("view", view);
+    skyboxComp().mDefaultShader.use();
 }

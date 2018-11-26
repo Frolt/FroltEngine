@@ -132,8 +132,9 @@ EntityHandle EntityFactory::createModel(const std::string &name, const std::stri
     TransformComponent transform;
     transform.mLocation = location;
     MaterialComponent material;
-    material.mHasDiffMap = true;
-    material.mHasSpecMap = true;
+    material.mDiffuseColor = Color::aqua;
+//    material.mHasDiffMap = true;
+//    material.mHasSpecMap = true;
     entity.addComponent(model);
     entity.addComponent(transform);
     entity.addComponent(material);

@@ -21,13 +21,13 @@
     Need to build the project in the root directory.  \n
     In the QT-editor, go to the projects tab(left side of screen).  \n
     Change debug and release build directory to inside the project directory. Mine is for example  \n
-    C:\\......\\FroltEngine\\build-FroltEngine-MSVC2017_64bit-Debug  \n
+    C:/....../FroltEngine/build-FroltEngine-MSVC2017_64bit-Debug  \n
 @section deploy_sec Deploy project for windows:
     1. controlpanel -> system -> advanced system settings -> enviroment variables  \n
     2. add "<qt-dir>/<qt-version>/bin" folder to the path. Mine is for example  \n
-    C:\Qt\5.10.1\msvc2017_64\bin  \n
+    C:/Qt/5.10.1/msvc2017_64/bin  \n
     3. open CMD and run "windeployqt.exe <path-to-exe-file-in-build-directory>" from the bin folder \n
-    4. copy the files from "FroltEngine\Libraries\libs" .exe file build directory \n
+    4. copy the files from "FroltEngine/Libraries/libs" .exe file build directory \n
 @section lib_sec External libraries used
     ASSIMP (Asset importer) for loading 3D meshes \n
     http://www.assimp.org/ \n

@@ -23,6 +23,9 @@ void PlayerSystem::update(float deltaTime)
         if (camera().mActive) {
             movePlayer(input, movement, deltaTime, mWorld->getEntity(entity));
         }
+        qDebug() << "FORWARD \t: " << mWorld->getEntity(entity).getForwardVector();
+//        qDebug() << "RIGHT \t: " << mWorld->getEntity(entity).getRightVector();
+//        qDebug() << "UP \t: " << mWorld->getEntity(entity).getUpVector();
     }
 }
 

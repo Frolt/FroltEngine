@@ -111,18 +111,17 @@ void World::makeScene(EntityFactory &ef)
     ef.createMathTerrain("mathTerrain");
 
     // Enviroment
-    auto testCube = ef.createCube("testCube", Color::aqua, am::up() * 10.0f);
-    testCube.setRelativeScale(5.0f, 5.0f, 5.0f);
-    testCube.addRelativeRotation(0.0f, 0.0f, 10.0f);
-    auto cube0 = ef.createCube("cube0", Color::red, am::Vec{0.0f, 20.0f, 0.0f});
-    auto cube1 = ef.createCube("cube1", Color::blue, am::Vec{-10.0f, 0.0f, 0.0f});
-    auto cube2 = ef.createCube("cube2", Color::aqua, am::Vec{-5.0f, 0.0f, 0.0f});
-    cube0.addEntityComponent(cube1);
-    cube1.addEntityComponent(cube2);
-    ef.createModel("nanosuit", "Nanosuit/nanosuit.obj", am::Vec(0.0f, 0.0f, 10.0f));
+//    auto testCube = ef.createCube("testCube", Color::aqua, am::up() * 10.0f);
+//    testCube.setRelativeScale(5.0f, 5.0f, 5.0f);
+//    testCube.addRelativeRotation(0.0f, 0.0f, 10.0f);
+//    auto cube0 = ef.createCube("cube0", Color::red, am::Vec{0.0f, 20.0f, 0.0f});
+//    auto cube1 = ef.createCube("cube1", Color::blue, am::Vec{-10.0f, 0.0f, 0.0f});
+//    auto cube2 = ef.createCube("cube2", Color::aqua, am::Vec{-5.0f, 0.0f, 0.0f});
+//    cube0.addEntityComponent(cube1);
+//    cube1.addEntityComponent(cube2);
 
     // AI
-    ef.createAIModel("guard", "nanosuit/nanosuit.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+    ef.createAIModel("guard", "nanosuit/nanosuit.obj", Color::red, am::Vec{0.0f, 20.0f, 0.0f});
 
     // Camera
     auto camera = ef.createFreeCamera("camera", am::Vec{0.0f, 20.0f, 40.0f});
@@ -130,16 +129,16 @@ void World::makeScene(EntityFactory &ef)
     activateCamera(camera);
 
     // Lights
-    ef.createDirectionalLight("dirLight", Color::white);
-    ef.createPointLight("pointLight1", am::Vec3{-50.0f, 20.0f, 0.0f}, Color::white);
-    ef.createPointLight("pointLight2", am::Vec3{50.0f, 20.0f, 0.0f}, Color::white);
-    ef.createPointLight("pointLight3", am::Vec3{0.0f, 20.0f, -50.0f}, Color::white);
-    ef.createSpotlight("spotlight1", am::Vec(0.0f, 20.0f, 50.0f), -am::up(), Color::yellow);
+    ef.createDirectionalLight("dirLight", Color::blue);
+    ef.createPointLight("pointLight1", am::Vec3{-50.0f, 20.0f, 0.0f}, Color::fuchsia);
+    ef.createPointLight("pointLight2", am::Vec3{50.0f, 20.0f, 0.0f}, Color::blue);
+    ef.createPointLight("pointLight3", am::Vec3{0.0f, 20.0f, -50.0f}, Color::fuchsia);
+    ef.createSpotlight("spotlight1", am::Vec(0.0f, 20.0f, 50.0f), -am::up(), Color::blue);
     ef.createSpotlight("spotlight2", am::Vec(0.0f, 20.0f, 0.0f), -am::up(), Color::fuchsia);
-    ef.createSpotlight("spotlight3", am::Vec(20.0f, 20.0f, 20.0f), -am::up(), Color::yellow);
+    ef.createSpotlight("spotlight3", am::Vec(20.0f, 20.0f, 20.0f), -am::up(), Color::blue);
 
     // Skybox
-    ef.createSkybox("skybox", "whirlpool");
+    ef.createSkybox("skybox", "nebula");
 
     // Test rendering performance (creates N cubes)
 //    for (unsigned int i = 0; i < 1e2; i++) {

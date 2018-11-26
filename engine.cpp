@@ -17,6 +17,7 @@
 #include "ECS/Components/physics_component.h"
 #include "ECS/Components/trophy_component.h"
 #include "ECS/Components/collision_component.h"
+#include "ECS/Components/skybox_component.h"
 #include "viewport.h"
 #include "world.h"
 #include "meshfactory.h"
@@ -27,6 +28,7 @@
 #include "a_math.h"
 #include "EventSystem/eventhandler.h"
 #include "EventSystem/collisionevent.h"
+#include "inputstate.h"
 
 Engine::Engine(Viewport *viewport, QObject *parent)
     : QObject(parent),
@@ -54,6 +56,8 @@ void Engine::initialize()
     mPhongShader.use();
     // Create EventHandler
     mEventHandler = std::make_unique<EventHandler>();
+    // Create general input object
+    mInput = std::make_unique<InputComponent>(&mViewport->mInputState);
     // Create worlds
     mWorld = std::make_unique<World>(this);
     // Create factories
@@ -69,11 +73,11 @@ void Engine::initialize()
     // Guard path
     auto startPos = mEntityFactory->createSphere("startPos", Color::green, am::Vec3{-20.0f, -15.0f, 0.0f});
     auto endPos = mEntityFactory->createSphere("endPos", Color::red, am::Vec3{20.0f, 18.0f, 0.0f});
-    mTrophies.push_back(mEntityFactory->createModel("trophy1", "trophy/treasure_chest.obj", am::Vec{-10.0f, -28.0f, -10.0f}));
+    mTrophies.push_back(mEntityFactory->createModel("trophy1", "crystal.fbx", am::Vec{-10.0f, 28.0f, -10.0f}));
     mTrophies.back().addComponent(CollisionComponent());
-    mTrophies.push_back(mEntityFactory->createModel("trophy2", "trophy/treasure_chest.obj", am::Vec{0.0f, 1.0f, 10.0f}));
+    mTrophies.push_back(mEntityFactory->createModel("trophy2", "crystal.fbx", am::Vec{10.0f, 51.0f, 30.0f}));
     mTrophies.back().addComponent(CollisionComponent());
-    mTrophies.push_back(mEntityFactory->createModel("trophy3", "trophy/treasure_chest.obj", am::Vec{10.0f, 10.0f, -3.0f}));
+    mTrophies.push_back(mEntityFactory->createModel("trophy3", "crystal.fbx", am::Vec{30.0f, 40.0f, -23.0f}));
     mTrophies.back().addComponent(CollisionComponent());
 
     // SCENE END
@@ -95,6 +99,29 @@ float Engine::getTime()
     return mTimer.elapsed() / 1000.0f;
 }
 
+void Engine::switchCamera()
+{
+    static bool canPossess{true};
+    static bool isPossessingPlayer{false};
+    if (isPossessingPlayer)
+        mViewport->lockMouseCursor();
+    else
+        mViewport->releaseMouseCursor();
+    if (mInput->keyPressed(Qt::Key_F8) && canPossess) {
+        if (isPossessingPlayer) {
+            mWorld->activateCamera(mWorld->getEntity("camera"));
+            isPossessingPlayer = false;
+            canPossess = false;
+        } else {
+            mWorld->activateCamera(mWorld->getEntity("player"));
+            isPossessingPlayer = true;
+            canPossess = false;
+        }
+    } else if (!mInput->keyPressed(Qt::Key_F8)){
+        canPossess = true;
+    }
+}
+
 //-------------------------------------------------------------------
 // GAME LOOP
 void Engine::gameLoop()
@@ -102,6 +129,7 @@ void Engine::gameLoop()
     mViewport->preRender();
     //-------------------------------------------------------------------
     mDeltaTime = mTickTimer.restart() / 1000.0f;
+    switchCamera();
     mWorld->update(mDeltaTime);
     emit mViewport->FPS();
     //-------------------------------------------------------------------

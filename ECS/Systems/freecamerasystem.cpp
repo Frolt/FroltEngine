@@ -23,32 +23,12 @@ void FreeCameraSystem::update(float)
     ch::Movement movement;
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, transform, camera, input, movement);
-        switchCamera(input);
         if (camera().mActive) {
             processKeyboard(input, movement, camera, mWorld->getEntity(entity));
             processMouse(input, camera, transform);
             processScroll(camera, input);
             updateUniforms(transform, camera, mWorld->getEntity(entity));
         }
-    }
-}
-
-void FreeCameraSystem::switchCamera(const InputComponent &input) const
-{
-    static bool canPossess{true};
-    static bool isPossessingPlayer{true};
-    if (input.keyPressed(Qt::Key_F8) && canPossess) {
-        if (isPossessingPlayer) {
-            mWorld->activateCamera(mWorld->getEntity("camera"));
-            isPossessingPlayer = false;
-            canPossess = false;
-        } else {
-            mWorld->activateCamera(mWorld->getEntity("player"));
-            isPossessingPlayer = true;
-            canPossess = false;
-        }
-    } else if (!input.keyPressed(Qt::Key_F8)){
-        canPossess = true;
     }
 }
 
@@ -91,8 +71,8 @@ void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCamer
     // FIND CAMERA ROTATION VALUES
     static float mLastX{0.0f};
     static float mLastY{0.0f};
-    auto xPos = static_cast<float>(input.mousePos().x);
-    auto yPos = static_cast<float>(input.mousePos().y);
+    auto xPos = static_cast<float>(input.mousePos().x());
+    auto yPos = static_cast<float>(input.mousePos().y());
     float xOffset = xPos - mLastX;
     float yOffset = mLastY - yPos;
     mLastX = xPos;
@@ -103,7 +83,7 @@ void FreeCameraSystem::processMouse(const InputComponent &input, const FreeCamer
         xOffset *= freeCamera.mMouseSense;
         yOffset *= freeCamera.mMouseSense;
 
-        transform.mRotation.yaw += xOffset;
+        transform.mRotation.yaw -= xOffset;
         transform.mRotation.pitch += yOffset;
         transform.mRotation.yaw = am::mod(transform.mRotation.yaw, 360.0f);
         transform.mRotation.pitch = am::clampLength(transform.mRotation.pitch, -89.0f, 89.0f);
@@ -137,13 +117,4 @@ void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const
     camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", entity.getWorldLocation());
-
-    // TODO set skybox shader uniforms elsewhere
-    auto skybox = mWorld->getEntity("skybox");
-    ch::Skybox skyboxComp;
-    mWorld->unpack(skybox, skyboxComp);
-    skyboxComp().mSkyboxShader.use();
-    skyboxComp().mSkyboxShader.setMat4("projection", projection);
-    skyboxComp().mSkyboxShader.setMat4("view", view);
-    skyboxComp().mDefaultShader.use();
 }
