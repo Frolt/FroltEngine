@@ -1,4 +1,5 @@
 #include "playersystem.h"
+#include "engine.h"
 
 PlayerSystem::PlayerSystem()
 {
@@ -23,9 +24,6 @@ void PlayerSystem::update(float deltaTime)
         if (camera().mActive) {
             movePlayer(input, movement, deltaTime, mWorld->getEntity(entity));
         }
-        qDebug() << "FORWARD \t: " << mWorld->getEntity(entity).getForwardVector();
-//        qDebug() << "RIGHT \t: " << mWorld->getEntity(entity).getRightVector();
-//        qDebug() << "UP \t: " << mWorld->getEntity(entity).getUpVector();
     }
 }
 
@@ -42,8 +40,15 @@ void PlayerSystem::movePlayer(const InputComponent &input, MovementComponent &mo
         movement.mVelocity -= entity.getForwardVector() * speed;
     if (input.keyPressed(Qt::Key_D))
         movement.mVelocity += entity.getRightVector() * speed;
-    if (input.keyPressed(Qt::Key_Space))
-        movement.mVelocity += am::up() * 5.0f;
+
+    float jumpTimer{5.0f};
+    float timeSinceJump{0.0f};
+    if (mWorld->mEngine.getTime() - timeSinceJump > jumpTimer) {
+        if (input.keyPressed(Qt::Key_Space)) {
+            timeSinceJump = mWorld->mEngine.getTime();
+            movement.mVelocity += am::up() * 20.0f;
+        }
+    }
 //    movement.mVelocity = am::clampLength(movement.mVelocity, -maxSpeed, maxSpeed);
 
     // Friction
