@@ -50,7 +50,7 @@ void Engine::initialize()
     mPhongShader.use();
     mPhongShader.setMat4("projection", perspective);
     mSkyboxShader.use();
-    mPhongShader.setMat4("projection", perspective);
+    mSkyboxShader.setMat4("projection", perspective);
     mPhongShader.use();
     // Create EventHandler
     mEventHandler = std::make_unique<EventHandler>();

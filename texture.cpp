@@ -12,8 +12,8 @@ Texture::Texture(const std::string& path)
     gl->initializeOpenGLFunctions();
 
     // Wrapping/filtering settings
-    gl->glGenTextures(1, &mID);
-    gl->glBindTexture(GL_TEXTURE_2D, mID);
+    gl->glGenTextures(1, &mTextureID);
+    gl->glBindTexture(GL_TEXTURE_2D, mTextureID);
     gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

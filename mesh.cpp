@@ -23,7 +23,7 @@ void Mesh::draw(Shader &shader)
         if (name == "specularMap")
             number = std::to_string(specularNr++);
         shader.setInt("material." + name, i);
-        gl->glBindTexture(GL_TEXTURE_2D, mTextures[i].mID);
+        gl->glBindTexture(GL_TEXTURE_2D, mTextures[i].mTextureID);
     }
     gl->glActiveTexture(GL_TEXTURE0);
 

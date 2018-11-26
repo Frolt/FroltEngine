@@ -47,7 +47,6 @@ Texture MaterialFactory::getEmissionTexture(const std::string &key)
 Cubemap MaterialFactory::getCubemap(const std::string &key)
 {
     auto search = mCubemaps.find(key);
-    qDebug() << search->second.mTextureID;
     if (search == mCubemaps.end()) {
         qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
         return Cubemap();
@@ -77,7 +76,7 @@ void MaterialFactory::loadTextures()
 
 void MaterialFactory::loadCubemaps()
 {
-    // Needs to load the 6 cubemaps in right, left, up, down, back, front order
+    // Needs to load the 6 cubemaps in right, left, up, down, front, back order
     // Some of the cubemaps needs to be flipped (use bool argument in Cubemap constructor)
 
     // Lake
@@ -113,7 +112,7 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["mountain"] = Cubemap(texturePaths);
 
-    // BlueCloud
+    // BlueCloud // TODO fix
     texturePaths = {
         "BlueCloud/bluecloud_rt.jpg",
         "BlueCloud/bluecloud_lf.jpg",
@@ -124,7 +123,7 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["blueCloud"] = Cubemap(texturePaths);
 
-    // GrayCloud
+    // GrayCloud // TODO fix
     texturePaths = {
         "GrayCloud/graycloud_lf.jpg",
         "GrayCloud/graycloud_rt.jpg",
@@ -145,4 +144,60 @@ void MaterialFactory::loadCubemaps()
         "Totality/totality_ft.tga",
     };
     mCubemaps["totality"] = Cubemap(texturePaths, true);
+
+    // Nebula
+    texturePaths = {
+        "Nebula/nebula_rt.tga",
+        "Nebula/nebula_lf.tga",
+        "Nebula/nebula_up.tga",
+        "Nebula/nebula_dn.tga",
+        "Nebula/nebula_bk.tga",
+        "Nebula/nebula_ft.tga",
+    };
+    mCubemaps["nebula"] = Cubemap(texturePaths, true);
+
+    // Blood // TODO fix
+    texturePaths = {
+        "Blood/blood_rt.tga",
+        "Blood/blood_lf.tga",
+        "Blood/blood_up.tga",
+        "Blood/blood_dn.tga",
+        "Blood/blood_bk.tga",
+        "Blood/blood_ft.tga",
+    };
+    mCubemaps["blood"] = Cubemap(texturePaths);
+
+    // Dim // TODO fix
+    texturePaths = {
+        "Dim/dim_rt.tga",
+        "Dim/dim_lf.tga",
+        "Dim/dim_up.tga",
+        "Dim/dim_dn.tga",
+        "Dim/dim_bk.tga",
+        "Dim/dim_ft.tga",
+    };
+    mCubemaps["dim"] = Cubemap(texturePaths);
+
+    // Greenhaze // TODO fix
+    texturePaths = {
+        "Greenhaze/greenhaze_rt.tga",
+        "Greenhaze/greenhaze_lf.tga",
+        "Greenhaze/greenhaze_up.tga",
+        "Greenhaze/greenhaze_dn.tga",
+        "Greenhaze/greenhaze_bk.tga",
+        "Greenhaze/greenhaze_ft.tga",
+    };
+    mCubemaps["greenhaze"] = Cubemap(texturePaths);
+
+    // Whirlpool // TODO fix
+    texturePaths = {
+        "Whirlpool/whirlpool_rt.tga",
+        "Whirlpool/whirlpool_lf.tga",
+        "Whirlpool/whirlpool_up.tga",
+        "Whirlpool/whirlpool_dn.tga",
+        "Whirlpool/whirlpool_bk.tga",
+        "Whirlpool/whirlpool_ft.tga",
+    };
+    mCubemaps["whirlpool"] = Cubemap(texturePaths);
+
 }

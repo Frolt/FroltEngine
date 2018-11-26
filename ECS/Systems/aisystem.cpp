@@ -168,10 +168,8 @@ void AISystem::updateSplineVertices(BSplineComponent &bSpline)
     // SENDS X VALUE INTO B-SPLINE FUNCTION
     float delta = 1.0f / res;
 
-    for (float x = 0.0f; x <= 1.0f; x+=delta) {
+    for (float x = 0.0f; x <= 1.0f; x+=delta)
         bSpline.mVertices.emplace_back(am::bSpline(bSpline.mPoints, t, x, degree));
-//        bSpline.mVertices.back().mPosition.y = 0.0f;
-    }
 }
 
 void AISystem::drawSpline(BSplineComponent &bSpline)

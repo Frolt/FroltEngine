@@ -49,7 +49,7 @@ void RenderSystem::updateMaterialUniforms(const Shader shader, MaterialComponent
             material.mHasEmissionMap = true;
         }
         shader.setInt("material." + name + number, i);
-        glBindTexture(GL_TEXTURE_2D, material.mTextures[i].mID);
+        glBindTexture(GL_TEXTURE_2D, material.mTextures[i].mTextureID);
     }
     glActiveTexture(GL_TEXTURE0);
 

@@ -5,7 +5,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include <map>
+#include <typeindex>
 #include "ECS/entity.h"
 
 // Forward declarations
@@ -88,8 +88,8 @@ public:
 private:
     /// The entity manager stores all entities
     std::unique_ptr<EntityManager> mEntityManager;
-    /// A vector of BaseComponentManagers that can be static casted to the desired manager based on the familiy ID tag
-    std::vector<std::unique_ptr<BaseComponentManager>> mComponentManagers;
+    /// A hashcontainer of BaseComponentManagers that can be static casted to the desired manager with typeId()
+    std::unordered_map<std::type_index, std::unique_ptr<BaseComponentManager>> mComponentManagers;
     /// A vector that stores all systems
     std::vector<std::unique_ptr<System>> mSystems;
     /// Maps an Entity ID to the belonging ComponentMask
@@ -106,13 +106,12 @@ public:
 
 #include "ECS/Handles/componenthandle.h"
 #include "ECS/Managers/componentmanager.h"
-#include "ECS/component.h"
 #include "ECS/component_mask.h"
 
 template<typename ComponentType>
 bool World::hasComponent(EntityID entity)
 {
-    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[typeid (ComponentType)].get());
     return manager->hasComponent(entity);
 }
 
@@ -133,7 +132,7 @@ template<typename ComponentType>
 void World::addComponent(EntityID entity, const ComponentType &component)
 {
     // add component
-    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[typeid (ComponentType)].get());
     manager->addComponent(entity, component);
 
     // update mask
@@ -145,7 +144,7 @@ void World::addComponent(EntityID entity, const ComponentType &component)
 template<typename ComponentType>
 void World::removeComponent(EntityID entity)
 {
-    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[typeid (ComponentType)].get());
     manager->destroyComponent(entity);
 
     // update mask
@@ -157,7 +156,7 @@ void World::removeComponent(EntityID entity)
 template<typename ComponentType>
 ComponentType *World::getComponent(EntityID entity)
 {
-    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[ComponentType::family()].get());
+    auto *manager = static_cast<ComponentManager<ComponentType> *>(mComponentManagers[typeid (ComponentType)].get());
     return manager->getComponent(entity);
 }
 

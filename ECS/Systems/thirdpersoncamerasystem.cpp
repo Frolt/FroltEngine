@@ -25,12 +25,6 @@ void ThirdPersonCameraSystem::update(float deltaTime)
             processMouse(input, transform, camera);
             updateViewMatrixUniform(camera, transform, mWorld->getEntity(entity));
         }
-
-        mWorld->unpack(mWorld->getEntity("cube0"), transform);
-        transform().mRotation.yaw += 0.5f;
-        transform().mRotation.pitch += 0.5f;
-        mWorld->unpack(mWorld->getEntity("cube1"), transform);
-        transform().mRotation.yaw += 0.5f;
     }
 }
 
@@ -58,13 +52,10 @@ void ThirdPersonCameraSystem::processMouse(const InputComponent &input, Transfor
     camera.mRotation.yaw = am::mod(camera.mRotation.yaw, 360.0f);
     // TODO fix pitch clamp
     camera.mRotation.pitch = am::clampLength(camera.mRotation.pitch, -50.0f, 89.0f);
-    qDebug() << camera.mRotation.pitch;
 }
 
 void ThirdPersonCameraSystem::updateViewMatrixUniform(const ThirdPersonCameraComponent &camera, const TransformComponent &transform, EntityHandle entity)
 {
-//    entity.setRelativeRotation(-camera.mRotation.yaw, 0.0f, 0.0f);
-
     am::Mat4 cameraTransform;
     cameraTransform.translate(entity.getWorldLocation());
     cameraTransform.rotate(-camera.mRotation.yaw, am::up());

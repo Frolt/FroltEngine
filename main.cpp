@@ -9,7 +9,7 @@
 
 /** @mainpage Frolt Engine
 @section intro_sec Introduction
-    "Frolt \%Engine" is a game engine made with OpenGL and QT Creator.  \n
+    "Frolt %Engine%" is a game engine made with OpenGL and QT Creator.  \n
     It uses a right hand coordinate system with -z pointing forward, x pointing right, and y pointing upwards  \n
     The game engine uses ECS (Entity–component–system)  \n
     Entities works as a simple unsigned int tag to bind components to an entity. \n
@@ -21,7 +21,7 @@
     Need to build the project in the root directory.  \n
     In the QT-editor, go to the projects tab(left side of screen).  \n
     Change debug and release build directory to inside the project directory. Mine is for example  \n
-    C:\......\FroltEngine\build-FroltEngine-MSVC2017_64bit-Debug  \n
+    C:\\......\\FroltEngine\\build-FroltEngine-MSVC2017_64bit-Debug  \n
 @section deploy_sec Deploy project for windows:
     1. controlpanel -> system -> advanced system settings -> enviroment variables  \n
     2. add "<qt-dir>/<qt-version>/bin" folder to the path. Mine is for example  \n

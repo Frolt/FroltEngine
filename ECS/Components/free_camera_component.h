@@ -5,7 +5,7 @@
 #include "ECS/Components/camera_component.h"
 #include "a_math.h"
 
-struct FreeCameraComponent : public Component<FreeCameraComponent>, public CameraComponent
+struct FreeCameraComponent : public CameraComponent, public Component<FreeCameraComponent>
 {
     FreeCameraComponent() = default;
     FreeCameraComponent(Shader shader);

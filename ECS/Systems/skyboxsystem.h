@@ -12,7 +12,7 @@ public:
     void update(float deltaTime) override;
 
 private:
-    void updateCubemapUniform(const SkyboxComponent &skybox, const MeshComponent &mesh);
+    void drawCubemap(const SkyboxComponent &skybox, const MeshComponent &mesh);
 };
 
 #endif // SKYBOXSYSTEM_H

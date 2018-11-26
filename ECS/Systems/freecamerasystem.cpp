@@ -16,9 +16,7 @@ void FreeCameraSystem::beginPlay()
 }
 
 void FreeCameraSystem::update(float)
-
 {
-
     ch::Transform transform;
     ch::FreeCamera camera;
     ch::Input input;
@@ -31,10 +29,6 @@ void FreeCameraSystem::update(float)
             processMouse(input, camera, transform);
             processScroll(camera, input);
             updateUniforms(transform, camera, mWorld->getEntity(entity));
-
-//            qDebug() << "FORWARD\t = " << am::normalize(mWorld->getEntity(entity).getForwardVector());
-//            qDebug() << "RIGHT\t = " << am::normalize(mWorld->getEntity(entity).getRightVector());
-//            qDebug() << "UP\t = " << am::normalize(mWorld->getEntity(entity).getUpVector());
         }
     }
 }
@@ -144,6 +138,7 @@ void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", entity.getWorldLocation());
 
+    // TODO set skybox shader uniforms elsewhere
     auto skybox = mWorld->getEntity("skybox");
     ch::Skybox skyboxComp;
     mWorld->unpack(skybox, skyboxComp);

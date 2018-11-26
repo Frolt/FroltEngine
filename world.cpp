@@ -22,6 +22,7 @@
 #include "ECS/Components/player_component.h"
 #include "ECS/Components/ai_component.h"
 #include "ECS/Components/third_person_camera_component.h"
+#include "ECS/Components/camera_component.h"
 #include "ECS/Components/skybox_component.h"
 #include "ECS/Systems/movementsystem.h"
 #include "ECS/Systems/rendersystem.h"
@@ -44,30 +45,29 @@
 World::World(Engine *engine)
     : mEngine{*engine}
 {
-    mComponentManagers.resize(64);
     // Create entity manager
     mEntityManager = std::make_unique<EntityManager>();
     // Create component managers
     mComponentManagers.reserve(20);
-    mComponentManagers[TransformComponent::family()] = std::make_unique<ComponentManager<TransformComponent>>(100000);
-    mComponentManagers[MovementComponent::family()] = std::make_unique<ComponentManager<MovementComponent>>(100000);
-    mComponentManagers[MeshComponent::family()] = std::make_unique<ComponentManager<MeshComponent>>(100000);
-    mComponentManagers[MaterialComponent::family()] = std::make_unique<ComponentManager<MaterialComponent>>(100000);
-    mComponentManagers[DirectionalLightComponent::family()] = std::make_unique<ComponentManager<DirectionalLightComponent>>(100);
-    mComponentManagers[PointLightComponent::family()] = std::make_unique<ComponentManager<PointLightComponent>>(100);
-    mComponentManagers[SpotlightComponent::family()] = std::make_unique<ComponentManager<SpotlightComponent>>(100);
-    mComponentManagers[InputComponent::family()] = std::make_unique<ComponentManager<InputComponent>>(100000);
-    mComponentManagers[FreeCameraComponent::family()] = std::make_unique<ComponentManager<FreeCameraComponent>>(10);
-    mComponentManagers[ThirdPersonCameraComponent::family()] = std::make_unique<ComponentManager<ThirdPersonCameraComponent>>(10);
-    mComponentManagers[TerrainComponent::family()] = std::make_unique<ComponentManager<TerrainComponent>>(100);
-    mComponentManagers[ModelComponent::family()] = std::make_unique<ComponentManager<ModelComponent>>(100000);
-    mComponentManagers[PhysicsComponent::family()] = std::make_unique<ComponentManager<PhysicsComponent>>(100000);
-    mComponentManagers[BSplineComponent::family()] = std::make_unique<ComponentManager<BSplineComponent>>(100000);
-    mComponentManagers[TrophyComponent::family()] = std::make_unique<ComponentManager<TrophyComponent>>(100000);
-    mComponentManagers[CollisionComponent::family()] = std::make_unique<ComponentManager<CollisionComponent>>(100000);
-    mComponentManagers[PlayerComponent::family()] = std::make_unique<ComponentManager<PlayerComponent>>(5);
-    mComponentManagers[AIComponent::family()] = std::make_unique<ComponentManager<AIComponent>>(1000);
-    mComponentManagers[SkyboxComponent::family()] = std::make_unique<ComponentManager<SkyboxComponent>>(1);
+    mComponentManagers[typeid (TransformComponent)] = std::make_unique<ComponentManager<TransformComponent>>(100000);
+    mComponentManagers[typeid (MovementComponent)] = std::make_unique<ComponentManager<MovementComponent>>(100000);
+    mComponentManagers[typeid (MeshComponent)] = std::make_unique<ComponentManager<MeshComponent>>(100000);
+    mComponentManagers[typeid (MaterialComponent)] = std::make_unique<ComponentManager<MaterialComponent>>(100000);
+    mComponentManagers[typeid (DirectionalLightComponent)] = std::make_unique<ComponentManager<DirectionalLightComponent>>(100);
+    mComponentManagers[typeid (PointLightComponent)] = std::make_unique<ComponentManager<PointLightComponent>>(100);
+    mComponentManagers[typeid (SpotlightComponent)] = std::make_unique<ComponentManager<SpotlightComponent>>(100);
+    mComponentManagers[typeid (InputComponent)] = std::make_unique<ComponentManager<InputComponent>>(100000);
+    mComponentManagers[typeid (FreeCameraComponent)] = std::make_unique<ComponentManager<FreeCameraComponent>>(10);
+    mComponentManagers[typeid (ThirdPersonCameraComponent)] = std::make_unique<ComponentManager<ThirdPersonCameraComponent>>(10);
+    mComponentManagers[typeid (TerrainComponent)] = std::make_unique<ComponentManager<TerrainComponent>>(100);
+    mComponentManagers[typeid (ModelComponent)] = std::make_unique<ComponentManager<ModelComponent>>(100000);
+    mComponentManagers[typeid (PhysicsComponent)] = std::make_unique<ComponentManager<PhysicsComponent>>(100000);
+    mComponentManagers[typeid (BSplineComponent)] = std::make_unique<ComponentManager<BSplineComponent>>(100000);
+    mComponentManagers[typeid (TrophyComponent)] = std::make_unique<ComponentManager<TrophyComponent>>(100000);
+    mComponentManagers[typeid (CollisionComponent)] = std::make_unique<ComponentManager<CollisionComponent>>(100000);
+    mComponentManagers[typeid (PlayerComponent)] = std::make_unique<ComponentManager<PlayerComponent>>(5);
+    mComponentManagers[typeid (AIComponent)] = std::make_unique<ComponentManager<AIComponent>>(1000);
+    mComponentManagers[typeid (SkyboxComponent)] = std::make_unique<ComponentManager<SkyboxComponent>>(1);
     // Create systems
     mSystems.reserve(20);
     mSystems.push_back(std::make_unique<MovementSystem>());
@@ -84,8 +84,8 @@ World::World(Engine *engine)
 
     // Order is important
     mSystems.push_back(std::make_unique<SkyboxSystem>());
-    mSystems.push_back(std::make_unique<RenderSystem>());
     mSystems.push_back(std::make_unique<ModelRenderSystem>());
+    mSystems.push_back(std::make_unique<RenderSystem>());
     // Set world and eventHandler pointer for all systems
     for (auto &sys : mSystems) {
         sys->setWorld(this);
@@ -105,21 +105,24 @@ void World::makeScene(EntityFactory &ef)
     // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
     // Player
-    auto player = ef.createPlayerModel("player", Color::orangeRed, am::Vec(-25.0f, 0.0f, 0.0f));
+    auto player = ef.createPlayerModel("player", Color::orangeRed, am::Vec(-10.0f, 20.0f, 0.0f));
 
     // Terrain
     ef.createMathTerrain("mathTerrain");
 
     // Enviroment
-    ef.createSphere("zeroMarker");
-    auto cube0 = ef.createCube("cube0", Color::red, am::Vec{0.0f, 20.0f, 00.0f});
-    auto cube1 = ef.createCube("cube1", Color::blue, am::Vec{-15.0f, 0.0f, 0.0f});
+    auto testCube = ef.createCube("testCube", Color::aqua, am::up() * 10.0f);
+    testCube.setRelativeScale(5.0f, 5.0f, 5.0f);
+    testCube.addRelativeRotation(0.0f, 0.0f, 10.0f);
+    auto cube0 = ef.createCube("cube0", Color::red, am::Vec{0.0f, 20.0f, 0.0f});
+    auto cube1 = ef.createCube("cube1", Color::blue, am::Vec{-10.0f, 0.0f, 0.0f});
     auto cube2 = ef.createCube("cube2", Color::aqua, am::Vec{-5.0f, 0.0f, 0.0f});
     cube0.addEntityComponent(cube1);
     cube1.addEntityComponent(cube2);
+    ef.createModel("nanosuit", "Nanosuit/nanosuit.obj", am::Vec(0.0f, 0.0f, 10.0f));
 
-//    // AI
-//    auto guard = ef.createAIModel("guard", "nanosuit/nanosuit.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+    // AI
+    ef.createAIModel("guard", "nanosuit/nanosuit.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
 
     // Camera
     auto camera = ef.createFreeCamera("camera", am::Vec{0.0f, 20.0f, 40.0f});
@@ -128,24 +131,24 @@ void World::makeScene(EntityFactory &ef)
 
     // Lights
     ef.createDirectionalLight("dirLight", Color::white);
-    ef.createPointLight("pointLight1", am::Vec3{20.0f, 20.0f, -100.0f}, Color::red);
-    ef.createPointLight("pointLight2", am::Vec3{-30.0f, 10.0f, 0.0f}, Color::white);
-    ef.createPointLight("pointLight3", am::Vec3{60.0f, 20.0f, 100.0f}, Color::orange);
-    ef.createSpotlight("spotlight1", am::Vec(-30.0f, 40.0f, 50.0f), -am::up(), Color::white);
-    ef.createSpotlight("spotlight2", am::Vec(80.0f, 30.0f, 20.0f), -am::up());
-    ef.createSpotlight("spotlight3", am::Vec(-60.0f, 60.0f, -40.0f), -am::up());
+    ef.createPointLight("pointLight1", am::Vec3{-50.0f, 20.0f, 0.0f}, Color::white);
+    ef.createPointLight("pointLight2", am::Vec3{50.0f, 20.0f, 0.0f}, Color::white);
+    ef.createPointLight("pointLight3", am::Vec3{0.0f, 20.0f, -50.0f}, Color::white);
+    ef.createSpotlight("spotlight1", am::Vec(0.0f, 20.0f, 50.0f), -am::up(), Color::yellow);
+    ef.createSpotlight("spotlight2", am::Vec(0.0f, 20.0f, 0.0f), -am::up(), Color::fuchsia);
+    ef.createSpotlight("spotlight3", am::Vec(20.0f, 20.0f, 20.0f), -am::up(), Color::yellow);
 
     // Skybox
-    ef.createSkybox("skybox", "lake");
+    ef.createSkybox("skybox", "whirlpool");
 
     // Test rendering performance (creates N cubes)
-    for (unsigned int i = 0; i < 1e2; i++) {
-        float randValueX = static_cast<float>(std::rand() % 100 - 50);
-        float randValueY = static_cast<float>(std::rand() % 100 - 50);
-        float randValueZ = static_cast<float>(std::rand() % 100 - 50);
-        auto cube = ef.createCube("floatingCube" + std::to_string(i), Color::aqua, am::Vec3{randValueX, randValueY, randValueZ});
-        cube.addComponent(MovementComponent(am::up() * 1.0f));
-    }
+//    for (unsigned int i = 0; i < 1e2; i++) {
+//        float randValueX = static_cast<float>(std::rand() % 100 - 50);
+//        float randValueY = static_cast<float>(std::rand() % 100 - 50);
+//        float randValueZ = static_cast<float>(std::rand() % 100 - 50);
+//        auto cube = ef.createCube("floatingCube" + std::to_string(i), Color::aqua, am::Vec3{randValueX, randValueY, randValueZ});
+//        cube.addComponent(MovementComponent(am::up() * 1.0f));
+//    }
 
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // SCENE END
@@ -199,11 +202,8 @@ void World::destroyEntity(EntityID entity)
         destroyEntity(*entityPtr->mChild);
 
     // Destroy all components belonging to entity
-    for (auto &manager : mComponentManagers) {
-        if (!manager)
-            break;
-        manager->destroyComponent(entity);
-    }
+    for (auto &element : mComponentManagers)
+        element.second->destroyComponent(entity);
 
     // Update mask
     ComponentMask oldMask = mEntityMasks[entityPtr->mID];
@@ -224,11 +224,8 @@ void World::destroyEntity(const Entity &entity)
         destroyEntity(*entity.mChild);
 
     // Destroy all components belonging to entity
-    for (auto &manager : mComponentManagers) {
-        if (!manager)
-            break;
-        manager->destroyComponent(entity.mID);
-    }
+    for (auto &element : mComponentManagers)
+        element.second->destroyComponent(entity.mID);
 
     // Update mask
     ComponentMask oldMask = mEntityMasks[entity.mID];
@@ -279,8 +276,8 @@ unsigned int World::getNumberOfEntities()
 
 void World::activateCamera(EntityID entity)
 {
-    auto *freeCamManager = static_cast<ComponentManager<FreeCameraComponent> *>(mComponentManagers[FreeCameraComponent::family()].get());
-    auto *thirdCamManager = static_cast<ComponentManager<ThirdPersonCameraComponent> *>(mComponentManagers[ThirdPersonCameraComponent::family()].get());
+    auto *freeCamManager = static_cast<ComponentManager<FreeCameraComponent> *>(mComponentManagers[typeid (FreeCameraComponent)].get());
+    auto *thirdCamManager = static_cast<ComponentManager<ThirdPersonCameraComponent> *>(mComponentManagers[typeid (ThirdPersonCameraComponent)].get());
 
     freeCamManager->iterateAll([](FreeCameraComponent &cameraComp) { cameraComp.mActive = false; });
     thirdCamManager->iterateAll([](ThirdPersonCameraComponent &cameraComp) { cameraComp.mActive = false; });

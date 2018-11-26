@@ -12,7 +12,7 @@ struct Texture
     Texture() = default;
     Texture(const std::string& path);
 
-    unsigned int mID;
+    unsigned int mTextureID;
     std::string mType;
     std::string mPath;
 };

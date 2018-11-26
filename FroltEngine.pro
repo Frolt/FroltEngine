@@ -90,7 +90,8 @@ SOURCES += \
     ECS/Components/third_person_camera_component.cpp \
     ECS/Components/skybox_component.cpp \
     ECS/Systems/skyboxsystem.cpp \
-    cubemap.cpp
+    cubemap.cpp \
+    ECS/component.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -118,7 +119,6 @@ HEADERS += \
     ECS/system.h \
     ECS/Systems/movementsystem.h \
     ECS/Managers/entitymanager.h \
-    ECS/component.h \
     ECS/Managers/basecomponentmanager.h \
     ECS/Components/movement_component.h \
     ECS/Components/transform_component.h \
@@ -173,7 +173,8 @@ HEADERS += \
     ECS/Components/skybox_component.h \
     ECS/Systems/skyboxsystem.h \
     cubemap.h \
-    path.h
+    path.h \
+    ECS/component.h
 
 FORMS += \
     mainwindow.ui

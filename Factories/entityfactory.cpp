@@ -98,7 +98,7 @@ EntityHandle EntityFactory::createCube(const std::string &name, const am::Vec3 &
     MeshComponent mesh{mMeshFactory.createCube()};
     MaterialComponent material;
     material.mDiffuseColor = color;
-//    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("stoneTile"));
+    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("kermit"));
 //    material.mTextures.push_back(mMaterialFactory.getEmissionTexture("innSpec"));
 //    material.mTextures.push_back(mMaterialFactory.getSpecularTexture("innSpec"));
     TransformComponent transform;
@@ -232,7 +232,7 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
     auto entity = mWorld.createEntity(name);
     TransformComponent transform;
     transform.mLocation = location;
-    transform.mRotation.yaw = -90.0f;
+    transform.mLocation.pitch = -90.0f;
     MovementComponent movement;
     InputComponent input(&mInputState);
     FreeCameraComponent freeCamera(mDefaultShader);

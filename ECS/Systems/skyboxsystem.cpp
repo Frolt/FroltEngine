@@ -20,31 +20,22 @@ void SkyboxSystem::update(float deltaTime)
     ch::Mesh mesh;
     for (auto entity : mRegisteredEntities) {
         mWorld->unpack(entity, skybox, transform, mesh);
-        updateCubemapUniform(skybox, mesh);
+        drawCubemap(skybox, mesh);
     }
 }
 
-void SkyboxSystem::updateCubemapUniform(const SkyboxComponent &skybox, const MeshComponent &mesh)
+void SkyboxSystem::drawCubemap(const SkyboxComponent &skybox, const MeshComponent &mesh)
 {
-    // Activate default shader
-    skybox.mSkyboxShader.use();
-//    skybox.mSkyboxShader.setMat4("view", );
-//    skybox.mSkyboxShader.setMat4("projection", );
-
     // Disable depthMask while drawing skybox
     glDepthMask(GL_FALSE);
-
-    // Activate cubemap uniform and bind our skybox texture to it
-    glActiveTexture(GL_TEXTURE_CUBE_MAP);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.mCubemap.mTextureID);
-
-    // Draw mesh
+    skybox.mSkyboxShader.use();
     glBindVertexArray(mesh.mVAO);
+
+    // Bind cubemap and draw
+    glBindTexture(GL_TEXTURE_CUBE_MAP, skybox.mCubemap.mTextureID);
     glDrawArrays(GL_TRIANGLES, 0, mesh.mDrawCount);
 
-    // Enable depth mask after we are done
+    // Turn depth mask and default shader back on
     glDepthMask(GL_TRUE);
-
-    // Enable default shader
     skybox.mDefaultShader.use();
 }
