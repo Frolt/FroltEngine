@@ -10,6 +10,20 @@ AISystem::AISystem()
 
 void AISystem::beginPlay()
 {
+    std::vector<EntityHandle> crystals;
+    unsigned int index{0};
+    bool noMoreCrystals{false};
+    while (noMoreCrystals == false) {
+        std::string entityName = "crystal" + std::to_string(index);
+        if (mWorld->entityExist(entityName)) {
+            crystals.push_back(mWorld->getEntity(entityName));
+            index++;
+        } else {
+            noMoreCrystals = true;
+        }
+    }
+    mNumOfCrystals = crystals.size();
+
     ch::Transform transform;
     ch::BSpline bSpline;
     for (auto &entity : mRegisteredEntities) {
@@ -18,12 +32,10 @@ void AISystem::beginPlay()
         points.reserve(5);
         mWorld->unpack(mWorld->getEntity("startPos"), transform);
         points.push_back(transform().mLocation);
-        mWorld->unpack(mWorld->getEntity("trophy1"), transform);
-        points.push_back(transform().mLocation);
-        mWorld->unpack(mWorld->getEntity("trophy2"), transform);
-        points.push_back(transform().mLocation);
-        mWorld->unpack(mWorld->getEntity("trophy3"), transform);
-        points.push_back(transform().mLocation);
+        for (auto &element : crystals) {
+            mWorld->unpack(element, transform);
+            points.push_back(transform().mLocation);
+        }
         mWorld->unpack(mWorld->getEntity("endPos"), transform);
         points.push_back(transform().mLocation);
         bSpline().mPoints = points;
@@ -42,25 +54,28 @@ void AISystem::update(float deltaTime)
         moveNPC(deltaTime, bSpline, transform);
         if (mFinished) {
             getNewPath(bSpline);
-            updateSplineVertices(bSpline);
+//            updateSplineVertices(bSpline);
             mFinished = false;
         }
 //        drawSpline(bSpline);
-        addTerrainCollision(transform);
+//        addTerrainCollision(transform);
     }
 }
 
 void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComponent &transform)
 {
-    unsigned int degree = bSpline.mDegree;
-
-    int activeTrophies = 0;
-    for (auto &entity : mWorld->mEngine.mTrophies) {
-        if (mWorld->entityExist(entity))
-            activeTrophies++;
+    std::vector<EntityHandle> crystals;
+    crystals.reserve(3);
+    for (unsigned int i = 0; i < mNumOfCrystals; i++) {
+        std::string entityName = "crystal" + std::to_string(i);
+        if (mWorld->entityExist(entityName)) {
+            crystals.push_back(mWorld->getEntity(entityName));
+        }
     }
+    unsigned int activeCrystals = crystals.size();
 
     // MAKE KNOT VECTOR
+    unsigned int degree = bSpline.mDegree;
     unsigned int numOfPoints = static_cast<unsigned int>(bSpline.mPoints.size());
     unsigned int knots = degree + numOfPoints + 1;
     std::vector<float> t(knots);
@@ -79,8 +94,9 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
     float vel = 0.2f * deltaTime;
     static float x = 0.0f;
     x+= vel;
-    if (activeTrophies == 0)
-        return;
+    if (activeCrystals == 0) {
+        return; // chase player
+    }
     if (x >= 1.0f) {
         x = 0.0f;
         mFinished = true;
@@ -91,7 +107,6 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
         return;
     }
     transform.mLocation = am::bSpline(bSpline.mPoints, t, x, degree);
-//    transform.mPosition.y = 10.0f;
 }
 
 void AISystem::getNewPath(BSplineComponent &bSpline)
@@ -107,27 +122,27 @@ void AISystem::getNewPath(BSplineComponent &bSpline)
         mWorld->unpack(mWorld->getEntity("endPos"), transform);
         points.push_back(transform().mLocation);
     }
-    // insert trophy points
-    auto rand1 = (std::rand() % 3) + 1;
-    auto rand2 = (std::rand() % 3) + 1;
-    auto rand3 = (std::rand() % 3) + 1;
-    std::string name = "trophy" + std::to_string(rand1);
+    // insert crystal points
+    auto rand1 = (std::rand() % 3);
+    auto rand2 = (std::rand() % 3);
+    auto rand3 = (std::rand() % 3);
+    std::string name = "crystal" + std::to_string(rand1);
     if (mWorld->entityExist(name)) {
         mWorld->unpack(mWorld->getEntity(name), transform);
         points.push_back(transform().mLocation);
     }
     while (rand2 == rand1) {
-        rand2 = (std::rand() % 3) + 1;
+        rand2 = (std::rand() % 3);
     }
-    name = "trophy" + std::to_string(rand2);
+    name = "crystal" + std::to_string(rand2);
     if (mWorld->entityExist(name)) {
         mWorld->unpack(mWorld->getEntity(name), transform);
         points.push_back(transform().mLocation);
     }
     while (rand3 == rand1 || rand3 == rand2) {
-        rand3 = (std::rand() % 3) + 1;
+        rand3 = (std::rand() % 3);
     }
-    name = "trophy" + std::to_string(rand3);
+    name = "crystal" + std::to_string(rand3);
     if (mWorld->entityExist(name)) {
         mWorld->unpack(mWorld->getEntity(name), transform);
         points.push_back(transform().mLocation);
@@ -163,7 +178,6 @@ void AISystem::updateSplineVertices(BSplineComponent &bSpline)
         else
             t[i] = t[i-1] + deltaKnots;
     }
-
 
     // SENDS X VALUE INTO B-SPLINE FUNCTION
     float delta = 1.0f / res;
@@ -214,7 +228,7 @@ void AISystem::addTerrainCollision(TransformComponent &transform)
             auto u = vertices[indices[i]].mPosition;
             auto v = vertices[indices[i+1]].mPosition;
             auto w = vertices[indices[i+2]].mPosition;
-//            transform.mLocation.y = res.x * u.y + res.y * v.y + res.z * w.y + 0.5f;
+            transform.mLocation.y = res.x * u.y + res.y * v.y + res.z * w.y + 0.5f;
         }
     }
 }

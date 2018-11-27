@@ -44,7 +44,6 @@ void Viewport::lockMouseCursor()
     c.setPos(mapToGlobal(middleOfScreen));
     c.setShape(Qt::BlankCursor);
     setCursor(c);
-    qDebug() << "HEI!";
 }
 
 void Viewport::releaseMouseCursor()

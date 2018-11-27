@@ -17,7 +17,6 @@
 #include "ECS/Components/model_component.h"
 #include "ECS/Components/physics_component.h"
 #include "ECS/Components/bspline_component.h"
-#include "ECS/Components/trophy_component.h"
 #include "ECS/Components/collision_component.h"
 #include "ECS/Components/player_component.h"
 #include "ECS/Components/ai_component.h"
@@ -63,7 +62,6 @@ World::World(Engine *engine)
     mComponentManagers[typeid (ModelComponent)] = std::make_unique<ComponentManager<ModelComponent>>(100000);
     mComponentManagers[typeid (PhysicsComponent)] = std::make_unique<ComponentManager<PhysicsComponent>>(100000);
     mComponentManagers[typeid (BSplineComponent)] = std::make_unique<ComponentManager<BSplineComponent>>(100000);
-    mComponentManagers[typeid (TrophyComponent)] = std::make_unique<ComponentManager<TrophyComponent>>(100000);
     mComponentManagers[typeid (CollisionComponent)] = std::make_unique<ComponentManager<CollisionComponent>>(100000);
     mComponentManagers[typeid (PlayerComponent)] = std::make_unique<ComponentManager<PlayerComponent>>(5);
     mComponentManagers[typeid (AIComponent)] = std::make_unique<ComponentManager<AIComponent>>(1000);
@@ -111,17 +109,20 @@ void World::makeScene(EntityFactory &ef)
     ef.createMathTerrain("mathTerrain");
 
     // Enviroment
-//    auto testCube = ef.createCube("testCube", Color::aqua, am::up() * 10.0f);
-//    testCube.setRelativeScale(5.0f, 5.0f, 5.0f);
-//    testCube.addRelativeRotation(0.0f, 0.0f, 10.0f);
-//    auto cube0 = ef.createCube("cube0", Color::red, am::Vec{0.0f, 20.0f, 0.0f});
-//    auto cube1 = ef.createCube("cube1", Color::blue, am::Vec{-10.0f, 0.0f, 0.0f});
-//    auto cube2 = ef.createCube("cube2", Color::aqua, am::Vec{-5.0f, 0.0f, 0.0f});
-//    cube0.addEntityComponent(cube1);
-//    cube1.addEntityComponent(cube2);
+//    ef.createModel("shark")
 
     // AI
-    ef.createAIModel("guard", "nanosuit/nanosuit.obj", Color::red, am::Vec{0.0f, 20.0f, 0.0f});
+    auto shark0 = ef.createAIShark("shark0", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+//    auto shark1 = ef.createAIShark("shark1", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+
+    // Crystals
+    auto startPos = ef.createSphere("startPos", Color::green, am::Vec3{0.0f, 0.0f, 0.0f});
+    auto endPos = ef.createSphere("endPos", Color::red, am::Vec3{0.0f, 50.0f, 0.0f});
+
+    auto crystal1 = ef.createCrystal("crystal0", Color::aqua, am::Vec{-10.0f, 28.0f, -10.0f});
+    auto crystal2 = ef.createCrystal("crystal1", Color::aqua, am::Vec{10.0f, 51.0f, 30.0f});
+    auto crystal3 = ef.createCrystal("crystal2", Color::aqua, am::Vec{30.0f, 40.0f, -23.0f});
+    auto crystal4 = ef.createCrystal("crystalTest", Color::aqua, am::Vec{30.0f, 150.0f, -23.0f});
 
     // Camera
     auto camera = ef.createFreeCamera("camera", am::Vec{0.0f, 20.0f, 40.0f});
@@ -138,16 +139,10 @@ void World::makeScene(EntityFactory &ef)
     ef.createSpotlight("spotlight3", am::Vec(20.0f, 20.0f, 20.0f), -am::up(), Color::blue);
 
     // Skybox
-    ef.createSkybox("skybox", "nebula");
+    ef.createSkybox("skybox", "whirlpool");
 
     // Test rendering performance (creates N cubes)
-//    for (unsigned int i = 0; i < 1e2; i++) {
-//        float randValueX = static_cast<float>(std::rand() % 100 - 50);
-//        float randValueY = static_cast<float>(std::rand() % 100 - 50);
-//        float randValueZ = static_cast<float>(std::rand() % 100 - 50);
-//        auto cube = ef.createCube("floatingCube" + std::to_string(i), Color::aqua, am::Vec3{randValueX, randValueY, randValueZ});
-//        cube.addComponent(MovementComponent(am::up() * 1.0f));
-//    }
+
 
     // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     // SCENE END

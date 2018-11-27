@@ -28,6 +28,7 @@ public:
     // Meshes
     EntityHandle createCube(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &location = {0});
     EntityHandle createSphere(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &location = {0});
+    EntityHandle createCrystal(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &location = {0});
     EntityHandle createModel(const std::string &name, const std::string &path, const am::Vec3 &location = {0});
     // Player
     EntityHandle createPlayerCube(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &location = {0});
@@ -43,7 +44,7 @@ public:
     EntityHandle createPhysicsBall(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &location = {0});
     // AI
     EntityHandle createAISphere(const std::string &name, const am::Vec3 &color = Color::green, const am::Vec3 &location = {0});
-    EntityHandle createAIModel(const std::string &name , const std::string &path, const am::Vec3 &color = Color::green, const am::Vec3 &location = {0});
+    EntityHandle createAIShark(const std::string &name , const std::string &path, const am::Vec3 &color = Color::green, const am::Vec3 &location = {0});
     // Skybox
     EntityHandle createSkybox(const std::string &name , const std::string &skyType, const am::Vec3 &location = {0});
 

@@ -72,6 +72,7 @@ void MaterialFactory::loadTextures()
     mTextures["desert"] = Texture(Path::textures + "dessert1.jpg");
     mTextures["soilCrack"] = Texture(Path::textures + "soilCrack.jpg");
     mTextures["innSpec"] = Texture(Path::textures + "innLogoSpec.jpg");
+    mTextures["crystal"] = Texture(Path::textures + "crystal.jpg");
 }
 
 void MaterialFactory::loadCubemaps()

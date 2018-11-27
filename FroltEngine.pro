@@ -76,7 +76,6 @@ SOURCES += \
     ECS/Components/physics_component.cpp \
     ECS/Components/bspline_component.cpp \
     ECS/Systems/aisystem.cpp \
-    ECS/Components/trophy_component.cpp \
     ECS/Components/collision_component.cpp \
     ECS/Systems/collisionsystem.cpp \
     ECS/Systems/combatsystem.cpp \
@@ -154,7 +153,6 @@ HEADERS += \
     ECS/Components/physics_component.h \
     ECS/Components/bspline_component.h \
     ECS/Systems/aisystem.h \
-    ECS/Components/trophy_component.h \
     ECS/Components/collision_component.h \
     ECS/Systems/collisionsystem.h \
     EventSystem/event.h \

@@ -41,13 +41,12 @@ void PlayerSystem::movePlayer(const InputComponent &input, MovementComponent &mo
     if (input.keyPressed(Qt::Key_D))
         movement.mVelocity += entity.getRightVector() * speed;
 
-    float jumpTimer{5.0f};
-    float timeSinceJump{0.0f};
-    if (mWorld->mEngine.getTime() - timeSinceJump > jumpTimer) {
-        if (input.keyPressed(Qt::Key_Space)) {
-            timeSinceJump = mWorld->mEngine.getTime();
-            movement.mVelocity += am::up() * 20.0f;
-        }
+    float jumpTimer{0.5f};
+    static float timeSinceJump{0.0f};
+    if (mWorld->mEngine.getTime() - timeSinceJump > jumpTimer && input.keyPressed(Qt::Key_Space)) {
+        timeSinceJump = mWorld->mEngine.getTime();
+        movement.mVelocity.y = 0.0f;
+        movement.mVelocity += am::up() * 50.0f;
     }
 //    movement.mVelocity = am::clampLength(movement.mVelocity, -maxSpeed, maxSpeed);
 

@@ -117,4 +117,13 @@ void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const
     camera.mShader.setMat4("projection", projection);
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", entity.getWorldLocation());
+
+    // TODO set skybox shader uniforms elsewhere
+    auto skybox = mWorld->getEntity("skybox");
+    ch::Skybox skyboxComp;
+    mWorld->unpack(skybox, skyboxComp);
+    skyboxComp().mSkyboxShader.use();
+    skyboxComp().mSkyboxShader.setMat4("projection", projection);
+    skyboxComp().mSkyboxShader.setMat4("view", view);
+    skyboxComp().mDefaultShader.use();
 }

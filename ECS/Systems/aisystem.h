@@ -22,6 +22,7 @@ public:
     void addTerrainCollision(TransformComponent &transform);
 
 private:
+    unsigned int mNumOfCrystals{0};
     bool mFinished{true};
     bool mAtStart{true};
 };

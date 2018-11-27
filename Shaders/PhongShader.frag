@@ -44,8 +44,8 @@ struct SpotLight {
 };
 
 // Number of lights supported
-const int numOfPointLights = 5;
-const int numOfspotlights = 5;
+const int numOfPointLights = 10;
+const int numOfspotlights = 10;
 const int numOfMaps = 3;
 
 // Uniforms

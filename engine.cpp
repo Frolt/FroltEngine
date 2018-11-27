@@ -15,7 +15,6 @@
 #include "ECS/Components/terrain_component.h"
 #include "ECS/Components/input_component.h"
 #include "ECS/Components/physics_component.h"
-#include "ECS/Components/trophy_component.h"
 #include "ECS/Components/collision_component.h"
 #include "ECS/Components/skybox_component.h"
 #include "viewport.h"
@@ -43,7 +42,6 @@ void Engine::initialize()
 {
     // Connect timer with gameLoop() function
     connect(mGameLoopTimer, SIGNAL(timeout()), this, SLOT(gameLoop()));
-
     // Create shaders
     mPhongShader = Shader{Path::shaders + "VertexShader.vert", Path::shaders + "PhongShader.frag"};
     mSkyboxShader = Shader{Path::shaders + "Skybox.vert", Path::shaders + "Skybox.frag"};
@@ -64,25 +62,8 @@ void Engine::initialize()
     mMeshFactory = std::make_unique<MeshFactory>(&mPhongShader);
     mMaterialFactory = std::make_unique<MaterialFactory>();
     mEntityFactory = std::make_unique<EntityFactory>(*mMeshFactory, *mMaterialFactory, *mWorld, mViewport->mInputState, mPhongShader);
-
-    // SCENE START
-    // ---------------------------------------------------------------------------------------
-
+    // Create scene
     mWorld->makeScene(*mEntityFactory);
-
-    // Guard path
-    auto startPos = mEntityFactory->createSphere("startPos", Color::green, am::Vec3{-20.0f, -15.0f, 0.0f});
-    auto endPos = mEntityFactory->createSphere("endPos", Color::red, am::Vec3{20.0f, 18.0f, 0.0f});
-    mTrophies.push_back(mEntityFactory->createModel("trophy1", "crystal.fbx", am::Vec{-10.0f, 28.0f, -10.0f}));
-    mTrophies.back().addComponent(CollisionComponent());
-    mTrophies.push_back(mEntityFactory->createModel("trophy2", "crystal.fbx", am::Vec{10.0f, 51.0f, 30.0f}));
-    mTrophies.back().addComponent(CollisionComponent());
-    mTrophies.push_back(mEntityFactory->createModel("trophy3", "crystal.fbx", am::Vec{30.0f, 40.0f, -23.0f}));
-    mTrophies.back().addComponent(CollisionComponent());
-
-    // SCENE END
-    // ---------------------------------------------------------------------------------------
-
     // Begin play
     mWorld->beginPlay();
 }

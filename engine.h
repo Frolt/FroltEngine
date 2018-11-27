@@ -62,13 +62,11 @@ public:
     std::unique_ptr<EntityFactory> mEntityFactory;
     // EventHandler
     std::unique_ptr<EventHandler> mEventHandler;
-    /// This is the main/only shader the engine use
+    // Shaders
     Shader mPhongShader;
     Shader mSkyboxShader;
     /// Input component for general engine key bindings
     std::unique_ptr<InputComponent> mInput;
-    // Trophies
-    std::vector<EntityHandle> mTrophies;
 private:
     /// Timer to calculate elapsed time since game start
     QElapsedTimer mTimer;

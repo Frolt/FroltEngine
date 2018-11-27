@@ -23,11 +23,11 @@ void CombatSystem::onCollisionEvent(CollisionEvent *event)
     ch::Transform transform;
 
     // If we hit the AI guard
-    if (other == mWorld->getEntity("guard")) {
+    if (mWorld->hasComponent<AIComponent>(other)) {
         ch::Material material;
         mWorld->unpack(player, transform, material);
         material().mDiffuseColor = Color::black;
-        transform().mLocation = am::up() * 1000.0f;
+        transform().mLocation = am::up() * 100.0f;
     } else {
         mWorld->destroyEntity(other);
     }

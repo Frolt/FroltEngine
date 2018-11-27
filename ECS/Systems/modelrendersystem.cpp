@@ -19,9 +19,8 @@ void ModelRenderSystem::update(float)
     ch::Material material;
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, model, transform, material);
-//        model().mShader.use();
         updateMaterialUniforms(model().mShader, material);
-        updateTransformUniforms(model().mShader, transform);
+        updateTransformUniforms(model().mShader, transform, mWorld->getEntity(entity));
         draw(model);
     }
 }
@@ -38,17 +37,9 @@ void ModelRenderSystem::updateMaterialUniforms(const Shader shader, const Materi
     shader.setFloat("material.shininess", material.mShininess);
 }
 
-void ModelRenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform) const
+void ModelRenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform, EntityHandle entity) const
 {
-    // Matrix transformation happens in reverse order
-    //---------------------------------------------------------------------------------
-    am::Mat4 modelMatrix;
-    modelMatrix.translate(transform.mLocation);
-    modelMatrix.rotate(transform.mRotation.yaw, am::up());
-    modelMatrix.rotate(transform.mRotation.pitch, am::right());
-    modelMatrix.rotate(transform.mRotation.roll, am::forward());
-    modelMatrix.scale(transform.mScale);
-    //---------------------------------------------------------------------------------
+    am::Mat4 modelMatrix = entity.getModelMatrix();
 
     // Create Normal Matrix
     auto m = modelMatrix;
