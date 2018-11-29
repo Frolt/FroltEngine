@@ -29,6 +29,11 @@ void CombatSystem::onCollisionEvent(CollisionEvent *event)
         material().mDiffuseColor = Color::black;
         transform().mLocation = am::up() * 100.0f;
     } else {
+        if (mWorld->hasComponent<AIComponent>(player)) {
+//            ch::Ai ai;
+//            mWorld->unpack(player, ai);
+//            ai().mChase = true;
+        }
         mWorld->destroyEntity(other);
     }
 }

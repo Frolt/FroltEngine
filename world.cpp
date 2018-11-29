@@ -113,7 +113,8 @@ void World::makeScene(EntityFactory &ef)
 
     // AI
     auto shark0 = ef.createAIShark("shark0", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
-//    auto shark1 = ef.createAIShark("shark1", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+    auto shark1 = ef.createAIShark("shark1", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
+    shark1.removeComponent<CollisionComponent>();
 
     // Crystals
     auto startPos = ef.createSphere("startPos", Color::green, am::Vec3{0.0f, 0.0f, 0.0f});

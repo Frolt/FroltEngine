@@ -13,7 +13,14 @@ void CollisionSystem::beginPlay()
 
 void CollisionSystem::update(float)
 {
-    EntityHandle player = mWorld->getEntity("player");
+    EntityHandle player;
+    EntityHandle shark;
+
+    if (mWorld->entityExist("player"))
+        player = mWorld->getEntity("player");
+    if (mWorld->entityExist("shark0"))
+        shark = mWorld->getEntity("shark0");
+
     for (auto &entity : mRegisteredEntities) {
         // Check for terrain collision
         checkTerrainCollision(entity);
@@ -23,6 +30,13 @@ void CollisionSystem::update(float)
                 mEventHandler->publish(std::make_unique<CollisionEvent>(player, entity));
             }
         }
+        if (entity != shark) {
+            if (checkCollision(shark, entity)) {
+                mEventHandler->publish(std::make_unique<CollisionEvent>(shark, entity));
+            }
+        }
+        // Check if projectile hit something
+
     }
 }
 

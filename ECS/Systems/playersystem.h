@@ -14,7 +14,7 @@ public:
 
     void beginPlay() override;
     void update(float deltaTime) override;
-    void movePlayer(const InputComponent &input, MovementComponent &movement, float deltaTime, EntityHandle entity) const;
+    void movePlayer(const InputComponent &input, const TransformComponent &transform, MovementComponent &movement, float deltaTime, EntityHandle entity) const;
 };
 
 #endif // PLAYERSYSTEM_H

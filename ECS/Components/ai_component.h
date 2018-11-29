@@ -5,7 +5,7 @@
 
 struct AIComponent : public Component<AIComponent>
 {
-    // Tag component
+    bool mIsChasing{false};
 };
 
 #endif // AI_COMPONENT_H

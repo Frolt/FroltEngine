@@ -23,6 +23,7 @@ struct TerrainComponent;
 struct BSplineComponent;
 struct CollisionComponent;
 struct SkyboxComponent;
+struct AiComponent;
 
 template<typename ComponentType>
 /**
@@ -65,6 +66,7 @@ namespace ch {
     using BSpline = ComponentHandle<BSplineComponent>;
     using Collision = ComponentHandle<CollisionComponent>;
     using Skybox = ComponentHandle<SkyboxComponent>;
+    using Ai = ComponentHandle<AiComponent>;
 }
 
 //--------------------------------------------------------------------------------------

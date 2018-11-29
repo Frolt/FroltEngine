@@ -40,7 +40,7 @@ template<class EventType>
 void EventHandler::publish(std::unique_ptr<EventType> event)
 {
     // Get the array of memberFunctions for the specific EventType
-    auto &memberFunctionArray = mSubscribers[typeid(EventType)];
+    auto &memberFunctionArray = mSubscribers[typeid (EventType)];
 
     // Calls all the member functions associated with the EventType
     for (auto &memberFunction : memberFunctionArray) {
@@ -52,7 +52,7 @@ template<class ClassInstance, class EventType>
 void EventHandler::subscribe(ClassInstance *instance, void(ClassInstance::*memberFunction)(EventType *))
 {
     // Get the array of memberFunctions for the specific EventType
-    auto &memberFunctionArray = mSubscribers[typeid(EventType)];
+    auto &memberFunctionArray = mSubscribers[typeid (EventType)];
 
     // Add the new member function
     memberFunctionArray.push_back(std::make_unique<MemberFunctionHandler<ClassInstance, EventType>>(instance, memberFunction));
