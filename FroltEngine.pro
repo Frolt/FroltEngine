@@ -6,6 +6,7 @@
 
 # Settings
 # --------------------------------------------------------------
+CONFIG += console
 QT += core gui widgets
 TARGET = FroltEngine
 TEMPLATE = app

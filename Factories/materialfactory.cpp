@@ -12,7 +12,7 @@ Texture MaterialFactory::getDiffuseTexture(const std::string &key)
 {
     auto search = mTextures.find(key);
     if (search == mTextures.end()) {
-        qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
+        qWarning() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
         return Texture();
     } else {
         search->second.mType = "diffuseMap";
@@ -24,7 +24,7 @@ Texture MaterialFactory::getSpecularTexture(const std::string &key)
 {
     auto search = mTextures.find(key);
     if (search == mTextures.end()) {
-        qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
+        qWarning() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
         return Texture();
     } else {
         search->second.mType = "specularMap";
@@ -36,7 +36,7 @@ Texture MaterialFactory::getEmissionTexture(const std::string &key)
 {
     auto search = mTextures.find(key);
     if (search == mTextures.end()) {
-        qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
+        qWarning() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
         return Texture();
     } else {
         search->second.mType = "emissionMap";
@@ -48,7 +48,7 @@ Cubemap MaterialFactory::getCubemap(const std::string &key)
 {
     auto search = mCubemaps.find(key);
     if (search == mCubemaps.end()) {
-        qDebug() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
+        qWarning() << "ERROR:: \"" << key.c_str() << "\"" << "is not a valid key";
         return Cubemap();
     } else {
         return search->second;

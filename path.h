@@ -6,14 +6,14 @@
 /// Contains relative paths to subdirectories inside the project directory
 namespace Path
 {
-    const std::string root = "../";
-    const std::string assets = "../Assets/";
-    const std::string textures = "../Assets/Textures/";
-    const std::string skyboxes = "../Assets/Skyboxes/";
-    const std::string primitives = "../Assets/Primitives/";
-    const std::string models = "../Assets/Models/";
-    const std::string shaders = "../Shaders/";
-    const std::string mapdata = "../LAS/MapData/";
+    const std::string root = "../FroltEngine/";
+    const std::string assets = "../FroltEngine/Assets/";
+    const std::string textures = "../FroltEngine/Assets/Textures/";
+    const std::string skyboxes = "../FroltEngine/Assets/Skyboxes/";
+    const std::string primitives = "../FroltEngine/Assets/Primitives/";
+    const std::string models = "../FroltEngine/Assets/Models/";
+    const std::string shaders = "../FroltEngine/Shaders/";
+    const std::string mapdata = "../FroltEngine/LAS/MapData/";
 };
 
 

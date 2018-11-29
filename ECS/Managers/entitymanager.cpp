@@ -18,7 +18,7 @@ Entity *EntityManager::createEntity(const std::string &name)
         mEntities[name] = entity;
         return &mEntities[name];
     } else {
-        qDebug() << "ERROR:: Entity already exist";
+        qWarning() << "ERROR:: Entity already exist";
         return nullptr;
     }
 }
@@ -42,7 +42,7 @@ Entity *EntityManager::getEntity(const std::string &name)
     if (search != mEntities.end()) {
         return &search->second;
     } else {
-        qDebug() << "ERROR:: no entity named \"" << name.c_str() << "\" exist";
+        qWarning() << "ERROR:: no entity named \"" << name.c_str() << "\" exist";
         return nullptr;
     }
 }
@@ -53,7 +53,7 @@ Entity *EntityManager::getEntity(EntityID entity)
     if (search != mIDMap.end()) {
         return &mEntities[search->second];
     } else {
-        qDebug() << "ERROR:: no entity with ID \"" << entity << "\" exist";
+        qWarning() << "ERROR:: no entity with ID \"" << entity << "\" exist";
         return nullptr;
     }
 }

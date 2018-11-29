@@ -283,6 +283,6 @@ void World::activateCamera(EntityID entity)
         auto camera = thirdCamManager->getComponent(entity);
         camera->mActive = true;
     } else {
-        qDebug() << "ERROR:: entity does not have a camera";
+        qWarning() << "ERROR:: entity does not have a camera";
     }
 }
