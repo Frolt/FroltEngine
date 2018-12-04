@@ -9,6 +9,8 @@ struct CollisionComponent : public Component<CollisionComponent>
     CollisionComponent();
 
     am::Vec3 mSize{1};
+    bool isBox{true};
+    float mRadius{1.0f};
 };
 
 #endif // COLLISION_COMPONENT_H

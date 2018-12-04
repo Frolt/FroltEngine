@@ -19,6 +19,7 @@ public:
     void update(float deltaTime) override;
 
     void onCollisionEvent(CollisionEvent *event);
+    void onSphereCollisionEvent(SphereCollisionEvent *event);
 };
 
 #endif // COMBATSYSTEM_H

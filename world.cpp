@@ -109,7 +109,12 @@ void World::makeScene(EntityFactory &ef)
     ef.createMathTerrain("mathTerrain");
 
     // Enviroment
-//    ef.createModel("shark")
+    for (int i = 0; i < 50; i++) {
+        ef.createPhysicsBall("ball" + std::to_string(i),
+                             am::Vec(1.0f / (float)(rand() % 10),1.0f / (float)(rand() % 10),1.0f / (float)(rand() % 10)),
+                             am::Vec((std::rand() % 100) - 100, 20.0f, (std::rand() % 100) - 50));
+        qDebug() << 1.0f / (float)(rand() % 100);
+    }
 
     // AI
     auto shark0 = ef.createAIShark("shark0", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});

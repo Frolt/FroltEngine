@@ -4,10 +4,9 @@
 #include <unordered_map>
 #include <vector>
 #include <typeindex>
+#include <memory>
 #include "basememberfunctionhandler.h"
 #include "memberfunctionhandler.h"
-#include <iostream>
-#include <memory>
 
 /**
    @brief The EventHandler class is the central event system in the engine.

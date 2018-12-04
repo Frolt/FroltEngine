@@ -21,26 +21,46 @@ void CollisionSystem::update(float)
     if (mWorld->entityExist("shark0"))
         shark = mWorld->getEntity("shark0");
 
+    ch::Collision collision;
     for (auto &entity : mRegisteredEntities) {
         // Check for terrain collision
         checkTerrainCollision(entity);
-        // Check if player hit something
+        // Check if player hit other box collision entities
         if (entity != player) {
-            if (checkCollision(player, entity)) {
-                mEventHandler->publish(std::make_unique<CollisionEvent>(player, entity));
+            mWorld->unpack(entity, collision);
+            if (collision().isBox) {
+                if (checkBoxCollision(player, entity)) {
+                    mEventHandler->publish(std::make_unique<CollisionEvent>(player, entity));
+                }
             }
         }
+        // Check if shark hit anything
         if (entity != shark) {
-            if (checkCollision(shark, entity)) {
-                mEventHandler->publish(std::make_unique<CollisionEvent>(shark, entity));
+            mWorld->unpack(entity, collision);
+            if (collision().isBox) {
+                if (checkBoxCollision(shark, entity)) {
+                    mEventHandler->publish(std::make_unique<CollisionEvent>(shark, entity));
+                }
             }
         }
-        // Check if projectile hit something
-
+        // Check if sphere hit something
+        mWorld->unpack(entity, collision);
+        if (collision().isBox == false) {
+            for (auto &other : mRegisteredEntities) {
+                if (entity != other) {
+                    mWorld->unpack(other, collision);
+                    if (collision().isBox == false) {
+                        if (checkSphereCollision(entity, other)) {
+                            mEventHandler->publish(std::make_unique<SphereCollisionEvent>(entity, other));
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
-bool CollisionSystem::checkCollision(EntityID entity1, EntityID entity2)
+bool CollisionSystem::checkBoxCollision(EntityID entity1, EntityID entity2)
 {
     ch::Transform transform;
     ch::Collision collision;
@@ -67,6 +87,22 @@ bool CollisionSystem::checkCollision(EntityID entity1, EntityID entity2)
     bool collisionZ = (aPos.z + aSize.z >= bPos.z) && (bPos.z + bSize.z >= aPos.z);
 
     return collisionX && collisionY && collisionZ;
+}
+
+bool CollisionSystem::checkSphereCollision(EntityID entity1, EntityID entity2)
+{
+    ch::Transform transform1;
+    ch::Collision collision1;
+    ch::Transform transform2;
+    ch::Collision collision2;
+
+    mWorld->unpack(entity1, transform1, collision1);
+    mWorld->unpack(entity2, transform2, collision2);
+
+    if ((transform1().mLocation - transform2().mLocation).length() <= collision1().mRadius + collision2().mRadius)
+        return true;
+    else
+        return false;
 }
 
 void CollisionSystem::checkTerrainCollision(EntityID entity)

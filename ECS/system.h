@@ -31,6 +31,7 @@
 #include "EventSystem/event.h"
 #include "EventSystem/eventhandler.h"
 #include "EventSystem/collisionevent.h"
+#include "EventSystem/spherecollisionevent.h"
 
 // Forward declarations
 class World;

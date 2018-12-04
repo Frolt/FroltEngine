@@ -336,12 +336,15 @@ EntityHandle EntityFactory::createPhysicsBall(const std::string &name, const am:
     auto entity = mWorld.createEntity(name);
     MeshComponent mesh{mMeshFactory.createSphere()};
     MaterialComponent material;
-    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("grass"));
+//    material.mTextures.push_back(mMaterialFactory.getDiffuseTexture("grass"));
     material.mDiffuseColor = color;
     TransformComponent transform;
     transform.mLocation = location;
     MovementComponent movement;
     PhysicsComponent physics;
+    CollisionComponent collision;
+    collision.isBox = false;
+    entity.addComponent(collision);
     entity.addComponent(mesh);
     entity.addComponent(material);
     entity.addComponent(transform);

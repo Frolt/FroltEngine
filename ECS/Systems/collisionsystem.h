@@ -13,7 +13,9 @@ public:
     void beginPlay() override;
     void update(float deltaTime) override;
     /// Check collisions by using the entities cube bounding box
-    bool checkCollision(EntityID entity1, EntityID entity2);
+    bool checkBoxCollision(EntityID entity1, EntityID entity2);
+    /// Check collisions by using the entities sphere collision
+    bool checkSphereCollision(EntityID entity1, EntityID entity2);
     /// Check if the entities height is below the terrain
     void checkTerrainCollision(EntityID entity);
 };

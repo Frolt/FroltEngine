@@ -91,7 +91,8 @@ SOURCES += \
     ECS/Components/skybox_component.cpp \
     ECS/Systems/skyboxsystem.cpp \
     cubemap.cpp \
-    ECS/component.cpp
+    ECS/component.cpp \
+    EventSystem/spherecollisionevent.cpp
 
 # Header files
 # --------------------------------------------------------------
@@ -173,7 +174,8 @@ HEADERS += \
     ECS/Systems/skyboxsystem.h \
     cubemap.h \
     path.h \
-    ECS/component.h
+    ECS/component.h \
+    EventSystem/spherecollisionevent.h
 
 FORMS += \
     mainwindow.ui
