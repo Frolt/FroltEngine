@@ -3,6 +3,7 @@
 
 #include "a_math.h"
 
+
 /**
    @brief Basic struct to store Position, Normal and UV(Texture) coordinate
  */

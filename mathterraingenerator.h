@@ -5,6 +5,7 @@
 #include <array>
 #include "vertex.h"
 
+
 /**
    @brief The MathTerrainGenerator class is used to build a terrain mesh derived from a mathematical multivariable function
 

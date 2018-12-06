@@ -2,9 +2,9 @@
 #define MATERIALFACTORY_H
 
 #include <unordered_map>
-#include <map>
 #include "texture.h"
 #include "cubemap.h"
+
 
 /**
    @brief The MaterialFactory class is used to get preloaded textures

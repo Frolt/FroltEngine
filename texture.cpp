@@ -5,6 +5,7 @@
 #include "stb_image.h"
 #include <memory>
 
+
 Texture::Texture(const std::string& path)
 {
     // Initialize opengl functions

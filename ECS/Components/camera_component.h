@@ -4,6 +4,7 @@
 #include "a_math.h"
 #include "shader.h"
 
+
 struct CameraComponent
 {
     CameraComponent() = default;

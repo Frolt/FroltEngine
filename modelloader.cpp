@@ -1,6 +1,7 @@
 #include "modelloader.h"
 #include "vertex.h"
 
+
 ModelLoader::ModelLoader(const std::string &path)
 {
     loadModel(path);
@@ -65,14 +66,11 @@ Mesh ModelLoader::processMesh(aiMesh *mesh, const aiScene *scene)
     }
 
     // Process textures
-    if (mesh->mMaterialIndex >= 0)
-    {
-        aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-        std::vector<Texture> diffuseMaps = loadMaterialTexture(material, aiTextureType_DIFFUSE, "diffuseMap");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        std::vector<Texture> specularMaps = loadMaterialTexture(material, aiTextureType_SPECULAR, "specularMap");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    }
+    aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+    std::vector<Texture> diffuseMaps = loadMaterialTexture(material, aiTextureType_DIFFUSE, "diffuseMap");
+    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+    std::vector<Texture> specularMaps = loadMaterialTexture(material, aiTextureType_SPECULAR, "specularMap");
+    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
     return Mesh{vertices, indices, textures};
 }

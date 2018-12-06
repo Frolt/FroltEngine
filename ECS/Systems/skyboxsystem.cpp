@@ -1,5 +1,6 @@
 #include "skyboxsystem.h"
 
+
 SkyboxSystem::SkyboxSystem()
 {
     initializeOpenGLFunctions();
@@ -13,7 +14,7 @@ void SkyboxSystem::beginPlay()
 
 }
 
-void SkyboxSystem::update(float deltaTime)
+void SkyboxSystem::update(float)
 {
     ch::Skybox skybox;
     ch::Transform transform;

@@ -28,7 +28,6 @@ void System::registerEntity(EntityID entity)
 
 void System::deRegisterEntity(EntityID entity)
 {
-    // TODO use std::vector erase function
     for (auto it = mRegisteredEntities.begin(); it != mRegisteredEntities.end(); ++it) {
         if (*it == entity) {
             mRegisteredEntities.erase(it);

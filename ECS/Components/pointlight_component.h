@@ -4,6 +4,7 @@
 #include "ECS/Components/light_component.h"
 #include "ECS/component.h"
 
+
 struct PointLightComponent : public LightComponent, public Component<PointLightComponent>
 {
     PointLightComponent() = default;

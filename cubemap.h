@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+
 /**
    @brief The Cubemap struct loads 6 textures and maps them on a cube. It stores an openGL cubemap ID.
  */

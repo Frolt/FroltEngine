@@ -1,5 +1,6 @@
 #include "modelrendersystem.h"
 
+
 ModelRenderSystem::ModelRenderSystem()
 {
     mSystemMask.addComponent<ModelComponent>();
@@ -20,7 +21,7 @@ void ModelRenderSystem::update(float)
     for (auto &entity : mRegisteredEntities) {
         mWorld->unpack(entity, model, transform, material);
         updateMaterialUniforms(model().mShader, material);
-        updateTransformUniforms(model().mShader, transform, mWorld->getEntity(entity));
+        updateTransformUniforms(model().mShader, mWorld->getEntity(entity));
         draw(model);
     }
 }
@@ -37,7 +38,7 @@ void ModelRenderSystem::updateMaterialUniforms(const Shader shader, const Materi
     shader.setFloat("material.shininess", material.mShininess);
 }
 
-void ModelRenderSystem::updateTransformUniforms(const Shader shader, const TransformComponent &transform, EntityHandle entity) const
+void ModelRenderSystem::updateTransformUniforms(const Shader shader, EntityHandle entity) const
 {
     am::Mat4 modelMatrix = entity.getModelMatrix();
 

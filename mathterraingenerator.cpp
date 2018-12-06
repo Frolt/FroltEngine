@@ -1,5 +1,6 @@
 #include "mathterraingenerator.h"
 
+
 MathTerrainGenerator::MathTerrainGenerator(int domainMin, int domainMax, float resolution)
 {
     float delta = 1.0f / resolution;
@@ -40,9 +41,7 @@ am::Vec3 MathTerrainGenerator::calculateNormal(const float x, const float z)
 // TODO not part of generator
 void MathTerrainGenerator::FindNeighborTriangles()
 {
-    // TODO cleanup
     // Create triangle array
-
     mTriangles.reserve(mIndices.size()/3);
     for (unsigned int i = 0; i < mIndices.size(); i += 3) {
         mTriangles.push_back({{static_cast<int>(mIndices[i]),
@@ -122,7 +121,7 @@ void MathTerrainGenerator::makeIndices()
         index += 6;
     }
 
-    //TODO use this instead?
+    // TODO use this instead?
 //    for (unsigned int z = 0; z < (mZRange - 1); z++) {
 //        for (unsigned int x = 0; x < (mXRange - 1); x++) {
 //            index.push_back(x + mXRange * z);

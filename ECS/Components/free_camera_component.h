@@ -5,12 +5,12 @@
 #include "ECS/Components/camera_component.h"
 #include "a_math.h"
 
+
 struct FreeCameraComponent : public CameraComponent, public Component<FreeCameraComponent>
 {
     FreeCameraComponent() = default;
     FreeCameraComponent(Shader shader);
 
-    // TODO use velocity in movementComponent?
     am::Vec mFront = am::forward();
     am::Vec mUp;
     am::Vec mRight;

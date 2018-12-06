@@ -264,7 +264,6 @@ EntityHandle EntityFactory::createFreeCamera(const std::string &name, const am::
 
 EntityHandle EntityFactory::createMathTerrain(const std::string &name, const am::Vec3 &color, int min, int max, const am::Vec3 &location)
 {
-    // TODO snakk med ole, constuctor i struct?
     // Consists of: Transform, Mesh, Material, Terrain
     MathTerrainGenerator terrainGen{min, max, 0.1f};
     auto entity = mWorld.createEntity(name);

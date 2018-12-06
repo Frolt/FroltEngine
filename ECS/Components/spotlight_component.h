@@ -5,6 +5,7 @@
 #include "ECS/component.h"
 #include "a_math.h"
 
+
 struct SpotlightComponent : public LightComponent, public Component<SpotlightComponent>
 {
     SpotlightComponent() = default;

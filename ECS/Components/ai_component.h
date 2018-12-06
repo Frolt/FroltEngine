@@ -3,6 +3,7 @@
 
 #include "ECS/component.h"
 
+
 struct AIComponent : public Component<AIComponent>
 {
     bool mIsChasing{false};

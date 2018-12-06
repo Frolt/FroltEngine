@@ -2,6 +2,7 @@
 #include "EventSystem/collisionevent.h"
 #include "engine.h"
 
+
 CombatSystem::CombatSystem()
 {
 
@@ -26,23 +27,29 @@ void CombatSystem::onCollisionEvent(CollisionEvent *event)
 
     // If we hit the AI guard
     if (mWorld->hasComponent<AIComponent>(other)) {
-        ch::Material material;
-        mWorld->unpack(player, transform, material);
-        material().mDiffuseColor = Color::black;
-        transform().mLocation = am::up() * 100.0f;
-    } else {
-        if (mWorld->hasComponent<AIComponent>(player)) {
-//            ch::Ai ai;
-//            mWorld->unpack(player, ai);
-//            ai().mChase = true;
+        if (mWorld->hasComponent<PlayerComponent>(player)) {
+            ch::Player playerComp;
+            ch::Material material;
+            mWorld->unpack(player, transform, material, playerComp);
+            material().mDiffuseColor = Color::black;
+            material().mHasDiffMap = false;
+            playerComp().isDead = true;
+            qWarning("YOU DIED!");
         }
+    } else if (!mWorld->hasComponent<PlayerComponent>(other) &&
+               !mWorld->hasComponent<AIComponent>(other)) {
         mWorld->destroyEntity(other);
+        if (!mWorld->hasComponent<PlayerComponent>(player)) {
+            ch::Material material;
+            mWorld->unpack(player, material);
+            material().mHasDiffMap = false;
+            material().mDiffuseColor = Color::orangeRed;
+        }
     }
 }
 
 void CombatSystem::onSphereCollisionEvent(SphereCollisionEvent *event)
 {
-//    qDebug() << "Collided!";
     // Implement proper sphere collision response
     ch::Movement movement1;
     ch::Transform transform1;

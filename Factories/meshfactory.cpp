@@ -7,6 +7,7 @@
 #include "octahedron.h"
 #include "modelloader.h"
 
+
 MeshFactory::MeshFactory(Shader *defaultShader)
     : mDefaultShader{defaultShader}
 {

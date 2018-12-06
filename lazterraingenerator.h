@@ -5,6 +5,7 @@
 #include <vector>
 #include "vertex.h"
 
+
 /**
    @brief The LazTerrainGenerator class is used to build a terrain mesh from a las file (lidar point cloud data)
 

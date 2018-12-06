@@ -1,9 +1,10 @@
 #include "octahedron.h"
 
+
 Octahedron::Octahedron(unsigned int n)
     : mRecursions{n}
 {
-    unsigned int size = 3 * 8 * static_cast<int>(pow(4, mRecursions));
+    size_t size = 3 * 8 * static_cast<size_t>(pow(4, mRecursions));
     mVertices.resize(size);
     makeUnitOctahedron();
 }
@@ -24,7 +25,7 @@ void Octahedron::makeTriangle(const am::Vec3 &v1, const am::Vec3 &v2, const am::
     ++mIndex;
 }
 
-void Octahedron::subDivide(const am::Vec3 &a, const am::Vec3 &b, const am::Vec3 &c, int n)
+void Octahedron::subDivide(const am::Vec3 &a, const am::Vec3 &b, const am::Vec3 &c, unsigned int n)
 {
     if (n>0) {
         am::Vec3 v1 = a + b; v1.normalize();

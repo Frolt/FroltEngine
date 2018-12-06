@@ -4,6 +4,11 @@
 #include "ECS/system.h"
 #include <QOpenGLFunctions_4_1_Core>
 
+
+/**
+   @brief The SkyboxSystem class creates a skybox that follows the active camera.
+   It uses a cubemap to create the skybox.
+ */
 class SkyboxSystem : public System, protected QOpenGLFunctions_4_1_Core
 {
 public:

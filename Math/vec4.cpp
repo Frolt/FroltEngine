@@ -2,6 +2,7 @@
 #include <iostream>
 #include "vec3.h"
 
+
 namespace am
 {
     Vec4::Vec4(float x, float y, float z, float w) :

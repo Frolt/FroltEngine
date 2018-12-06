@@ -5,6 +5,7 @@
 #include <string>
 #include "a_math.h"
 
+
 /**
    @brief The Shader class store a reference to the openGL shader,
    and provides setter functions for shader uniforms

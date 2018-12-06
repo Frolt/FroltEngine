@@ -3,8 +3,8 @@
 
 #include <ostream>
 #include <vector>
-#include <array>
 #include <QDebug>
+
 
 namespace am
 {

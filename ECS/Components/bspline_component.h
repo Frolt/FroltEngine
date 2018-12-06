@@ -5,6 +5,7 @@
 #include <vector>
 #include "vertex.h"
 
+
 struct BSplineComponent : public Component<BSplineComponent>
 {
     BSplineComponent();

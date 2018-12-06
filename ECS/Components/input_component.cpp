@@ -1,6 +1,7 @@
 #include "input_component.h"
 #include "inputstate.h"
 
+
 InputComponent::InputComponent(InputState *inputState)
     :mInputState{inputState}
 {

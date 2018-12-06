@@ -4,6 +4,7 @@
 #include "ECS/Components/light_component.h"
 #include "ECS/component.h"
 
+
 struct DirectionalLightComponent : public LightComponent, public Component<DirectionalLightComponent>
 {
     DirectionalLightComponent(const am::Vec3 &dir = -am::up(), const am::Vec3 &diff = {1}, const am::Vec3 &amb = {0.1});

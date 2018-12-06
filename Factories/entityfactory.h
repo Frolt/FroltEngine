@@ -4,6 +4,7 @@
 #include <string>
 #include "a_math.h"
 
+
 // Forward declarations
 struct EntityHandle;
 struct InputState;
@@ -47,14 +48,6 @@ public:
     EntityHandle createAIShark(const std::string &name , const std::string &path, const am::Vec3 &color = Color::green, const am::Vec3 &location = {0});
     // Skybox
     EntityHandle createSkybox(const std::string &name , const std::string &skyType, const am::Vec3 &location = {0});
-
-
-
-    // TODO Functions below are not implemented yet
-    // AI
-    EntityHandle createAICube(const std::string &name, const am::Vec3 &color = Color::orangeRed, const am::Vec3 &location = {0});
-    // Camera
-    EntityHandle createCamera(const std::string &name, const am::Vec3 &location = {0});
 
 private:
     MeshFactory &mMeshFactory;

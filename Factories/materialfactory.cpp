@@ -2,6 +2,7 @@
 #include "path.h"
 #include <QDebug>
 
+
 MaterialFactory::MaterialFactory()
 {
     loadTextures();
@@ -113,7 +114,7 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["mountain"] = Cubemap(texturePaths);
 
-    // BlueCloud // TODO fix
+    // BlueCloud
     texturePaths = {
         "BlueCloud/bluecloud_rt.jpg",
         "BlueCloud/bluecloud_lf.jpg",
@@ -124,7 +125,7 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["blueCloud"] = Cubemap(texturePaths);
 
-    // GrayCloud // TODO fix
+    // GrayCloud
     texturePaths = {
         "GrayCloud/graycloud_lf.jpg",
         "GrayCloud/graycloud_rt.jpg",
@@ -157,7 +158,7 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["nebula"] = Cubemap(texturePaths, true);
 
-    // Blood // TODO fix
+    // Blood
     texturePaths = {
         "Blood/blood_rt.tga",
         "Blood/blood_lf.tga",
@@ -168,7 +169,7 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["blood"] = Cubemap(texturePaths);
 
-    // Dim // TODO fix
+    // Dim
     texturePaths = {
         "Dim/dim_rt.tga",
         "Dim/dim_lf.tga",
@@ -179,7 +180,7 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["dim"] = Cubemap(texturePaths);
 
-    // Greenhaze // TODO fix
+    // Greenhaze
     texturePaths = {
         "Greenhaze/greenhaze_rt.tga",
         "Greenhaze/greenhaze_lf.tga",
@@ -190,7 +191,6 @@ void MaterialFactory::loadCubemaps()
     };
     mCubemaps["greenhaze"] = Cubemap(texturePaths);
 
-    // Whirlpool // TODO fix
     texturePaths = {
         "Whirlpool/whirlpool_rt.tga",
         "Whirlpool/whirlpool_lf.tga",

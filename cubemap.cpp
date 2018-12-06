@@ -4,6 +4,7 @@
 #include "stb_image.h"
 #include "path.h"
 
+
 Cubemap::Cubemap(std::vector<std::string> &mCubemapTextures, bool flipVertical)
 {
     // Initialize opengl functions

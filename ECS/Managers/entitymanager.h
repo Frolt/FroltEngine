@@ -2,9 +2,9 @@
 #define ENTITYMANAGER_H
 
 #include <unordered_map>
-#include <map>
 #include <string>
 #include "ECS/entity.h"
+
 
 /**
    @brief The EntityManager class manages all Entities in the gameworld.

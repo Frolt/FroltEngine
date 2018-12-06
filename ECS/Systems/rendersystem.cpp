@@ -2,6 +2,7 @@
 #include "shader.h"
 #include "texture.h"
 
+
 RenderSystem::RenderSystem()
 {
     initializeOpenGLFunctions();

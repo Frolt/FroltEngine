@@ -3,6 +3,7 @@
 
 #include "ECS/entity.h"
 
+
 // Forward declarations
 template<typename ComponentType>
 class ComponentManager;
@@ -24,6 +25,7 @@ struct BSplineComponent;
 struct CollisionComponent;
 struct SkyboxComponent;
 struct AiComponent;
+struct PlayerComponent;
 
 template<typename ComponentType>
 /**
@@ -67,6 +69,7 @@ namespace ch {
     using Collision = ComponentHandle<CollisionComponent>;
     using Skybox = ComponentHandle<SkyboxComponent>;
     using Ai = ComponentHandle<AiComponent>;
+    using Player = ComponentHandle<PlayerComponent>;
 }
 
 //--------------------------------------------------------------------------------------

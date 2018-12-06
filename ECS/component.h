@@ -3,6 +3,7 @@
 
 #include <utility>
 
+
 /// Simple counter to provide unique family ID
 struct FamilyCounter {
     static unsigned int ID;

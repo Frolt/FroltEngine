@@ -41,6 +41,7 @@
 #include "engine.h"
 #include <functional>
 
+
 World::World(Engine *engine)
     : mEngine{*engine}
 {
@@ -103,36 +104,25 @@ void World::makeScene(EntityFactory &ef)
     // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
     // Player
-    auto player = ef.createPlayerModel("player", Color::orangeRed, am::Vec(-10.0f, 20.0f, 0.0f));
+    ef.createPlayerModel("player", Color::orangeRed, am::Vec(-10.0f, 20.0f, 0.0f));
 
     // Terrain
     ef.createMathTerrain("mathTerrain");
 
-    // Enviroment
-    for (int i = 0; i < 50; i++) {
-        ef.createPhysicsBall("ball" + std::to_string(i),
-                             am::Vec(1.0f / (float)(rand() % 10),1.0f / (float)(rand() % 10),1.0f / (float)(rand() % 10)),
-                             am::Vec((std::rand() % 100) - 100, 20.0f, (std::rand() % 100) - 50));
-        qDebug() << 1.0f / (float)(rand() % 100);
-    }
-
     // AI
-    auto shark0 = ef.createAIShark("shark0", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
-    auto shark1 = ef.createAIShark("shark1", "shark/shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
-    shark1.removeComponent<CollisionComponent>();
+    ef.createAIShark("shark0", "shark.obj", Color::aqua, am::Vec{0.0f, 20.0f, 0.0f});
 
     // Crystals
-    auto startPos = ef.createSphere("startPos", Color::green, am::Vec3{0.0f, 0.0f, 0.0f});
-    auto endPos = ef.createSphere("endPos", Color::red, am::Vec3{0.0f, 50.0f, 0.0f});
+    ef.createSphere("startPos", Color::green, am::Vec3{0.0f, 0.0f, 0.0f});
+    ef.createSphere("endPos", Color::red, am::Vec3{0.0f, 50.0f, 0.0f});
 
-    auto crystal1 = ef.createCrystal("crystal0", Color::aqua, am::Vec{-10.0f, 28.0f, -10.0f});
-    auto crystal2 = ef.createCrystal("crystal1", Color::aqua, am::Vec{10.0f, 51.0f, 30.0f});
-    auto crystal3 = ef.createCrystal("crystal2", Color::aqua, am::Vec{30.0f, 40.0f, -23.0f});
-    auto crystal4 = ef.createCrystal("crystalTest", Color::aqua, am::Vec{30.0f, 150.0f, -23.0f});
+    ef.createCrystal("crystal0", Color::aqua, am::Vec{-10.0f, 28.0f, -10.0f});
+    ef.createCrystal("crystal1", Color::aqua, am::Vec{10.0f, 51.0f, 30.0f});
+    ef.createCrystal("crystal2", Color::aqua, am::Vec{30.0f, 40.0f, -23.0f});
+    ef.createCrystal("crystalTest", Color::aqua, am::Vec{30.0f, 150.0f, -23.0f});
 
     // Camera
     auto camera = ef.createFreeCamera("camera", am::Vec{0.0f, 20.0f, 40.0f});
-    activateCamera(player);
     activateCamera(camera);
 
     // Lights

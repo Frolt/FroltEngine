@@ -5,6 +5,7 @@
 #include "vertex.h"
 #include "ECS/component.h"
 
+
 struct TerrainComponent : public Component<TerrainComponent>
 {
     std::vector<Vertex> mVertices;

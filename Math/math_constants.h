@@ -1,6 +1,7 @@
 #ifndef MATH_CONSTANTS_H
 #define MATH_CONSTANTS_H
 
+
 namespace am
 {
     // Mathematical constants

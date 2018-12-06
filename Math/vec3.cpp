@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include "vec4.h"
 
+
 namespace am
 {
     Vec3::Vec3(float x, float y, float z) :

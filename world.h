@@ -8,6 +8,7 @@
 #include <typeindex>
 #include "ECS/entity.h"
 
+
 // Forward declarations
 class EntityManager;
 struct EntityHandle;
@@ -22,11 +23,13 @@ class EntityFactory;
 /**
    @brief The World class is used to provide connection
     between the ECS systems, managers and entity/component handlers.
+    It is here the game scene is created.
 
     If for example an entityHandle instance calls its destroy function, the function will call world
     from its world reference and call the destroyEntity method in the world class.
     This function will then call the destroyEntity function in the EntityManager class instance.
     This is an example on how the world class serve as a crossroad for the ECS system in the engine.
+    The game scene is created inside the makeScene() member method.
  */
 class World
 {

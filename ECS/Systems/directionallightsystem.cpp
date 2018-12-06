@@ -1,6 +1,7 @@
 #include "directionallightsystem.h"
 #include "shader.h"
 
+
 DirectionalLightSystem::DirectionalLightSystem()
 {
     mSystemMask.addComponent<DirectionalLightComponent>();

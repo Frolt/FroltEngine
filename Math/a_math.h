@@ -1,13 +1,13 @@
 #ifndef A_MATH_H
 #define A_MATH_H
 
-
 #include "vec2.h"
 #include "vec3.h"
 #include "vec4.h"
 #include "matrix.h"
 #include "math_constants.h"
 #include "color.h"
+
 
 /// Namespace for all math related classes and functions
 namespace am

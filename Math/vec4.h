@@ -3,6 +3,7 @@
 
 #include <QDebug>
 
+
 namespace am
 {
     // Forward declarations

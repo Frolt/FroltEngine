@@ -5,6 +5,7 @@
 #include "cubemap.h"
 #include "shader.h"
 
+
 struct SkyboxComponent : public Component<SkyboxComponent>
 {
     SkyboxComponent() = default;

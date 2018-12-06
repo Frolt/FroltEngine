@@ -4,6 +4,7 @@
 #include "a_math.h"
 #include "ECS/component.h"
 
+
 struct MovementComponent : public Component<MovementComponent>
 {
     MovementComponent(const am::Vec3 &velocity = {0}, float acceleration = 0);

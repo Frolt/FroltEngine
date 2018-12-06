@@ -6,6 +6,7 @@
 #include <vector>
 #include "headerstock.h"
 
+
 // Forward declarations
 struct Vertex;
 

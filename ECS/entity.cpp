@@ -1,11 +1,12 @@
 #include "entity.h"
 
+
 Entity::Entity()
 {
 
 }
 
-Entity::Entity(unsigned int ID, const std::string &name)
+Entity::Entity(size_t ID, const std::string &name)
     : mID{ID}, mName{name}
 {
 

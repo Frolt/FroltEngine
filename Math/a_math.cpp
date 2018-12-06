@@ -3,6 +3,7 @@
 #include <array>
 #include <QElapsedTimer>
 
+
 namespace am
 {
     float toDegrees(float rad)

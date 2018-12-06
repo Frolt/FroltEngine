@@ -1,6 +1,7 @@
 #include "collisionsystem.h"
 #include "engine.h"
 
+
 CollisionSystem::CollisionSystem()
 {
     mSystemMask.addComponent<CollisionComponent>();
@@ -43,20 +44,20 @@ void CollisionSystem::update(float)
                 }
             }
         }
-        // Check if sphere hit something
-        mWorld->unpack(entity, collision);
-        if (collision().isBox == false) {
-            for (auto &other : mRegisteredEntities) {
-                if (entity != other) {
-                    mWorld->unpack(other, collision);
-                    if (collision().isBox == false) {
-                        if (checkSphereCollision(entity, other)) {
-                            mEventHandler->publish(std::make_unique<SphereCollisionEvent>(entity, other));
-                        }
-                    }
-                }
-            }
-        }
+//        // Check if sphere hit something
+//        mWorld->unpack(entity, collision);
+//        if (collision().isBox == false) {
+//            for (auto &other : mRegisteredEntities) {
+//                if (entity != other) {
+//                    mWorld->unpack(other, collision);
+//                    if (collision().isBox == false) {
+//                        if (checkSphereCollision(entity, other)) {
+//                            mEventHandler->publish(std::make_unique<SphereCollisionEvent>(entity, other));
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }
 

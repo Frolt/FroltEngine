@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 
+
 Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
 {
     gl->initializeOpenGLFunctions();

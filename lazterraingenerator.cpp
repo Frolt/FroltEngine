@@ -1,6 +1,7 @@
 #include "lazterraingenerator.h"
 #include "LAS/lasreader.h"
 
+
 LazTerrainGenerator::LazTerrainGenerator(const std::string &path, float res)
     : mPath{path}
 {

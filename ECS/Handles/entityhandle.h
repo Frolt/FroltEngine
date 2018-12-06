@@ -5,6 +5,7 @@
 #include "ECS/Handles/componenthandle.h"
 #include "a_math.h"
 
+
 // Forward declarations
 class World;
 struct TransformComponent;
@@ -79,6 +80,7 @@ struct EntityHandle
 private:
     /// recursive function that travels up the hierarchy and combines all the model matrices to get world position
     am::Mat4 combineAncestorsTransforms(Entity *entity, const am::Mat4 &prevModelMat = am::Mat4(1));
+    /// recursive function that travels up the hierarchy and combines all the ancestors rotations
     am::Vec3 combineAncestorsRotation(Entity *entity, const am::Rotator &prevRotation = am::zero());
 
 public:

@@ -26,13 +26,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-    // TODO snakk med Ole
     QSurfaceFormat format;
     format.setVersion(4, 1);
     format.setProfile(QSurfaceFormat::CoreProfile);
     format.setRenderableType(QSurfaceFormat::OpenGL);
     format.setSamples(4);
-//    format.setDepthBufferSize(24);
+    format.setDepthBufferSize(24);
     format.setOption(QSurfaceFormat::DebugContext);
 //    format.setSwapInterval(0); // Distable Vsync
 

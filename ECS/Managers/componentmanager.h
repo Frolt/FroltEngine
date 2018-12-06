@@ -2,13 +2,13 @@
 #define COMPONENTMANAGER_H
 
 #include <unordered_map>
-#include <map>
 #include <vector>
 #include <functional>
 #include <QtGlobal>
 #include <QDebug>
 #include "ECS/entity.h"
 #include "ECS/Managers/basecomponentmanager.h"
+
 
 /**
    @brief The ComponentManager class stores and handles all components of a specific type.

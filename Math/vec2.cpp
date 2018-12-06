@@ -6,6 +6,7 @@
 #include "vec3.h"
 #include "vec4.h"
 
+
 namespace am
 {
     Vec2::Vec2(float x, float y) :

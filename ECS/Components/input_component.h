@@ -5,6 +5,7 @@
 #include <Qt>
 #include "a_math.h"
 
+
 // Forward declarations
 struct InputState;
 

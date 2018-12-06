@@ -3,6 +3,7 @@
 
 #include "ECS/system.h"
 
+
 /**
    @brief The FreeCameraSystem class makes a FPS type camera that can be used to navigate the viewport.
 
@@ -23,7 +24,7 @@ private:
     void processKeyboard(const InputComponent &input, MovementComponent &movement, FreeCameraComponent &freeCamera, EntityHandle entity) const;
     void processMouse(const InputComponent &input, const FreeCameraComponent &freeCamera, TransformComponent &transform) const;
     void processScroll(FreeCameraComponent &freeCamera, const InputComponent &input) const;
-    void updateUniforms(const TransformComponent &transform, const FreeCameraComponent &camera, EntityHandle entity) const;
+    void updateUniforms(const FreeCameraComponent &camera, EntityHandle entity) const;
 };
 
 #endif // FREECAMERASYSTEM_H

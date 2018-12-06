@@ -5,6 +5,7 @@
 #include "ECS/Components/camera_component.h"
 #include "a_math.h"
 
+
 struct ThirdPersonCameraComponent : public CameraComponent, public Component<ThirdPersonCameraComponent>
 {
     ThirdPersonCameraComponent() = default;

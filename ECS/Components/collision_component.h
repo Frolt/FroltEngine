@@ -4,6 +4,7 @@
 #include "ECS/component.h"
 #include "a_math.h"
 
+
 struct CollisionComponent : public Component<CollisionComponent>
 {
     CollisionComponent();

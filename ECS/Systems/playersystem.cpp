@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "entityfactory.h"
 
+
 PlayerSystem::PlayerSystem()
 {
     mSystemMask.addComponent<InputComponent>();
@@ -20,9 +21,10 @@ void PlayerSystem::update(float deltaTime)
     ch::Movement movement;
     ch::Transform transform;
     ch::ThirdPersonCamera camera;
+    ch::Player player;
     for (auto entity : mRegisteredEntities) {
-        mWorld->unpack(entity, input, movement, transform, camera);
-        if (camera().mActive) {
+        mWorld->unpack(entity, input, movement, transform, camera, player);
+        if (camera().mActive && !player().isDead) {
             movePlayer(input, transform, movement, deltaTime, mWorld->getEntity(entity));
         }
     }
@@ -49,7 +51,7 @@ void PlayerSystem::movePlayer(const InputComponent &input, const TransformCompon
     if (mWorld->mEngine.getTime() - timeSinceJump > jumpTimer && input.keyPressed(Qt::Key_Space)) {
         timeSinceJump = mWorld->mEngine.getTime();
         movement.mVelocity.y = 0.0f;
-        movement.mVelocity += am::up() * 50.0f;
+        movement.mVelocity += am::up() * 30.0f;
     }
 //    movement.mVelocity = am::clampLength(movement.mVelocity, -maxSpeed, maxSpeed);
 
@@ -57,17 +59,23 @@ void PlayerSystem::movePlayer(const InputComponent &input, const TransformCompon
     float shootTimer{0.5f};
     static float timeSinceShoot{0.0f};
     if (input.mousePressed(Qt::MouseButton::LeftButton) && mWorld->mEngine.getTime() - timeSinceShoot > shootTimer) {
-//        timeSinceShoot = mWorld->mEngine.getTime();
+        timeSinceShoot = mWorld->mEngine.getTime();
         static int index{0};
-        auto projectile = mWorld->mEngine.mEntityFactory->createModel("projectile" + std::to_string(index++), "shark/shark.obj", transform.mLocation + entity.getForwardVector() * 10.0f);
+        auto projectile = mWorld->mEngine.mEntityFactory->createModel("projectile" + std::to_string(index++), "Arrow.fbx", transform.mLocation + entity.getForwardVector() * 10.0f);
         MovementComponent movement;
         CollisionComponent collision;
         projectile.addComponent(collision);
         projectile.addComponent(PhysicsComponent());
         movement.mVelocity = entity.getForwardVector() * 100.0f;
         projectile.addComponent(movement);
+        projectile.setRelativeRotation(transform.mRotation.yaw + 90.0f, 90.0f, 0.0f);
+        projectile.setRelativeScale(4.0f, 4.0f, 4.0f);
+        ch::Material material;
+        mWorld->unpack(projectile, material);
+        material().mHasDiffMap = false;
+        material().mDiffuseColor = Color::red;
     }
 
     // Friction
-    movement.mVelocity *= 0.995f;
+    movement.mVelocity *= 0.999f;
 }

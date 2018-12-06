@@ -6,6 +6,7 @@
 #include <QString>
 #include <QHash>
 
+
 // Forward declarations
 struct Vertex;
 struct MeshComponent;

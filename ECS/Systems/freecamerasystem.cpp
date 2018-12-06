@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "viewport.h"
 
+
 FreeCameraSystem::FreeCameraSystem()
 {
     mSystemMask.addComponent<TransformComponent>();
@@ -27,7 +28,7 @@ void FreeCameraSystem::update(float)
             processKeyboard(input, movement, camera, mWorld->getEntity(entity));
             processMouse(input, camera, transform);
             processScroll(camera, input);
-            updateUniforms(transform, camera, mWorld->getEntity(entity));
+            updateUniforms(camera, mWorld->getEntity(entity));
         }
     }
 }
@@ -110,7 +111,7 @@ void FreeCameraSystem::processScroll(FreeCameraComponent &freeCamera, const Inpu
     lastWheelPos = currentWheelPos;
 }
 
-void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const FreeCameraComponent &camera, EntityHandle entity) const
+void FreeCameraSystem::updateUniforms(const FreeCameraComponent &camera, EntityHandle entity) const
 {
     auto view = am::Mat4::lookAt(entity.getWorldLocation(), entity.getWorldLocation() + entity.getForwardVector(), am::up());
     auto projection = am::Mat4::perspective(am::toRadians(camera.mZoom), mWorld->mEngine.mViewport->mAspect, 0.1f, 1000.0f);
@@ -118,7 +119,7 @@ void FreeCameraSystem::updateUniforms(const TransformComponent &transform, const
     camera.mShader.setMat4("view", view);
     camera.mShader.setVec3("camPos", entity.getWorldLocation());
 
-    // TODO set skybox shader uniforms elsewhere
+    // Set skybox shader uniforms
     auto skybox = mWorld->getEntity("skybox");
     ch::Skybox skyboxComp;
     mWorld->unpack(skybox, skyboxComp);

@@ -5,6 +5,7 @@
 #include <QOpenGLFunctions_4_1_Core>
 #include "inputstate.h"
 
+
 // Forward declarations
 class MainWindow;
 class QOpenGLContext;

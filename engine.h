@@ -9,6 +9,7 @@
 #include "shader.h"
 #include "ECS/Handles/entityhandle.h"
 
+
 // Forward declarations
 class QTimer;
 class Viewport;
@@ -25,7 +26,6 @@ struct InputComponent;
     It also provides general utility functions like getTime()
 
     The engine handles all timers aswell as the main game loop.
-    The game scene is created inside the initialize method
  */
 class Engine : public QObject, protected QOpenGLFunctions_4_1_Core
 {

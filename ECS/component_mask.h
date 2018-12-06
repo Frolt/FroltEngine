@@ -3,6 +3,7 @@
 
 #include <bitset>
 
+
 /**
    @brief The ComponentMask struct stores a bitmask to represent each component.
    Each bit represent a specific componentType.

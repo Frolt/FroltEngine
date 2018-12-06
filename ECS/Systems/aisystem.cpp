@@ -1,6 +1,7 @@
 #include "aisystem.h"
 #include "engine.h"
 
+
 AISystem::AISystem()
 {
     mSystemMask.addComponent<BSplineComponent>();
@@ -22,7 +23,7 @@ void AISystem::beginPlay()
             noMoreCrystals = true;
         }
     }
-    mNumOfCrystals = crystals.size();
+    mNumOfCrystals = static_cast<unsigned int>(crystals.size());
 
     ch::Transform transform;
     ch::BSpline bSpline;
@@ -72,7 +73,7 @@ void AISystem::moveNPC(float deltaTime, BSplineComponent &bSpline, TransformComp
             crystals.push_back(mWorld->getEntity(entityName));
         }
     }
-    unsigned int activeCrystals = crystals.size();
+    auto activeCrystals = crystals.size();
 
     // MAKE KNOT VECTOR
     unsigned int degree = bSpline.mDegree;

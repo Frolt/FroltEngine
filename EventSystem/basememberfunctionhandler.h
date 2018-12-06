@@ -3,6 +3,7 @@
 
 #include <memory>
 
+
 // Forward declarations
 struct Event;
 

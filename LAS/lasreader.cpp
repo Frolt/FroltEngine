@@ -6,6 +6,7 @@
 #include <fstream>
 #include <QDebug>
 
+
 LASReader::LASReader(const std::string &path)
 {
     mHeaderStock = std::make_unique<HeaderStock>();

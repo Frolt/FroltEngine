@@ -8,6 +8,7 @@
 #include "texture.h"
 #include "shader.h"
 
+
 /**
    @brief The Mesh class is used by the ModelLoader class to store each mesh the model contains
  */

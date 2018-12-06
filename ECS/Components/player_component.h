@@ -3,9 +3,10 @@
 
 #include "ECS/component.h"
 
+
 struct PlayerComponent : public Component<PlayerComponent>
 {
-    // Tag component
+    bool isDead{false};
 };
 
 #endif // PLAYER_COMPONENT_H

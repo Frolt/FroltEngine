@@ -4,6 +4,7 @@
 #include "ECS/component.h"
 #include "shader.h"
 
+
 struct MeshComponent : public Component<MeshComponent>
 {
     MeshComponent() = default;

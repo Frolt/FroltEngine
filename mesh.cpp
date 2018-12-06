@@ -1,5 +1,6 @@
 #include "mesh.h"
 
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
     : mVertices{vertices},
       mIndices{indices},
@@ -22,14 +23,14 @@ void Mesh::draw(Shader &shader)
             number = std::to_string(diffuseNr++);
         if (name == "specularMap")
             number = std::to_string(specularNr++);
-        shader.setInt("material." + name, i);
+        shader.setInt("material." + name, static_cast<int>(i));
         gl->glBindTexture(GL_TEXTURE_2D, mTextures[i].mTextureID);
     }
     gl->glActiveTexture(GL_TEXTURE0);
 
     // Draw mesh
     gl->glBindVertexArray(mVAO);
-    gl->glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(mIndices.size()), GL_UNSIGNED_INT, nullptr);
+    gl->glDrawElements(GL_TRIANGLES, static_cast<int>(mIndices.size()), GL_UNSIGNED_INT, nullptr);
     gl->glBindVertexArray(0);
 }
 

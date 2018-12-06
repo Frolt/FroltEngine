@@ -4,8 +4,9 @@
 #include <string>
 #include <functional>
 
+
 /// Type alias for entity ID
-using EntityID = unsigned int;
+using EntityID = size_t;
 
 /**
    @brief The Entity struct keeps an unsigned int ID, a name, and a parent/child pointer.
@@ -15,14 +16,14 @@ using EntityID = unsigned int;
 struct Entity
 {
     Entity();
-    Entity(unsigned int ID, const std::string &name);
+    Entity(size_t ID, const std::string &name);
 
     bool operator==(const Entity &rhs) const;
     bool operator<(const Entity &rhs) const;
     operator EntityID();
 
     // Variables
-    unsigned int mID{0};
+    size_t mID{0};
     std::string mName;
     Entity *mParent{nullptr};
     Entity *mChild{nullptr};
@@ -36,7 +37,7 @@ namespace std {
     {
         std::size_t operator()(const Entity &key) const
         {
-            return std::hash<unsigned int>{}(key.mID);
+            return std::hash<size_t>{}(key.mID);
         }
     };
 }

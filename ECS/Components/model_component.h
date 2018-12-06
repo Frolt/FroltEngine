@@ -6,6 +6,7 @@
 #include "mesh.h"
 #include "shader.h"
 
+
 struct ModelComponent : public Component<ModelComponent>
 {
     ModelComponent() = default;

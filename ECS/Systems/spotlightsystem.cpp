@@ -1,5 +1,6 @@
 #include "spotlightsystem.h"
 
+
 SpotlightSystem::SpotlightSystem()
 {
     mSystemMask.addComponent<SpotlightComponent>();

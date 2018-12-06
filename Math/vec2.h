@@ -2,7 +2,6 @@
 #define VEC2_H
 
 #include <vector>
-#include <array>
 #include <QDebug>
 
 

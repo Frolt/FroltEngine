@@ -1,5 +1,6 @@
 #include "pointlightsystem.h"
 
+
 PointLightSystem::PointLightSystem()
 {
     mSystemMask.addComponent<PointLightComponent>();

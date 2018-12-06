@@ -4,6 +4,7 @@
 #include "event.h"
 #include "ECS/entity.h"
 
+
 struct SphereCollisionEvent : public Event
 {
     SphereCollisionEvent(EntityID a, EntityID b);

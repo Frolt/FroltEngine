@@ -3,6 +3,7 @@
 
 #include "vec3.h"
 
+
 /// Contains a set of predefined colors
 namespace Color
 {
