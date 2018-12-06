@@ -1,0 +1,11 @@
+digraph "C:/Users/Alexa/Documents/Github/FroltEngine/ECS/Systems" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_c9cf17564b2c1495e1833ff68ae38634 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="ECS" fontname="Helvetica", fontsize="10", URL="dir_c9cf17564b2c1495e1833ff68ae38634.html"]
+  dir_06fa0a37e33468214ede4983bd9a6d3a [shape=box, label="Systems", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_06fa0a37e33468214ede4983bd9a6d3a.html"];
+  }
+  dir_d9ed0825c4db5ee501736167be77bd02 [shape=box label="EventSystem" URL="dir_d9ed0825c4db5ee501736167be77bd02.html"];
+  dir_06fa0a37e33468214ede4983bd9a6d3a->dir_d9ed0825c4db5ee501736167be77bd02 [headlabel="1", labeldistance=1.5 headhref="dir_000010_000011.html"];
+}

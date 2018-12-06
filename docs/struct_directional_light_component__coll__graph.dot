@@ -1,0 +1,15 @@
+digraph "DirectionalLightComponent"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node3 [label="DirectionalLightComponent",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="LightComponent",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_light_component.html"];
+  Node5 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" mShader" ,fontname="Helvetica"];
+  Node5 [label="Shader",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_shader.html"];
+  Node6 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" mDiff" ,fontname="Helvetica"];
+  Node6 [label="am::Vec3",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structam_1_1_vec3.html"];
+  Node7 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="Component\< DirectionalLight\lComponent \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct_component.html"];
+  Node6 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" mDir\nmAmb" ,fontname="Helvetica"];
+}

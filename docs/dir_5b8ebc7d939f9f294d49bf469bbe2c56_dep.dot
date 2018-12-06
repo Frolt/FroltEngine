@@ -1,0 +1,9 @@
+digraph "C:/Users/Alexa/Documents/Github/FroltEngine/ECS/Managers" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_c9cf17564b2c1495e1833ff68ae38634 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="ECS" fontname="Helvetica", fontsize="10", URL="dir_c9cf17564b2c1495e1833ff68ae38634.html"]
+  dir_5b8ebc7d939f9f294d49bf469bbe2c56 [shape=box, label="Managers", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_5b8ebc7d939f9f294d49bf469bbe2c56.html"];
+  }
+}

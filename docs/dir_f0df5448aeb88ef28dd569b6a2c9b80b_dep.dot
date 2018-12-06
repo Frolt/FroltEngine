@@ -1,0 +1,11 @@
+digraph "C:/Users/Alexa/Documents/Github/FroltEngine/LAS" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_baacf327caffa611df7b41249c9ce391 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="FroltEngine" fontname="Helvetica", fontsize="10", URL="dir_baacf327caffa611df7b41249c9ce391.html"]
+  dir_f0df5448aeb88ef28dd569b6a2c9b80b [shape=box, label="LAS", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_f0df5448aeb88ef28dd569b6a2c9b80b.html"];
+  }
+  dir_3be1c43419ecf49a9c57805a1f0f4add [shape=box label="Math" URL="dir_3be1c43419ecf49a9c57805a1f0f4add.html"];
+  dir_f0df5448aeb88ef28dd569b6a2c9b80b->dir_3be1c43419ecf49a9c57805a1f0f4add [headlabel="1", labeldistance=1.5 headhref="dir_000013_000014.html"];
+}

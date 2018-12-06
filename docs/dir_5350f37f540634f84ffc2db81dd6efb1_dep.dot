@@ -1,0 +1,13 @@
+digraph "C:/Users/Alexa/Documents" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_beb40871999682219b5199296cacaad9 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="Alexa" fontname="Helvetica", fontsize="10", URL="dir_beb40871999682219b5199296cacaad9.html"]
+  subgraph clusterdir_5350f37f540634f84ffc2db81dd6efb1 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_5350f37f540634f84ffc2db81dd6efb1.html"];
+    dir_5350f37f540634f84ffc2db81dd6efb1 [shape=plaintext label="Documents"];
+    dir_e4b7d33faea19d1bca0eab530491949b [shape=box label="Github" color="red" fillcolor="white" style="filled" URL="dir_e4b7d33faea19d1bca0eab530491949b.html"];
+  }
+  }
+}
