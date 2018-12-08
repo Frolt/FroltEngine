@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     // Splash screen
-    QPixmap pixmap ("../Assets/logo2.jpg");
+    std::string path = Path::assets + "logo2.jpg";
+    QPixmap pixmap (path.c_str());
     QSplashScreen splash(pixmap);
     QFont font("FreeSans", 48, QFont::Bold);
     splash.setFont(font);

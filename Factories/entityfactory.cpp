@@ -74,7 +74,7 @@ EntityHandle EntityFactory::createPointLight(const std::string &name, const am::
 EntityHandle EntityFactory::createSpotlight(const std::string &name, const am::Vec3 &location, const am::Vec3 &dir, const am::Vec3 &color)
 {
     // Consists of: Spotlight, Transform
-    auto entity = mWorld.createEntity(name);
+    EntityHandle entity = mWorld.createEntity(name);
     static int lightInstance{0};
     SpotlightComponent spotlight(lightInstance++, dir, color);
     spotlight.mShader = mDefaultShader;

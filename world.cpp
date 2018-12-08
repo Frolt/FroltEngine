@@ -163,11 +163,11 @@ void World::updateSystems(EntityID entity, ComponentMask oldMask)
     ComponentMask newMask = mEntityMasks[entity];
 
     for (auto &sys : mSystems) {
-      if (newMask.isNewMatch(oldMask, sys->mSystemMask)) {
-        sys->registerEntity(entity);
-      } else if (newMask.noLongerMatched(oldMask, sys->mSystemMask)) {
-        sys->deRegisterEntity(entity);
-      }
+        if (newMask.isNewMatch(oldMask, sys->mSystemMask)) {
+            sys->registerEntity(entity);
+        } else if (newMask.noLongerMatched(oldMask, sys->mSystemMask)) {
+            sys->deRegisterEntity(entity);
+        }
     }
 }
 
